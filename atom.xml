@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://huzhenyou.github.io/"/>
-  <updated>2023-07-23T08:10:25.503Z</updated>
+  <updated>2023-07-23T12:19:51.713Z</updated>
   <id>https://huzhenyou.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MacOS操作记录</title>
+    <link href="https://huzhenyou.github.io//blog/2022/12/MacOS.html"/>
+    <id>https://huzhenyou.github.io//blog/2022/12/MacOS.html</id>
+    <published>2022-12-07T03:35:51.000Z</published>
+    <updated>2023-07-23T12:19:51.713Z</updated>
+    
+    <content type="html"><![CDATA[<p>MacOS操作的经验记录。</p><a id="more"></a><h1 id="禁止开机项"><a href="#禁止开机项" class="headerlink" title="禁止开机项"></a>禁止开机项</h1><p>参考：<a href="https://www.zhihu.com/question/28268529" target="_blank" rel="noopener">https://www.zhihu.com/question/28268529</a><br><img src="imgs/mac1.png" alt></p><h1 id="macOS-输入法卡顿问题解决方法"><a href="#macOS-输入法卡顿问题解决方法" class="headerlink" title="macOS 输入法卡顿问题解决方法"></a>macOS 输入法卡顿问题解决方法</h1><p><a href="https://www.jianshu.com/p/ec2729d485a8?u_atoken=eb25a902-3d35-4793-9c57-df80d5b0b4c1&amp;u_asession=01I5WkBINhG2nCXt7WdzwEukqIm0W-Fonps6YsFD8zs6UWAwiHnyfvs8AiduFIIclPX0KNBwm7Lovlpxjd_P_q4JsKWYrT3W_NKPr8w6oU7K-jkG6pP5tE1Tz5OzuQfj00UBcpB774y4TuQmJJbY9S9WBkFo3NEHBv0PZUm6pbxQU&amp;u_asig=05VbG5ePk9V-SNVfm59Jr3epNmezaL12H2m4V-SpY-qO_Uepe__b6Mar4H2_f8uirldZ3t-HfH8Si-UT5IuOllW3uu9QbgG4KpeLocafrO7tuRLuU6vC3u9d_wz7tVd_ecgtQja7SNp9dQcfXwOq8A-GovWj8o0YGJeqopzYNRYaf9JS7q8ZD7Xtz2Ly-b0kmuyAKRFSVJkkdwVUnyHAIJzUYRr1aQ1Be2oGEmeCDK1hzO9rSje9odqjITtLuR3eIR1oWpdObHCERm5o7Dzs12Ce3h9VXwMyh6PgyDIVSG1W954wOreLx4Cp_Wts_ySb2pLrOBOWgTd5WAMvZk50HQNJA6v-kDxo2v7N-DclbtrKZLWOLOZH-RKG-itiYjpXxHmWspDxyAEEo4kbsryBKb9Q&amp;u_aref=8%2Frz3JfzYTOLUGv7ZEFT8C%2BTu%2B8%3D" target="_blank" rel="noopener">https://www.jianshu.com/p/ec2729d485a8?u_atoken=eb25a902-3d35-4793-9c57-df80d5b0b4c1&amp;u_asession=01I5WkBINhG2nCXt7WdzwEukqIm0W-Fonps6YsFD8zs6UWAwiHnyfvs8AiduFIIclPX0KNBwm7Lovlpxjd_P_q4JsKWYrT3W_NKPr8w6oU7K-jkG6pP5tE1Tz5OzuQfj00UBcpB774y4TuQmJJbY9S9WBkFo3NEHBv0PZUm6pbxQU&amp;u_asig=05VbG5ePk9V-SNVfm59Jr3epNmezaL12H2m4V-SpY-qO_Uepe__b6Mar4H2_f8uirldZ3t-HfH8Si-UT5IuOllW3uu9QbgG4KpeLocafrO7tuRLuU6vC3u9d_wz7tVd_ecgtQja7SNp9dQcfXwOq8A-GovWj8o0YGJeqopzYNRYaf9JS7q8ZD7Xtz2Ly-b0kmuyAKRFSVJkkdwVUnyHAIJzUYRr1aQ1Be2oGEmeCDK1hzO9rSje9odqjITtLuR3eIR1oWpdObHCERm5o7Dzs12Ce3h9VXwMyh6PgyDIVSG1W954wOreLx4Cp_Wts_ySb2pLrOBOWgTd5WAMvZk50HQNJA6v-kDxo2v7N-DclbtrKZLWOLOZH-RKG-itiYjpXxHmWspDxyAEEo4kbsryBKb9Q&amp;u_aref=8%2Frz3JfzYTOLUGv7ZEFT8C%2BTu%2B8%3D</a></p><p><img src="imgs/mac0.png" alt></p><h1 id="快捷键："><a href="#快捷键：" class="headerlink" title="快捷键："></a>快捷键：</h1><h2 id="最大化：-control-cmmand-f"><a href="#最大化：-control-cmmand-f" class="headerlink" title="最大化： control+cmmand+f"></a>最大化： control+cmmand+f</h2><h1 id="终端："><a href="#终端：" class="headerlink" title="终端："></a>终端：</h1><h2 id="拆分窗口：-command-D"><a href="#拆分窗口：-command-D" class="headerlink" title="拆分窗口： command+D"></a>拆分窗口： command+D</h2><h1 id="google大文件下载"><a href="#google大文件下载" class="headerlink" title="google大文件下载"></a>google大文件下载</h1><p>参考文档：<br><a href="https://blog.csdn.net/Andrwin/article/details/125040426" target="_blank" rel="noopener">https://blog.csdn.net/Andrwin/article/details/125040426</a><br><a href="https://zhuanlan.zhihu.com/p/527689084" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/527689084</a></p><h1 id="翻墙方法："><a href="#翻墙方法：" class="headerlink" title="翻墙方法："></a>翻墙方法：</h1><h2 id="ClashX"><a href="#ClashX" class="headerlink" title="ClashX"></a>ClashX</h2><p>简介：可实现系统级代理<br>订阅：<a href="https://hd47h3dikuktvxnvjzja.wgetcloud.org/user" target="_blank" rel="noopener">https://hd47h3dikuktvxnvjzja.wgetcloud.org/user</a></p><h2 id="Ghelpler"><a href="#Ghelpler" class="headerlink" title="Ghelpler"></a>Ghelpler</h2><p>简介：为chrome的插件，仅支持chrome内部的翻墙。</p><h1 id="Anaconda"><a href="#Anaconda" class="headerlink" title="Anaconda"></a>Anaconda</h1><h2 id="set-environmental-path"><a href="#set-environmental-path" class="headerlink" title="set environmental path"></a>set environmental path</h2><ol><li>Open terminal.</li><li>Input: <code>echo &#39;export PATH=&quot;/Users/zhangluheng/anaconda3/bin:$PATH&quot;&#39; &gt;&gt; ~/.zshrc</code></li><li>Activate: <code>source ~/.zshrc</code></li></ol><h2 id="alias"><a href="#alias" class="headerlink" title="alias"></a>alias</h2><p>vim ~/.zshrc<br>alias &lt;命令&gt;=”shell”</p><h2 id="安装sshpass"><a href="#安装sshpass" class="headerlink" title="安装sshpass"></a>安装sshpass</h2><p>brew install hudochenkov/sshpass/sshpass</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;MacOS操作的经验记录。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="AppleOS" scheme="https://huzhenyou.github.io/categories/AppleOS/"/>
+    
+    
+      <category term="MacOS" scheme="https://huzhenyou.github.io/tags/MacOS/"/>
+    
+  </entry>
   
   <entry>
     <title>思维模型</title>
