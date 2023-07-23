@@ -11,5 +11,5 @@ Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
 
-Sitemap: https://murphypei.github.io/sitemap.xml
-Sitemap: https://murphypei.github.io/baidusitemap.xml
+Sitemap: https://HuzhenYou.github.io/sitemap.xml
+Sitemap: https://HuzhenYou.github.io/baidusitemap.xml
