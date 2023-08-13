@@ -58,32 +58,40 @@
   };
 </script>
 
-  <meta name="description" content="虚怀若谷，大智若愚">
-<meta property="og:type" content="website">
-<meta property="og:title" content="九万里">
-<meta property="og:url" content="https://huzhenyou.github.io/index.html">
+  <meta name="description" content="BMN(Boundary-Matching Network) 详解。">
+<meta name="keywords" content="Action Detection,Proposal Generation,ActivityNet Challenge 2019,DeepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BMN详解">
+<meta property="og:url" content="https://huzhenyou.github.io/blog/2019/03/BMN详解.html">
 <meta property="og:site_name" content="九万里">
-<meta property="og:description" content="虚怀若谷，大智若愚">
+<meta property="og:description" content="BMN(Boundary-Matching Network) 详解。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230807194737.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230807194836.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230807202541.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230810081026.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230808205131.png">
+<meta property="og:updated_time" content="2023-08-13T07:12:46.827Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="九万里">
-<meta name="twitter:description" content="虚怀若谷，大智若愚">
+<meta name="twitter:title" content="BMN详解">
+<meta name="twitter:description" content="BMN(Boundary-Matching Network) 详解。">
+<meta name="twitter:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230807194737.png">
   <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
-  <link rel="canonical" href="https://huzhenyou.github.io/">
+  <link rel="canonical" href="https://huzhenyou.github.io/blog/2019/03/BMN详解">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false,
+    isHome: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>九万里</title>
+  <title>BMN详解 | 九万里</title>
   <meta name="generator" content="Hexo 3.9.0">
   
 
@@ -227,12 +235,13 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
+
   <div id="posts" class="posts-expand">
-        <article itemscope itemtype="http://schema.org/Article">
+      <article itemscope itemtype="http://schema.org/Article">
   
   
   
-  <div class="post-block home">
+  <div class="post-block post">
     <link itemprop="mainEntityOfPage" href="https://huzhenyou.github.io/blog/2019/03/BMN详解.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -245,9 +254,8 @@
       <meta itemprop="name" content="九万里">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-            
-            <a href="/blog/2019/03/BMN详解.html" class="post-title-link" itemprop="url">BMN详解</a>
+        <h2 class="post-title" itemprop="name headline">BMN详解
+
           
         </h2>
 
@@ -292,6 +300,14 @@
           
 
           
+            <span class="post-meta-item" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
           <br>
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
@@ -323,41 +339,159 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>BMN(Boundary-Matching Network) 详解。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/blog/2019/03/BMN详解.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
+        <p>BMN(Boundary-Matching Network) 详解。</p>
+<a id="more"></a>
+<hr>
+<h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>百度，ActivityNet Challenge 2019 冠军模型：BMN: Boundary-Matching Network for Temporal Action Proposal Generation。</p>
+<h2 id="Problem-Formulation"><a href="#Problem-Formulation" class="headerlink" title="Problem Formulation"></a>Problem Formulation</h2><ol>
+<li>Unlike temporal action detection task, in the work categories of action instances are not taken into account in proposal generation task.</li>
+<li>The temporal annotation: $\Psi<em>g=\left { \varphi_n=(t</em>{s,n}, t<em>{e,n})  \right } ^{N_g}</em>{n=1}$, here $N_g$ is  the amount of ground-truth action instances.</li>
+<li>During inference, proposal generation method should generate proposals $\Psi_p$ which cover  $\Psi_g$ precisely and exhaustively.</li>
+</ol>
+<h2 id="网络结构："><a href="#网络结构：" class="headerlink" title="网络结构："></a>网络结构：</h2><p><img src="/imgs/Pasted image 20230807194737.png" alt> <img src="/imgs/Pasted image 20230807194836.png" alt></p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
+<li>Feature Extraction: 使用双流网络（光流+RGB），获得feature map.</li>
+<li>Base Module： 1x1卷积（时序卷积）。</li>
+<li>Temporal Evaluation Module(TEM)： 1x1卷积（时序卷积），获得开始、结束点的概率序列。</li>
+<li>Proposal Evaluation Module(PEM)：<ol>
+<li>[[PapersRead#BMN#BM layer|BM layer]]</li>
+<li>通过conv3d, conv2d 得到置信度图。</li>
+</ol>
+</li>
+<li>生成结果：<ol>
+<li>把两条边界概率序列中大于$极大值\times  \frac{1}{2}$ 或是峰值（极大值）的都看作开始或结束边界.</li>
+<li>$n^2$复杂度两两组合，获得一系列proposals:</li>
+<li>根据置信度图获得各个proposals的置信度。<ol>
+<li>the proposal denoted: $φ = (t<em>s, t_e, p^s</em>{ts} , p^e<em>{te} , p</em>{cc}, p<em>{cr})$<br>where $p^s</em>{ts},  p^e<em>{te}$ are starting and ending probabilities.  $p</em>{cc}, p_{cr}$ are classification confidence and regression confidence score.</li>
+<li>get final score: $p<em>f = p^s</em>{ts} · p^e<em>{te} · \sqrt{p</em>{cc}· p_{cr})}$</li>
+</ol>
+</li>
+<li>利用Soft-NMS去冗余。</li>
+</ol>
+</li>
+</ol>
+<h2 id="置信度图："><a href="#置信度图：" class="headerlink" title="置信度图："></a>置信度图：</h2><p><img src="/imgs/Pasted image 20230807202541.png" alt><br>        1.$M_C\in R^{D×T}$.</p>
+<pre><code>    2. 由开始点和长度决定结束点，从而确定一个proposal. 所以上图对应所有任意视频段的置信度。
+    3. duration dim: proposal长度.
+    4. starting dim: 开始点位置。
+    5. 同一行对应的proposals对应相同的长度。同一列队对应的proposals拥有相同的开始点。同一负对角线对应的proposals拥有相同的结束边界。右下角部分proposals超出视频范围，无意义。
+</code></pre><h2 id="BM-layer"><a href="#BM-layer" class="headerlink" title="BM layer"></a>BM layer</h2><ol>
+<li>The goal: uniformly sample N points in $S<em>{F} ∈ R^{C×T}$  between starting boundary $t</em>{s}$ and ending boundary $t<em>{e}$ of each proposal $φ</em>{i,j}$, and get proposal feature $m^f_{i,j} ∈ R^{C×N}$ with rich context (actually sampling in [$t_S-0.25d, t_e+0.25d$]).<br><img src="/imgs/Pasted image 20230810081026.png" alt="Pasted image 20230810081026"></li>
+<li>two problems:<ol>
+<li>how to sample feature in non-integer point:<br><img src="/imgs/Pasted image 20230808205131.png" alt="Pasted image 20230808205131"></li>
+<li>how to sample feature for all proposals simultaneously:<ol>
+<li>expanding $w_{i,j} ∈ R^{N ×T}$  to  $W ∈ R^{N ×T ×D×T}$ for all proposals in BM confidence map.</li>
+<li>get $M<em>F ∈ R^{C×N×D×T}$ by using dot product:   $S</em>{F} ∈ R^{C×T}$ and  $W^T ∈ R^{T×N×D×T}$. （<em>$W$ can be pre-generated because it’s the same for different videos, the inference speed of BM layer is very fast.</em> Is T is the same for the different videos? Ans: [[#BMN#Base module|Base module]] and [[#BMN#Training of BMN#Training Data Construction|Training Data Construction]]. TODO: review code）</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="Base-module"><a href="#Base-module" class="headerlink" title="Base module"></a>Base module</h2><ol>
+<li><em>adopt a long observation window with length $l_ω$ to truncate the untrimmed feature sequence with length $l_f$ .</em></li>
+<li>So here $l<em>w$ is $T$ in $S</em>{F} ∈ R^{C×T}$.</li>
+</ol>
+<h2 id="Proposal-Evaluation-Module-PEM"><a href="#Proposal-Evaluation-Module-PEM" class="headerlink" title="Proposal Evaluation Module(PEM)"></a>Proposal Evaluation Module(PEM)</h2><ol>
+<li>Final generate: $M<em>C\in R^{D×T}$, but there are two predicted $M_C$: $M</em>{CC}$, $M_{CR}$, being trained using binary classification and regression loss function separately. TODO: review code.</li>
+</ol>
+<h2 id="Training-of-BMN"><a href="#Training-of-BMN" class="headerlink" title="Training of BMN"></a>Training of BMN</h2><h3 id="TEM-vs-PEM"><a href="#TEM-vs-PEM" class="headerlink" title="TEM vs PEM:"></a>TEM vs PEM:</h3><ol>
+<li>TEM: learns local boundary.</li>
+<li>PEM: pattern global proposal context.</li>
+</ol>
+<h3 id="Training-Data-Construction"><a href="#Training-Data-Construction" class="headerlink" title="Training Data Construction:"></a>Training Data Construction:</h3><ol>
+<li>firstly, extract all feature sequence F with length.</li>
+<li>get many observation windows with length $l_w$ with 50% overlap.</li>
+<li>here every window contains at least one ground-truth action instance.</li>
+</ol>
+<h3 id="Label-Assignment"><a href="#Label-Assignment" class="headerlink" title="Label Assignment"></a>Label Assignment</h3><h4 id="TEM"><a href="#TEM" class="headerlink" title="TEM"></a>TEM</h4><ol>
+<li>denote its starting and ending regions as $r_S = [t_s − d_g /10, t_s +d_g/10]$ and $r_E =[t_e−d_g/10,t_e+d_g/10]$separately.</li>
+<li>denote its local region as $r<em>{t_n} = [t_n −d_f /2, t_n +d_f /2]$, where $d_f = t_n −t</em>{n−1}$ is the temporal interval between two locations.</li>
+<li>Then calculate overlap ratio IoR of $r<em>{t_n}$ with $r_S$ and $r_E$ separately, and denote maximum IoR as $g^s</em>{t<em>n}$ and  $g^e</em>{t_n}$ separately.</li>
+<li><em>here IoR is defined as the overlap ratio with ground-truth proportional to the duration of this region.</em> TODO: code review.</li>
+<li>Thus generate $G<em>{S,ω}={g^s</em>{t<em>n}}^{l_w}</em>{n=1}$ and $G<em>{E,ω}={g^e</em>{t<em>n}}^{l_w}</em>{n=1}$  as label of TEM.</li>
+</ol>
+<h4 id="PEM"><a href="#PEM" class="headerlink" title="PEM"></a>PEM</h4><ol>
+<li>Purpose: BM label map $G_C ∈ R^{D×T}$.</li>
+<li>For a proposal $φ<em>{i,j}=(t_s=t_j, t_e=t_j+t_i)$ , calculate its IoU with all $φ_g$ in $Ψ</em>ω$, and denote the maximum IoU as $g^c<em>{i,j}$ . Thus we can generate $G_C={g^c</em>{i,j}}^{D,l<em>ω}</em>{i,j=1}$  as label of PEM.</li>
+</ol>
+<h3 id="Loss"><a href="#Loss" class="headerlink" title="Loss"></a>Loss</h3><h4 id="Loss-of-TEM"><a href="#Loss-of-TEM" class="headerlink" title="Loss of TEM"></a>Loss of TEM</h4><ol>
+<li>adopt weighted binary logistic regression loss function $L<em>{bl}$,  to get the sum of starting and ending losses:<br>$L</em>{TEM} =L<em>{bl}(P_S,G_S)+L</em>{bl}(P_E,G_E)$</li>
+<li>$L<em>{bl}(P,G)$:<br>$\frac{1}{l_w}\sum</em>{i=1}^{l<em>w}(a^+·b_i·log(p_i)+a^-·(1-b_i)·log(1-p_i))$<br>where $b_i = sign(g_i − θ)$ is a two-value function used to convert $g_i$ from [0, 1] to {0, 1}0, 1} based on overlap threshold$θ = 0.5$. Denoting $l^+=\sum b_i$  and $l^− = l</em>ω −l^+$, the weighted terms are $α^+ = \frac{l_w}{l^+}$ and $α^- = \frac{l_w}{l^-}$.</li>
+</ol>
+<h4 id="Loss-of-PEM"><a href="#Loss-of-PEM" class="headerlink" title="Loss of PEM"></a>Loss of PEM</h4><ol>
+<li>Define:<br>$L<em>{PEM} =L_C(M</em>{CC},G<em>C)+λ·L_R(M</em>{CR},G_C)$<ol>
+<li>here  $L_{bl}$  for $L_C$  ,  L2 loss for $L_R$ .  $λ = 10$ .</li>
+<li>to balance the ratio between positive and negative samples in $L<em>R$ , take all points with $g^C</em>{i,j}&gt;0.6$  as positive, and randomly sample  $g^C_{i,j}&lt;0.2$  as negative, ensure 1:1 for positive: negative.</li>
+</ol>
+</li>
+</ol>
+<h3 id="Training-Objective"><a href="#Training-Objective" class="headerlink" title="Training Objective"></a>Training Objective</h3><pre><code>$L=L_{LEM} +λ_1 ·L_{GEM} +λ_2 ·L_2(Θ)$
+where $L_2(Θ)$ is L2 regularization term,  $λ_1$, $λ_2$ are set to 1, 0.000 to ensure different modules are trained evenly.
+</code></pre><p>Refs:</p>
+<ol>
+<li><a href="https://zhuanlan.zhihu.com/p/337432552" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/337432552</a></li>
+<li><a href="https://arxiv.org/pdf/1907.09702.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1907.09702.pdf</a></li>
+</ol>
+
     </div>
 
     
     
     
-      <footer class="post-footer">
-          <div class="post-eof"></div>
         
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AngryBirds</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://huzhenyou.github.io/blog/2019/03/BMN详解.html" title="BMN详解">https://huzhenyou.github.io/blog/2019/03/BMN详解.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Action-Detection/" rel="tag"># Action Detection</a>
+            
+              <a href="/tags/Proposal-Generation/" rel="tag"># Proposal Generation</a>
+            
+              <a href="/tags/ActivityNet-Challenge-2019/" rel="tag"># ActivityNet Challenge 2019</a>
+            
+              <a href="/tags/DeepLearning/" rel="tag"># DeepLearning</a>
+            
+          </div>
+        
+
+        
+
       </footer>
+    
   </div>
   
   
   
   </article>
 
-    
   </div>
-
-  
 
 
           </div>
           
+    
+    <div class="comments" id="gitalk-container"></div>
+  
 
         </div>
           
@@ -372,6 +506,11 @@
 
   <aside class="sidebar">
     <div class="sidebar-inner">
+        
+        
+        
+        
+      
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
@@ -384,6 +523,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Intro"><span class="nav-number">1.</span> <span class="nav-text">Intro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem-Formulation"><span class="nav-number">2.</span> <span class="nav-text">Problem Formulation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络结构："><span class="nav-number">3.</span> <span class="nav-text">网络结构：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程"><span class="nav-number">4.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#置信度图："><span class="nav-number">5.</span> <span class="nav-text">置信度图：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BM-layer"><span class="nav-number">6.</span> <span class="nav-text">BM layer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Base-module"><span class="nav-number">7.</span> <span class="nav-text">Base module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proposal-Evaluation-Module-PEM"><span class="nav-number">8.</span> <span class="nav-text">Proposal Evaluation Module(PEM)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Training-of-BMN"><span class="nav-number">9.</span> <span class="nav-text">Training of BMN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TEM-vs-PEM"><span class="nav-number">9.1.</span> <span class="nav-text">TEM vs PEM:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Training-Data-Construction"><span class="nav-number">9.2.</span> <span class="nav-text">Training Data Construction:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Label-Assignment"><span class="nav-number">9.3.</span> <span class="nav-text">Label Assignment</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TEM"><span class="nav-number">9.3.1.</span> <span class="nav-text">TEM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PEM"><span class="nav-number">9.3.2.</span> <span class="nav-text">PEM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loss"><span class="nav-number">9.4.</span> <span class="nav-text">Loss</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Loss-of-TEM"><span class="nav-number">9.4.1.</span> <span class="nav-text">Loss of TEM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Loss-of-PEM"><span class="nav-number">9.4.2.</span> <span class="nav-text">Loss of PEM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Training-Objective"><span class="nav-number">9.5.</span> <span class="nav-text">Training Objective</span></a></li></ol></li></ol></div>
+        
       </div>
       <!--/noindex-->
 
@@ -607,12 +748,6 @@
   
     
       
-        
-      
-    
-  
-    
-      
 <script type="text/x-mathjax-config">
 
   MathJax.Hub.Config({
@@ -657,7 +792,7 @@
   NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
     MathJax.Hub.Typeset();
   }, window.MathJax);
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script>
 
     
   
@@ -666,6 +801,24 @@
 
   
 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'e14928c5d4e586a1be33',
+      clientSecret: 'b58488475e69824177de7fa4e52325a0de1dbdb7',
+      repo: 'HuzhenYou.github.io',
+      owner: 'HuzhenYou',
+      admin: ['HuzhenYou'],
+      id: '851ff91bf54c5bce1639103f3e0579c3',
+        language: 'zh-CN',
+      
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
 </html>
