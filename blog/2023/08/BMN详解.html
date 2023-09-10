@@ -70,8 +70,7 @@
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230807194836.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230807202541.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230810081026.png">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230808205131.png">
-<meta property="og:updated_time" content="2023-09-09T11:05:03.296Z">
+<meta property="og:updated_time" content="2023-09-10T09:02:13.160Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BMN详解">
 <meta name="twitter:description" content="BMN(Boundary-Matching Network) 详解。">
@@ -281,7 +280,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-09 19:05:03" itemprop="dateModified" datetime="2023-09-09T19:05:03+08:00">2023-09-09</time>
+                <time title="修改时间：2023-09-10 17:02:13" itemprop="dateModified" datetime="2023-09-10T17:02:13+08:00">2023-09-10</time>
               </span>
             
           
@@ -345,18 +344,8 @@
 <h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>百度，ActivityNet Challenge 2019 冠军模型：BMN: Boundary-Matching Network for Temporal Action Proposal Generation。</p>
 <h2 id="Problem-Formulation"><a href="#Problem-Formulation" class="headerlink" title="Problem Formulation"></a>Problem Formulation</h2><ol>
 <li>Unlike temporal action detection task, in the work categories of action instances are not taken into account in proposal generation task.</li>
-<li><p>The temporal annotation:  </p>
-<script type="math/tex; mode=display">
-\Psi_g=\left \{ \varphi_n=(t_{s,n}, t_{e,n})  \right \} ^{N_g}_{n=1}</script><p> , here </p>
-<script type="math/tex; mode=display">
-N_g</script><p> is  the amount of ground-truth action instances.</p>
-</li>
-<li><p>During inference, proposal generation method should generate proposals </p>
-<script type="math/tex; mode=display">
-\Psi_p</script><p> which cover  </p>
-<script type="math/tex; mode=display">
-\Psi_g</script><p> precisely and exhaustively.</p>
-</li>
+<li>The temporal annotation: <script type="math/tex">\Psi_g=\left \{ \varphi_n=(t_{s,n}, t_{e,n})  \right \} ^{N_g}_{n=1}</script>, here <script type="math/tex">N_g</script> is  the amount of ground-truth action instances.</li>
+<li>During inference, proposal generation method should generate proposals <script type="math/tex">\Psi_p</script> which cover  <script type="math/tex">\Psi_g</script> precisely and exhaustively.</li>
 </ol>
 <h2 id="网络结构："><a href="#网络结构：" class="headerlink" title="网络结构："></a>网络结构：</h2><p><img src="/imgs/Pasted image 20230807194737.png" alt><br><img src="/imgs/Pasted image 20230807194836.png" alt></p>
 <h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
@@ -368,116 +357,44 @@ N_g</script><p> is  the amount of ground-truth action instances.</p>
 <li>通过conv3d, conv2d 得到置信度图。</li>
 </ol>
 </li>
-<li><p>生成结果：</p>
-<ol>
-<li><p>把两条边界概率序列中大于</p>
-<script type="math/tex; mode=display">
-极大值\times  \frac{1}{2}</script><p> 或是峰值（极大值）的都看作开始或结束边界.</p>
-</li>
-<li><script type="math/tex; mode=display">
-n^2$$复杂度两两组合，获得一系列proposals:</script></li>
-<li><p>根据置信度图获得各个proposals的置信度。</p>
-<ol>
-<li><p>the proposal denoted: </p>
-<script type="math/tex; mode=display">
-φ = (t_s, t_e, p^s_{ts} , p^e_{te} , p_{cc}, p_{cr})</script></li>
+<li>生成结果：<ol>
+<li>把两条边界概率序列中大于<script type="math/tex">极大值\times  \frac{1}{2}</script> 或是峰值（极大值）的都看作开始或结束边界.</li>
+<li>$n^2$复杂度两两组合，获得一系列proposals:</li>
+<li>根据置信度图获得各个proposals的置信度。<ol>
+<li>the proposal denoted: <script type="math/tex">φ = (t_s, t_e, p^s_{ts} , p^e_{te} , p_{cc}, p_{cr})</script><br>  where <script type="math/tex">p^s_{ts},  p^e_{te}</script> are starting and ending probabilities.  <script type="math/tex">p_{cc}, p_{cr}</script> are classification confidence and regression confidence score.</li>
+<li>get final score: <script type="math/tex">p_f = p^s_{ts} · p^e_{te} · \sqrt{p_{cc}· p_{cr})}</script></li>
 </ol>
 </li>
-</ol>
-</li>
-</ol>
-<pre><code>     where 
-     $$
-     p^s_{ts},  p^e_{te}
-     $$
-
-      are starting and ending probabilities.  
-     $$
-     p_{cc}, p_{cr}
-     $$
-
-      are classification confidence and regression confidence score.
-  2. get final score: 
-
-     $$
-     p_f = p^s_{ts} · p^e_{te} · \sqrt{p_{cc}· p_{cr})}
-     $$
-</code></pre><ol>
 <li>利用Soft-NMS去冗余。</li>
+</ol>
+</li>
 </ol>
 <h2 id="置信度图："><a href="#置信度图：" class="headerlink" title="置信度图："></a>置信度图：</h2><p><img src="/imgs/Pasted image 20230807202541.png" alt></p>
 <ol>
-<li><script type="math/tex; mode=display">
-M_C\in R^{D×T}</script></li>
+<li><script type="math/tex">M_C\in R^{D×T}</script>.</li>
 <li>由开始点和长度决定结束点，从而确定一个proposal. 所以上图对应所有任意视频段的置信度。</li>
 <li>duration dim: proposal长度.</li>
 <li>starting dim: 开始点位置。</li>
 <li>同一行对应的proposals对应相同的长度。同一列队对应的proposals拥有相同的开始点。同一负对角线对应的proposals拥有相同的结束边界。右下角部分proposals超出视频范围，无意义。</li>
 </ol>
 <h2 id="BM-layer"><a href="#BM-layer" class="headerlink" title="BM layer"></a>BM layer</h2><ol>
-<li><p>The goal: uniformly sample N points in </p>
-<script type="math/tex; mode=display">
-S_{F} ∈ R^{C×T}</script><p>  between starting boundary </p>
-<script type="math/tex; mode=display">
-t_{s}</script><p> and ending boundary </p>
-<script type="math/tex; mode=display">
-t_{e}</script><p> of each proposal </p>
-<script type="math/tex; mode=display">
-φ_{i,j}</script><p>, and get proposal feature </p>
-<script type="math/tex; mode=display">
-m^f_{i,j} ∈ R^{C×N}</script><p> with rich context (actually sampling in [</p>
-<script type="math/tex; mode=display">
-t_S-0.25d, t_e+0.25d</script><p>]).<br><img src="/imgs/Pasted image 20230810081026.png" alt></p>
-</li>
-<li><p>two problems:</p>
-<ol>
-<li>how to sample feature in non-integer point:<br><img src="/imgs/Pasted image 20230808205131.png" alt="Pasted image 20230808205131"></li>
-<li><p>how to sample feature for all proposals simultaneously:</p>
-<ol>
-<li><p>expanding </p>
-<script type="math/tex; mode=display">
-w_{i,j} ∈ R^{N ×T}</script><p>  to  </p>
-<script type="math/tex; mode=display">
-W ∈ R^{N ×T ×D×T}</script><p> for all proposals in BM confidence map.</p>
-</li>
-<li><p>get </p>
-<script type="math/tex; mode=display">
-M_F ∈ R^{C×N×D×T}</script><p> by using dot product:   </p>
-<script type="math/tex; mode=display">
-S_{F} ∈ R^{C×T}</script><p> and  </p>
-<script type="math/tex; mode=display">
-W^T ∈ R^{T×N×D×T}</script><p>. （<em><script type="math/tex">W</script> can be pre-generated because it’s the same for different videos, the inference speed of BM layer is very fast.</em> Is T is the same for the different videos? Ans: [[#BMN#Base module|Base module]] and [[#BMN#Training of BMN#Training Data Construction|Training Data Construction]]. TODO: review code）</p>
-</li>
+<li>The goal: uniformly sample N points in <script type="math/tex">S_{F} ∈ R^{C×T}</script>  between starting boundary <script type="math/tex">t_{s}</script> and ending boundary <script type="math/tex">t_{e}</script> of each proposal <script type="math/tex">φ_{i,j}</script>, and get proposal feature <script type="math/tex">m^f_{i,j} ∈ R^{C×N}</script> with rich context (actually sampling in [<script type="math/tex">t_S-0.25d, t_e+0.25d</script>]).<br> <img src="/imgs/Pasted image 20230810081026.png" alt></li>
+<li>two problems: <ol>
+<li>how to sample feature in non-integer point:<br> ![[Pasted image 20230808205131.png|375]]</li>
+<li>how to sample feature for all proposals simultaneously:<ol>
+<li>expanding <script type="math/tex">w_{i,j} ∈ R^{N ×T}</script>  to  <script type="math/tex">W ∈ R^{N ×T ×D×T}</script> for all proposals in BM confidence map.</li>
+<li>get <script type="math/tex">M_F ∈ R^{C×N×D×T}</script> by using dot product:   <script type="math/tex">S_{F} ∈ R^{C×T}</script> and  <script type="math/tex">W^T ∈ R^{T×N×D×T}</script>. （<em><script type="math/tex">W</script> can be pre-generated because it’s the same for different videos, the inference speed of BM layer is very fast.</em> Is T is the same for the different videos? Ans: [[#BMN#Base module|Base module]] and [[#BMN#Training of BMN#Training Data Construction|Training Data Construction]]. TODO: review code）</li>
 </ol>
 </li>
 </ol>
 </li>
 </ol>
 <h2 id="Base-module"><a href="#Base-module" class="headerlink" title="Base module"></a>Base module</h2><ol>
-<li><p>*adopt a long observation window with length </p>
-<script type="math/tex; mode=display">
-l_ω</script><p> to truncate the untrimmed feature sequence with length </p>
-<script type="math/tex; mode=display">
-l_f</script><p> .*</p>
-</li>
-<li><p>So here </p>
-<script type="math/tex; mode=display">
-l_w</script><p> is </p>
-<script type="math/tex; mode=display">
-T$$ in</script><p>S_{F} ∈ R^{C×T}$$.</p>
-</li>
+<li><em>adopt a long observation window with length <script type="math/tex">l_ω</script> to truncate the untrimmed feature sequence with length <script type="math/tex">l_f</script> .</em></li>
+<li>So here <script type="math/tex">l_w</script> is <script type="math/tex">T</script> in <script type="math/tex">S_{F} ∈ R^{C×T}</script>.</li>
 </ol>
 <h2 id="Proposal-Evaluation-Module-PEM"><a href="#Proposal-Evaluation-Module-PEM" class="headerlink" title="Proposal Evaluation Module(PEM)"></a>Proposal Evaluation Module(PEM)</h2><ol>
-<li><p>Final generate: </p>
-<script type="math/tex; mode=display">
-M_C\in R^{D×T}</script><p>, but there are two predicted </p>
-<script type="math/tex; mode=display">
-M_C</script><p>: </p>
-<script type="math/tex; mode=display">
-M_{CC}</script><p>, </p>
-<script type="math/tex; mode=display">
-M_{CR}</script><p>, being trained using binary classification and regression loss function separately. TODO: review code.</p>
-</li>
+<li>Final generate: <script type="math/tex">M_C\in R^{D×T}</script>, but there are two predicted <script type="math/tex">M_C</script>: <script type="math/tex">M_{CC}</script>, <script type="math/tex">M_{CR}</script>, being trained using binary classification and regression loss function separately. TODO: review code.</li>
 </ol>
 <h2 id="Training-of-BMN"><a href="#Training-of-BMN" class="headerlink" title="Training of BMN"></a>Training of BMN</h2><h3 id="TEM-vs-PEM"><a href="#TEM-vs-PEM" class="headerlink" title="TEM vs PEM:"></a>TEM vs PEM:</h3><ol>
 <li>TEM: learns local boundary.</li>
@@ -485,119 +402,34 @@ M_{CR}</script><p>, being trained using binary classification and regression los
 </ol>
 <h3 id="Training-Data-Construction"><a href="#Training-Data-Construction" class="headerlink" title="Training Data Construction:"></a>Training Data Construction:</h3><ol>
 <li>firstly, extract all feature sequence F with length.</li>
-<li><p>get many observation windows with length </p>
-<script type="math/tex; mode=display">
-l_w</script><p> with 50% overlap.</p>
-</li>
+<li>get many observation windows with length <script type="math/tex">l_w</script> with 50% overlap.</li>
 <li>here every window contains at least one ground-truth action instance.</li>
 </ol>
 <h3 id="Label-Assignment"><a href="#Label-Assignment" class="headerlink" title="Label Assignment"></a>Label Assignment</h3><h4 id="TEM"><a href="#TEM" class="headerlink" title="TEM"></a>TEM</h4><ol>
-<li><p>denote its starting and ending regions as </p>
-<script type="math/tex; mode=display">
-r_S = [t_s − d_g /10, t_s +d_g/10]</script><p> and </p>
-<script type="math/tex; mode=display">
-r_E =[t_e−d_g/10,t_e+d_g/10]</script><p>separately.</p>
-</li>
-<li><p>denote its local region as </p>
-<script type="math/tex; mode=display">
-r_{t_n} = [t_n −d_f /2, t_n +d_f /2]</script><p>, where </p>
-<script type="math/tex; mode=display">
-d_f = t_n −t_{n−1}</script><p> is the temporal interval between two locations.</p>
-</li>
-<li><p>Then calculate overlap ratio IoR of </p>
-<script type="math/tex; mode=display">
-r_{t_n}</script><p> with </p>
-<script type="math/tex; mode=display">
-r_S</script><p> and </p>
-<script type="math/tex; mode=display">
-r_E</script><p> separately, and denote maximum IoR as </p>
-<script type="math/tex; mode=display">
-g^s_{t_n}</script><p> and  </p>
-<script type="math/tex; mode=display">
-g^e_{t_n}</script><p> separately.</p>
-</li>
+<li>denote its starting and ending regions as <script type="math/tex">r_S = [t_s − d_g /10, t_s +d_g/10]</script> and $r_E =[t_e−d_g/10,t_e+d_g/10]$separately.</li>
+<li>denote its local region as <script type="math/tex">r_{t_n} = [t_n −d_f /2, t_n +d_f /2]</script>, where <script type="math/tex">d_f = t_n −t_{n−1}</script> is the temporal interval between two locations. </li>
+<li>Then calculate overlap ratio IoR of <script type="math/tex">r_{t_n}</script> with <script type="math/tex">r_S</script> and <script type="math/tex">r_E</script> separately, and denote maximum IoR as <script type="math/tex">g^s_{t_n}</script> and  <script type="math/tex">g^e_{t_n}</script> separately.</li>
 <li><em>here IoR is defined as the overlap ratio with ground-truth proportional to the duration of this region.</em> TODO: code review.</li>
-<li><p>Thus generate </p>
-<script type="math/tex; mode=display">
-G_{S,ω}=\{g^s_{t_n}\}^{l_w}_{n=1}</script><p> and </p>
-<script type="math/tex; mode=display">
-G_{E,ω}=\{g^e_{t_n}\}^{l_w}_{n=1}</script><p>  as label of TEM.</p>
-</li>
+<li>Thus generate <script type="math/tex">G_{S,ω}=\{g^s_{t_n}\}^{l_w}_{n=1}</script> and <script type="math/tex">G_{E,ω}=\{g^e_{t_n}\}^{l_w}_{n=1}</script>  as label of TEM.</li>
 </ol>
 <h4 id="PEM"><a href="#PEM" class="headerlink" title="PEM"></a>PEM</h4><ol>
-<li><p>Purpose: BM label map </p>
-<script type="math/tex; mode=display">
-G_C ∈ R^{D×T}</script><p>.</p>
-</li>
-<li><p>For a proposal </p>
-<script type="math/tex; mode=display">
-φ_{i,j}=(t_s=t_j, t_e=t_j+t_i)</script><p> , calculate its IoU with all </p>
-<script type="math/tex; mode=display">
-φ_g</script><p> in </p>
-<script type="math/tex; mode=display">
-Ψ_ω</script><p>, and denote the maximum IoU as </p>
-<script type="math/tex; mode=display">
-g^c_{i,j}</script><p> . Thus we can generate </p>
-<script type="math/tex; mode=display">
-G_C=\{g^c_{i,j}\}^{D,l_ω}_{i,j=1}</script><p>  as label of PEM.</p>
-</li>
+<li>Purpose: BM label map <script type="math/tex">G_C ∈ R^{D×T}</script>.</li>
+<li>For a proposal <script type="math/tex">φ_{i,j}=(t_s=t_j, t_e=t_j+t_i)</script> , calculate its IoU with all <script type="math/tex">φ_g</script> in <script type="math/tex">Ψ_ω</script>, and denote the maximum IoU as <script type="math/tex">g^c_{i,j}</script> . Thus we can generate <script type="math/tex">G_C=\{g^c_{i,j}\}^{D,l_ω}_{i,j=1}</script>  as label of PEM.</li>
 </ol>
 <h3 id="Loss"><a href="#Loss" class="headerlink" title="Loss"></a>Loss</h3><h4 id="Loss-of-TEM"><a href="#Loss-of-TEM" class="headerlink" title="Loss of TEM"></a>Loss of TEM</h4><ol>
-<li><p>adopt weighted binary logistic regression loss function </p>
-<script type="math/tex; mode=display">
-L_{bl}</script><p>,  to get the sum of starting and ending losses:</p>
-<script type="math/tex; mode=display">
-L_{TEM} =L_{bl}(P_S,G_S)+L_{bl}(P_E,G_E)</script></li>
-<li><script type="math/tex; mode=display">
-L_{bl}(P,G): \frac{1}{l_w}\sum_{i=1}^{l_w}(a^+·b_i·log(p_i)+a^-·(1-b_i)·log(1-p_i))</script><p>where </p>
-<script type="math/tex; mode=display">
-b_i = sign(g_i − θ)</script><p> is a two-value function used to convert </p>
-<script type="math/tex; mode=display">
-g_i</script><p> from [0, 1] to {0, 1}0, 1} based on overlap threshold</p>
-<script type="math/tex; mode=display">
-θ = 0.5</script><p>. Denoting </p>
-<script type="math/tex; mode=display">
-l^+=\sum b_i</script><p>  and </p>
-<script type="math/tex; mode=display">
-l^− = l_ω −l^+</script><p>, the weighted terms are </p>
-<script type="math/tex; mode=display">
-α^+ = \frac{l_w}{l^+}</script><p> and </p>
-<script type="math/tex; mode=display">
-α^- = \frac{l_w}{l^-}</script><p>.</p>
-</li>
+<li>adopt weighted binary logistic regression loss function <script type="math/tex">L_{bl}</script>,  to get the sum of starting and ending losses:<script type="math/tex; mode=display">L_{TEM} =L_{bl}(P_S,G_S)+L_{bl}(P_E,G_E)</script></li>
+<li><script type="math/tex; mode=display">L_{bl}(P,G):
+ \frac{1}{l_w}\sum_{i=1}^{l_w}(a^+·b_i·log(p_i)+a^-·(1-b_i)·log(1-p_i))</script> where <script type="math/tex">b_i = sign(g_i − θ)</script> is a two-value function used to convert <script type="math/tex">g_i</script> from [0, 1] to {0, 1}0, 1} based on overlap threshold$θ = 0.5$. Denoting <script type="math/tex">l^+=\sum b_i</script>  and <script type="math/tex">l^− = l_ω −l^+</script>, the weighted terms are <script type="math/tex">α^+ = \frac{l_w}{l^+}</script> and <script type="math/tex">α^- = \frac{l_w}{l^-}</script>.</li>
 </ol>
 <h4 id="Loss-of-PEM"><a href="#Loss-of-PEM" class="headerlink" title="Loss of PEM"></a>Loss of PEM</h4><ol>
-<li><p>Define:</p>
-<script type="math/tex; mode=display">
-L_{PEM} =L_C(M_{CC},G_C)+λ·L_R(M_{CR},G_C)</script></li>
-<li><p>here  </p>
-<script type="math/tex; mode=display">
-L_{bl}</script><p>  for </p>
-<script type="math/tex; mode=display">
-L_C</script><p>  ,  L2 loss for </p>
-<script type="math/tex; mode=display">
-L_R</script><p> .  </p>
-<script type="math/tex; mode=display">
-λ = 10</script><p> .</p>
-</li>
-<li><p>to balance the ratio between positive and negative samples in </p>
-<script type="math/tex; mode=display">
-L_R</script><p> , take all points with </p>
-<script type="math/tex; mode=display">
-g^C_{i,j}>0.6</script><p>  as positive, and randomly sample  </p>
-<script type="math/tex; mode=display">
-g^C_{i,j}<0.2</script><p>  as negative, ensure 1:1 for positive: negative.</p>
+<li>Define:<script type="math/tex; mode=display">L_{PEM} =L_C(M_{CC},G_C)+λ·L_R(M_{CR},G_C)</script><ol>
+<li>here  <script type="math/tex">L_{bl}</script>  for <script type="math/tex">L_C</script>  ,  L2 loss for <script type="math/tex">L_R</script> .  <script type="math/tex">λ = 10</script> . </li>
+<li>to balance the ratio between positive and negative samples in <script type="math/tex">L_R</script> , take all points with <script type="math/tex">g^C_{i,j}>0.6</script>  as positive, and randomly sample  <script type="math/tex">g^C_{i,j}<0.2</script>  as negative, ensure 1:1 for positive: negative.</li>
+</ol>
 </li>
 </ol>
-<h3 id="Training-Objective"><a href="#Training-Objective" class="headerlink" title="Training Objective"></a>Training Objective</h3><script type="math/tex; mode=display">
-\begin{aligned}L=L_{LEM} +λ_1 ·L_{GEM} +λ_2 ·L_2(Θ)\end{aligned}</script><p>where </p>
-<script type="math/tex; mode=display">
-L_2(Θ)</script><p> is L2 regularization term,  </p>
-<script type="math/tex; mode=display">
-λ_1</script><p>, </p>
-<script type="math/tex; mode=display">
-λ_2</script><p> are set to 1, 0.000 to ensure different modules are trained evenly.</p>
-<p>Refs:</p>
+<h3 id="Training-Objective"><a href="#Training-Objective" class="headerlink" title="Training Objective"></a>Training Objective</h3><script type="math/tex; mode=display">L=L_{LEM} +λ_1 ·L_{GEM} +λ_2 ·L_2(Θ)</script><p>where <script type="math/tex">L_2(Θ)</script> is L2 regularization term,  <script type="math/tex">λ_1</script>, <script type="math/tex">λ_2</script> are set to 1, 0.000 to ensure different modules are trained evenly.</p>
+<p>Refs: </p>
 <ol>
 <li><a href="https://zhuanlan.zhihu.com/p/337432552" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/337432552</a></li>
 <li><a href="https://arxiv.org/pdf/1907.09702.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1907.09702.pdf</a></li>
@@ -1011,7 +843,7 @@ L_2(Θ)</script><p> is L2 regularization term,  </p>
         })
 
         gitalk.render('gitalk-container')           
-       </script>
+       </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
 </html>

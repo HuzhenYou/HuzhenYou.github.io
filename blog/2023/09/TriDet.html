@@ -81,7 +81,7 @@
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904211744.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905084929.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905085657.png">
-<meta property="og:updated_time" content="2023-09-10T01:10:15.000Z">
+<meta property="og:updated_time" content="2023-09-10T09:15:22.205Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TriDet">
 <meta name="twitter:description" content="The detail of TriDet.">
@@ -280,7 +280,7 @@
                 
               
 
-              <time title="创建时间：2023-09-10 15:34:05 / 修改时间：09:10:15" itemprop="dateCreated datePublished" datetime="2023-09-10T15:34:05+08:00">2023-09-10</time>
+              <time title="创建时间：2023-09-10 15:34:05 / 修改时间：17:15:22" itemprop="dateCreated datePublished" datetime="2023-09-10T15:34:05+08:00">2023-09-10</time>
             </span>
           
             
@@ -318,7 +318,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>5k</span>
+              <span>4.7k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -432,11 +432,11 @@
 <h1 id="Trident-head"><a href="#Trident-head" class="headerlink" title="Trident-head"></a>Trident-head</h1><p><img src="/imgs/Pasted image 20230904090904.png" alt></p>
 <ol>
 <li>Three branch:<ol>
-<li><code>&lt;font color=#FF8C00&gt;</code>Start Boundary <code>&lt;/font&gt;</code> and <code>&lt;font color=#FF8C00&gt;</code>End Boundary <code>&lt;/font&gt;</code> would extract the segment-level feature.</li>
-<li><code>&lt;font color=#FF8C00&gt;</code>Center Offset <code>&lt;/font&gt;</code> would extract instance-level feature.</li>
+<li><span style="color:#FF8C00;">Start Boundary </span>  and <span style="color:#FF8C00;">End Boundary </span> would extract the segment-level feature.</li>
+<li><span style="color:#FF8C00;">Center Offset </span> would extract instance-level feature.</li>
 </ol>
 </li>
-<li>E.G., Predicted <code>&lt;font color=Purple&gt;</code>Start Boundary <code>&lt;/font&gt;</code> is decided by <code>&lt;font color=#FF8C00&gt;</code>Start Boundary <code>&lt;/font&gt;</code> and <code>&lt;font color=#FF8C00&gt;</code>Center Offset <code>&lt;/font&gt;</code>:<br><img src="/imgs/Pasted image 20230904182444.png" alt></li>
+<li>E.G., Predicted <span style="color:Purple;">Start Boundary</span>  is decided by <span style="color:#FF8C00;">Start Boundary </span> and  <span style="color:#FF8C00;">Center Offset </span>:<br><img src="/imgs/Pasted image 20230904182444.png" alt></li>
 <li>Expectation is decided by B:<ol>
 <li>if B is too small, we can’t find the more far boundary.</li>
 <li>if B is too big, the difficulty of  learning and convergence of training is more great, so that the predicted result is not accuracy.</li>
@@ -452,24 +452,24 @@
 <li>Many methods require complex attention mechanisms to make the network work.</li>
 <li>The success of the previous transformer-based layers(in TAD) primarily relies on their macro-architecture, rather than the self-attention mechanism.<br><img src="/imgs/Pasted image 20230904193650.png" alt></li>
 <li>Above, when 1D-Conv take the place of Self-attention, the Avg map only drops by 1.9, but  when CNN baseline takes the place of Transformer baseline, the Avg map drops very much,  which indicates that Transformer is effective depending to its structure not Self-attention.<br><img src="/imgs/4. ![[The Rank Loss Problem of Self Attention" alt><br>In TAD, making the features same is disastrous, because we need to distinguish a position is the action or not.</li>
-<li><p>Pure LayerNorm will normalize the features $x\in R^n$ to a modulus $\sqrt{n}$ :<br>$x’ = LayerNorm(x)$</p>
-<p>$x’<em>i = \frac{x_i-mean(x)}{\frac{1}{n} {\textstyle \sum</em>{n}^{}(x_i-mean(x))^2}}$</p>
-<p>$\left | x’ \right | ^2<em>2 = {\textstyle \sum</em>{n}^{}x’^2_i}=n$</p>
-</li>
+<li><p>Pure LayerNorm will normalize the features <script type="math/tex">x\in R^n</script> to a modulus <script type="math/tex">\sqrt{n}</script> :</p>
+<script type="math/tex; mode=display">x' = LayerNorm(x)</script><script type="math/tex; mode=display">x'_i = \frac{x_i-mean(x)}{\frac{1}{n} {\textstyle \sum_{n}^{}(x_i-mean(x))^2}}</script><script type="math/tex; mode=display">\left \| x' \right \| ^2_2 = {\textstyle \sum_{n}^{}x'^2_i}=n</script></li>
 <li><p>The Evidence on HACS:<br>we consider the cosine similarity:<br><img src="/imgs/Pasted image 20230904203951.png" alt></p>
 <ol>
 <li>here SA is Self-Attention, SGP is proposed by the author, BackB is the backbone network to extract the feature.</li>
 <li>here the value is the average of the cosine similarity of every feature and average feature in the same layer ?</li>
 </ol>
 </li>
-<li>Consider the Self Attention:<br>$V’=WV$<br>$W=Softmax(\frac{QK^T}{\sqrt{d}})$<br>W is non-negative and the sum of each row is 1, thus the $V’$ are [[ConceptAI#convex combination|convex combination]] for the input $V$.<br>But the value in Convolution kernel can be negative, and the sum can be not 1.</li>
+<li>Consider the Self Attention:<script type="math/tex; mode=display">V'=WV</script><script type="math/tex; mode=display">W=Softmax(\frac{QK^T}{\sqrt{d}})</script>W is non-negative and the sum of each row is 1, thus the <script type="math/tex">V'</script> are [[ConceptAI#convex combination|convex combination]] for the input <script type="math/tex">V</script>.<br>But the value in Convolution kernel can be negative, and the sum can be not 1.</li>
 </ol>
 <h1 id="The-author’s-Solution-The-SGP-layer"><a href="#The-author’s-Solution-The-SGP-layer" class="headerlink" title="The author’s Solution: The SGP layer"></a>The author’s Solution: The SGP layer</h1><ol>
 <li>increase the discrimination of feature.</li>
-<li><p>capture temporal information with different scales of receptive fields.<br>$f<em>{SGP}=\Phi (x)FC(x)+\psi(x)(Conv_w(x)+Conv</em>{kw}(x))+x$,</p>
-<p>$\Phi(x)=ReLU(FC(AvgPool(x)))$,</p>
-<p>$\psi(x)=Conv_w(x)$</p>
-<p>Window-level: make the network extract features in different scales adaptively.</p>
+<li><p>capture temporal information with different scales of receptive fields.</p>
+<script type="math/tex; mode=display">f_{SGP}=\Phi (x)FC(x)+\psi(x)(Conv_w(x)+Conv_{kw}(x))+x$$,
+
+$$\Phi(x)=ReLU(FC(AvgPool(x)))$$,
+
+$$\psi(x)=Conv_w(x)</script><p>Window-level: make the network extract features in different scales adaptively.</p>
 <p>In detail:</p>
 <ol>
 <li>the author uses the depth-wise convolution to reduce the computation of the network.</li>
@@ -895,7 +895,7 @@
         })
 
         gitalk.render('gitalk-container')           
-       </script>
+       </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
 </html>
