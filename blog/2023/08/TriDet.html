@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/angry_bird_16.ico?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+  <meta name="google-site-verification" content="3dBwV8OlVnNtYzxCLCFp2w8WMpuSecV7vBmA_zrf9j4">
+  <meta name="baidu-site-verification" content="eoUZD1BDx6">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":"default"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="The detail of TriDet.">
+<meta name="keywords" content="ActionDetection,DeepLearning,CVPR2023,TemporalActionDetection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TriDet">
+<meta property="og:url" content="https://huzhenyou.github.io/blog/2023/08/TriDet.html">
+<meta property="og:site_name" content="九万里">
+<meta property="og:description" content="The detail of TriDet.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230815192206.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230815192350.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230824200202.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230824195951.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230824201525.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230829191215.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904090904.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904182444.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904184206.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904193650.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/4.%20![[The%20Rank%20Loss%20Problem%20of%20Self%20Attention">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904203951.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904211744.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905084929.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905085657.png">
+<meta property="og:updated_time" content="2023-09-10T00:59:03.958Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TriDet">
+<meta name="twitter:description" content="The detail of TriDet.">
+<meta name="twitter:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230815192206.png">
+  <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
+  <link rel="canonical" href="https://huzhenyou.github.io/blog/2023/08/TriDet">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>TriDet | 九万里</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">九万里</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">虚怀若谷，大智若愚</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+    
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="https://huzhenyou.github.io/blog/2023/08/TriDet.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AngryBirds">
+      <meta itemprop="description" content="虚怀若谷，大智若愚">
+      <meta itemprop="image" content="/images/angry_bird_128.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="九万里">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">TriDet
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2023-08-13 15:34:05" itemprop="dateCreated datePublished" datetime="2023-08-13T15:34:05+08:00">2023-08-13</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-09-10 08:59:03" itemprop="dateModified" datetime="2023-09-10T08:59:03+08:00">2023-09-10</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ActionDetection/" itemprop="url" rel="index"><span itemprop="name">ActionDetection</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>5k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>8 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>The detail of TriDet.</p>
+<a id="more"></a>
+<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ol>
+<li>TriDet: Temporal Action Detection <strong>with</strong> Relative Boundary Modeling.</li>
+<li><p>Temporal Action Detection(TAD)</p>
+<ol>
+<li>Detect all action boundaries and categories from an untrimmed video.<br><img src="/imgs/Pasted image 20230815192206.png" alt></li>
+<li>The pipeline of TAD:<br><img src="/imgs/Pasted image 20230815192350.png" alt><ol>
+<li>backbone:</li>
+<li>use the pre-trained model in [[PoseEstimation_TAD#行为识别(Action Detection/Regnition)|Action Recognition Task]].</li>
+<li>to get the feature map of each frame.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>The core Focus of the author:</p>
+<ol>
+<li>get more accuracy boundary.</li>
+<li>explore Transformer for TAD.</li>
+</ol>
+</li>
+</ol>
+<h1 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h1><h2 id="Intro-1"><a href="#Intro-1" class="headerlink" title="Intro"></a>Intro</h2><ol>
+<li>two classes by the method of boundary dividing for TAD works using Transformer:<ol>
+<li>[[#Segment-level prediction]]</li>
+<li>[[#Instance-level prediction]]</li>
+</ol>
+</li>
+</ol>
+<h2 id="Segment-level-prediction"><a href="#Segment-level-prediction" class="headerlink" title="Segment-level prediction"></a>Segment-level prediction</h2><ol>
+<li>based on extracted feature maps, get a clip, and simple, global expression(e.g., pooling), finally judge whether the clip is the target.</li>
+<li>e.g. both of the below are two-stage network(like Faster-Rcnn, one stage generate lots of proposals, the second stage regresses and classifies proposals):<ol>
+<li>[[BMNDetail|BMN]]</li>
+<li>PGCN：<ol>
+<li>use GCN to refine every proposal.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>The method can’t be trained end-to-end.</li>
+<li>End-to-end:<ol>
+<li>TadTR</li>
+<li>ReAct</li>
+</ol>
+</li>
+</ol>
+<h2 id="Instance-level-prediction"><a href="#Instance-level-prediction" class="headerlink" title="Instance-level prediction"></a>Instance-level prediction</h2><h3 id="Anchor-free-Detection"><a href="#Anchor-free-Detection" class="headerlink" title="Anchor-free Detection"></a>Anchor-free Detection</h3><h4 id="AFSD"><a href="#AFSD" class="headerlink" title="AFSD"></a>AFSD</h4><p><img src="/imgs/Pasted image 20230824200202.png" alt></p>
+<ol>
+<li>predict the distance to the start or end boundary.</li>
+<li>then make the position pointed by most other position as the boundary.</li>
+</ol>
+<h4 id="ActionFormer"><a href="#ActionFormer" class="headerlink" title="ActionFormer"></a>ActionFormer</h4><p><img src="/imgs/Pasted image 20230824195951.png" alt></p>
+<ol>
+<li>Using slide-window to apply self-attention.</li>
+<li>In 2022, the work in TAD improved obviously.</li>
+<li>So TriDet carry out based on the work.</li>
+</ol>
+<h3 id="Segmentation"><a href="#Segmentation" class="headerlink" title="Segmentation"></a>Segmentation</h3><p><img src="/imgs/Pasted image 20230824201525.png" alt></p>
+<h4 id="MLAD"><a href="#MLAD" class="headerlink" title="MLAD"></a>MLAD</h4><ol>
+<li>Apply self-attention in the time level dimension and the classes level dimension.</li>
+<li>Add the two attentions of  the two level dimensions to build the final feature map.</li>
+</ol>
+<h4 id="MS-TCT"><a href="#MS-TCT" class="headerlink" title="MS-TCT"></a>MS-TCT</h4><ol>
+<li>Add a CNN module after a traditional self-attention module.</li>
+<li>Add residual connections.</li>
+</ol>
+<h4 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h4><ol>
+<li>For the above  two works,  they both pay attention to modifying  the self-attention.</li>
+<li>So, it indicates that the original self-attention cannot be applied to TAD.</li>
+</ol>
+<h2 id="Pros-and-Cons"><a href="#Pros-and-Cons" class="headerlink" title="Pros and Cons"></a>Pros and Cons</h2><h3 id="Segment-level-prediction-1"><a href="#Segment-level-prediction-1" class="headerlink" title="Segment-level prediction"></a>Segment-level prediction</h3><ol>
+<li>Contain global representation of segments.</li>
+<li>Larger receptive field.</li>
+<li>More information.</li>
+<li>Detailed Information at each instant is discarded.</li>
+<li>Highly depend on the accuracy of segments.<br><img src="/imgs/Pasted image 20230829191215.png" alt></li>
+</ol>
+<h3 id="Instant-level-prediction"><a href="#Instant-level-prediction" class="headerlink" title="Instant-level prediction"></a>Instant-level prediction</h3><ol>
+<li>Contain detailed representation of instants.</li>
+<li>Smaller receptive field.</li>
+<li>The requirement for feature distinguishability is high. (use the strong backbone to extract features.)</li>
+<li>The degree of response varies greatly with different videos.</li>
+</ol>
+<h1 id="Motivation-of-Trident-head"><a href="#Motivation-of-Trident-head" class="headerlink" title="Motivation of Trident-head"></a>Motivation of Trident-head</h1><ol>
+<li>Consider both instant-level and segment-level feature.</li>
+<li>Set it as the segment-level feature that the predicted frame with the  fixed number of adjacent frames.</li>
+<li>Set the segment-level feature as instant-level feature?</li>
+</ol>
+<h1 id="Trident-head"><a href="#Trident-head" class="headerlink" title="Trident-head"></a>Trident-head</h1><p><img src="/imgs/Pasted image 20230904090904.png" alt></p>
+<ol>
+<li>Three branch:<ol>
+<li><code>&lt;font color=#FF8C00&gt;</code>Start Boundary <code>&lt;/font&gt;</code> and <code>&lt;font color=#FF8C00&gt;</code>End Boundary <code>&lt;/font&gt;</code> would extract the segment-level feature.</li>
+<li><code>&lt;font color=#FF8C00&gt;</code>Center Offset<code>&lt;/font&gt;</code> would extract instance-level feature.</li>
+</ol>
+</li>
+<li>E.G., Predicted <code>&lt;font color=Purple&gt;</code>Start Boundary <code>&lt;/font&gt;</code> is decided by <code>&lt;font color=#FF8C00&gt;</code>Start Boundary <code>&lt;/font&gt;</code> and <code>&lt;font color=#FF8C00&gt;</code>Center Offset<code>&lt;/font&gt;</code>:<br><img src="/imgs/Pasted image 20230904182444.png" alt></li>
+<li>Expectation is decided by B:<ol>
+<li>if B is too small, we can’t find the more far boundary.</li>
+<li>if B is too big, the difficulty of  learning and convergence of training is more great, so that the predicted result is not accuracy.</li>
+</ol>
+</li>
+<li>Combined with FPN:<br><img src="/imgs/Pasted image 20230904184206.png" alt><ol>
+<li>In the different level layers, the fixed number of B is set to product different Bs, so it can have small and big Bs simultaneously.</li>
+<li>While finally outputting, the predicted results in different layers times corresponding scale ratio to get real position.</li>
+</ol>
+</li>
+</ol>
+<h1 id="The-second-question-Attention-in-Temporal-Dimension"><a href="#The-second-question-Attention-in-Temporal-Dimension" class="headerlink" title="The second question: Attention in Temporal Dimension."></a>The second question: Attention in Temporal Dimension.</h1><ol>
+<li>Many methods require complex attention mechanisms to make the network work.</li>
+<li>The success of the previous transformer-based layers(in TAD) primarily relies on their macro-architecture, rather than the self-attention mechanism.<br><img src="/imgs/Pasted image 20230904193650.png" alt></li>
+<li>Above, when 1D-Conv take the place of Self-attention, the Avg map only drops by 1.9, but  when CNN baseline takes the place of Transformer baseline, the Avg map drops very much,  which indicates that Transformer is effective depending to its structure not Self-attention.<br><img src="/imgs/4. ![[The Rank Loss Problem of Self Attention" alt><br>In TAD, making the features same is disastrous, because we need to distinguish a position is the action or not.</li>
+<li><p>Pure LayerNorm will normalize the features $x\in R^n$ to a modulus $\sqrt{n}$ :<br>$x’ = LayerNorm(x)$</p>
+<p>$x’<em>i = \frac{x_i-mean(x)}{\frac{1}{n} {\textstyle \sum</em>{n}^{}(x_i-mean(x))^2}}$</p>
+<p>$\left | x’ \right | ^2<em>2 = {\textstyle \sum</em>{n}^{}x’^2_i}=n$</p>
+</li>
+<li><p>The Evidence on HACS:<br>we consider the cosine similarity:<br><img src="/imgs/Pasted image 20230904203951.png" alt></p>
+<ol>
+<li>here SA is Self-Attention, SGP is proposed by the author, BackB is the backbone network to extract the feature.</li>
+<li>here the value is the average of the cosine similarity of every feature and average feature in the same layer ?</li>
+</ol>
+</li>
+<li>Consider the Self Attention:<br>$V’=WV$<br>$W=Softmax(\frac{QK^T}{\sqrt{d}})$<br>W is non-negative and the sum of each row is 1, thus the $V’$ are [[ConceptAI#convex combination|convex combination]] for the input $V$.<br>But the value in Convolution kernel can be negative, and the sum can be not 1.</li>
+</ol>
+<h1 id="The-author’s-Solution-The-SGP-layer"><a href="#The-author’s-Solution-The-SGP-layer" class="headerlink" title="The author’s Solution: The SGP layer"></a>The author’s Solution: The SGP layer</h1><ol>
+<li>increase the discrimination of feature.</li>
+<li><p>capture temporal information with different scales of receptive fields.<br>$f<em>{SGP}=\Phi (x)FC(x)+\psi(x)(Conv_w(x)+Conv</em>{kw}(x))+x$,</p>
+<p>$\Phi(x)=ReLU(FC(AvgPool(x)))$,</p>
+<p>$\psi(x)=Conv_w(x)$</p>
+<p>Window-level: make the network extract features in different scales adaptively.</p>
+<p>In detail:</p>
+<ol>
+<li>the author uses the depth-wise convolution to reduce the computation of the network.</li>
+<li>add a additional residual connection.</li>
+</ol>
+</li>
+</ol>
+<p><img src="/imgs/Pasted image 20230904211744.png" alt></p>
+<h1 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h1><p>The performance is so good: the accuracy is higher, the speed is faster.</p>
+<p><img src="/imgs/Pasted image 20230905084929.png" alt></p>
+<p><img src="/imgs/Pasted image 20230905085657.png" alt></p>
+<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ol>
+<li><a href="https://www.bilibili.com/video/BV12M4y117GZ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=2c23be48ba22c91130ce4868020ab598" target="_blank" rel="noopener">https://www.bilibili.com/video/BV12M4y117GZ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=2c23be48ba22c91130ce4868020ab598</a>  (‘4.10)</li>
+<li>Paper: <a href="https://arxiv.org/abs/2303.07347" target="_blank" rel="noopener">https://arxiv.org/abs/2303.07347</a></li>
+<li>Code: <a href="https://github.com/dingfengshi/TriDet" target="_blank" rel="noopener">https://github.com/dingfengshi/TriDet</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AngryBirds</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://huzhenyou.github.io/blog/2023/08/TriDet.html" title="TriDet">https://huzhenyou.github.io/blog/2023/08/TriDet.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/ActionDetection/" rel="tag"># ActionDetection</a>
+            
+              <a href="/tags/DeepLearning/" rel="tag"># DeepLearning</a>
+            
+              <a href="/tags/CVPR2023/" rel="tag"># CVPR2023</a>
+            
+              <a href="/tags/TemporalActionDetection/" rel="tag"># TemporalActionDetection</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/blog/2023/08/BMN详解.html" rel="prev" title="BMN详解">
+                  BMN详解 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="gitalk-container"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Intro"><span class="nav-number">1.</span> <span class="nav-text">Intro</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Related-Work"><span class="nav-number">2.</span> <span class="nav-text">Related Work</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Intro-1"><span class="nav-number">2.1.</span> <span class="nav-text">Intro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Segment-level-prediction"><span class="nav-number">2.2.</span> <span class="nav-text">Segment-level prediction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instance-level-prediction"><span class="nav-number">2.3.</span> <span class="nav-text">Instance-level prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Anchor-free-Detection"><span class="nav-number">2.3.1.</span> <span class="nav-text">Anchor-free Detection</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AFSD"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">AFSD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ActionFormer"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">ActionFormer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Segmentation"><span class="nav-number">2.3.2.</span> <span class="nav-text">Segmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MLAD"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">MLAD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MS-TCT"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">MS-TCT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Summary"><span class="nav-number">2.3.2.3.</span> <span class="nav-text">Summary</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pros-and-Cons"><span class="nav-number">2.4.</span> <span class="nav-text">Pros and Cons</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Segment-level-prediction-1"><span class="nav-number">2.4.1.</span> <span class="nav-text">Segment-level prediction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Instant-level-prediction"><span class="nav-number">2.4.2.</span> <span class="nav-text">Instant-level prediction</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation-of-Trident-head"><span class="nav-number">3.</span> <span class="nav-text">Motivation of Trident-head</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Trident-head"><span class="nav-number">4.</span> <span class="nav-text">Trident-head</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-second-question-Attention-in-Temporal-Dimension"><span class="nav-number">5.</span> <span class="nav-text">The second question: Attention in Temporal Dimension.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-author’s-Solution-The-SGP-layer"><span class="nav-number">6.</span> <span class="nav-text">The author’s Solution: The SGP layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experiment"><span class="nav-number">7.</span> <span class="nav-text">Experiment</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refs"><span class="nav-number">8.</span> <span class="nav-text">Refs</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/angry_bird_128.ico"
+      alt="AngryBirds">
+  <p class="site-author-name" itemprop="name">AngryBirds</p>
+  <div class="site-description" itemprop="description">虚怀若谷，大智若愚</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/HuzhenYou" title="GitHub &rarr; https://github.com/HuzhenYou" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:youhuzhen@gmail.com" title="E-Mail &rarr; mailto:youhuzhen@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/you-jin-cheng/activities" title="https://www.zhihu.com/people/you-jin-cheng/activities" rel="noopener" target="_blank">知乎</a>
+        </li>
+      
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AngryBirds</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">9k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">15 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/muse.js?v=7.3.0"></script>
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'e14928c5d4e586a1be33',
+      clientSecret: 'b58488475e69824177de7fa4e52325a0de1dbdb7',
+      repo: 'HuzhenYou.github.io',
+      owner: 'HuzhenYou',
+      admin: ['HuzhenYou'],
+      id: '05ef30d16f5c28103d521f2570fcaacf',
+        language: 'zh-CN',
+      
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
