@@ -36,11 +36,11 @@
     
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
-    
       <category term="CVPR2023" scheme="https://huzhenyou.github.io/tags/CVPR2023/"/>
     
       <category term="TemporalActionDetection" scheme="https://huzhenyou.github.io/tags/TemporalActionDetection/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -64,11 +64,11 @@
     
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
       <category term="ProposalGeneration" scheme="https://huzhenyou.github.io/tags/ProposalGeneration/"/>
     
       <category term="ActivityNetChallenge2019" scheme="https://huzhenyou.github.io/tags/ActivityNetChallenge2019/"/>
-    
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
