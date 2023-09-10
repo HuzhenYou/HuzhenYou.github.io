@@ -62,7 +62,7 @@
 <meta name="keywords" content="ActionDetection,DeepLearning,CVPR2023,TemporalActionDetection">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TriDet">
-<meta property="og:url" content="https://huzhenyou.github.io/blog/2023/08/TriDet.html">
+<meta property="og:url" content="https://huzhenyou.github.io/blog/2023/09/TriDet.html">
 <meta property="og:site_name" content="九万里">
 <meta property="og:description" content="The detail of TriDet.">
 <meta property="og:locale" content="zh-CN">
@@ -81,13 +81,13 @@
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904211744.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905084929.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905085657.png">
-<meta property="og:updated_time" content="2023-09-10T00:59:03.958Z">
+<meta property="og:updated_time" content="2023-09-10T01:10:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TriDet">
 <meta name="twitter:description" content="The detail of TriDet.">
 <meta name="twitter:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230815192206.png">
   <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
-  <link rel="canonical" href="https://huzhenyou.github.io/blog/2023/08/TriDet">
+  <link rel="canonical" href="https://huzhenyou.github.io/blog/2023/09/TriDet">
 
 
 <script id="page-configurations">
@@ -252,7 +252,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="https://huzhenyou.github.io/blog/2023/08/TriDet.html">
+    <link itemprop="mainEntityOfPage" href="https://huzhenyou.github.io/blog/2023/09/TriDet.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="AngryBirds">
@@ -280,19 +280,11 @@
                 
               
 
-              <time title="创建时间：2023-08-13 15:34:05" itemprop="dateCreated datePublished" datetime="2023-08-13T15:34:05+08:00">2023-08-13</time>
+              <time title="创建时间：2023-09-10 15:34:05 / 修改时间：09:10:15" itemprop="dateCreated datePublished" datetime="2023-09-10T15:34:05+08:00">2023-09-10</time>
             </span>
           
             
 
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-10 08:59:03" itemprop="dateModified" datetime="2023-09-10T08:59:03+08:00">2023-09-10</time>
-              </span>
             
           
             <span class="post-meta-item">
@@ -441,10 +433,10 @@
 <ol>
 <li>Three branch:<ol>
 <li><code>&lt;font color=#FF8C00&gt;</code>Start Boundary <code>&lt;/font&gt;</code> and <code>&lt;font color=#FF8C00&gt;</code>End Boundary <code>&lt;/font&gt;</code> would extract the segment-level feature.</li>
-<li><code>&lt;font color=#FF8C00&gt;</code>Center Offset<code>&lt;/font&gt;</code> would extract instance-level feature.</li>
+<li><code>&lt;font color=#FF8C00&gt;</code>Center Offset <code>&lt;/font&gt;</code> would extract instance-level feature.</li>
 </ol>
 </li>
-<li>E.G., Predicted <code>&lt;font color=Purple&gt;</code>Start Boundary <code>&lt;/font&gt;</code> is decided by <code>&lt;font color=#FF8C00&gt;</code>Start Boundary <code>&lt;/font&gt;</code> and <code>&lt;font color=#FF8C00&gt;</code>Center Offset<code>&lt;/font&gt;</code>:<br><img src="/imgs/Pasted image 20230904182444.png" alt></li>
+<li>E.G., Predicted <code>&lt;font color=Purple&gt;</code>Start Boundary <code>&lt;/font&gt;</code> is decided by <code>&lt;font color=#FF8C00&gt;</code>Start Boundary <code>&lt;/font&gt;</code> and <code>&lt;font color=#FF8C00&gt;</code>Center Offset <code>&lt;/font&gt;</code>:<br><img src="/imgs/Pasted image 20230904182444.png" alt></li>
 <li>Expectation is decided by B:<ol>
 <li>if B is too small, we can’t find the more far boundary.</li>
 <li>if B is too big, the difficulty of  learning and convergence of training is more great, so that the predicted result is not accuracy.</li>
@@ -510,7 +502,7 @@
     <strong>本文作者： </strong>AngryBirds</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://huzhenyou.github.io/blog/2023/08/TriDet.html" title="TriDet">https://huzhenyou.github.io/blog/2023/08/TriDet.html</a>
+    <a href="https://huzhenyou.github.io/blog/2023/09/TriDet.html" title="TriDet">https://huzhenyou.github.io/blog/2023/09/TriDet.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -541,15 +533,15 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
+                <a href="/blog/2023/08/BMN详解.html" rel="next" title="BMN详解">
+                  <i class="fa fa-chevron-left"></i> BMN详解
+                </a>
+              
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/blog/2023/08/BMN详解.html" rel="prev" title="BMN详解">
-                  BMN详解 <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -893,7 +885,7 @@
       repo: 'HuzhenYou.github.io',
       owner: 'HuzhenYou',
       admin: ['HuzhenYou'],
-      id: '05ef30d16f5c28103d521f2570fcaacf',
+      id: '5860e2590f5fa2017aaf72b6bef55623',
         language: 'zh-CN',
       
       distractionFreeMode: 'true'
@@ -902,5 +894,5 @@
   }, window.Gitalk);
 </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
-</body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
 </html>
