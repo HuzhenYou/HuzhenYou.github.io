@@ -67,7 +67,7 @@
 <meta property="og:description" content="mmaction人体行为检测脚本demo/demo_spatiotemporal_det.py的分析。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230912092443.png">
-<meta property="og:updated_time" content="2023-09-17T12:06:45.236Z">
+<meta property="og:updated_time" content="2023-09-17T12:13:58.305Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mmaction2之demo_spatiotemporal_det.py分析">
 <meta name="twitter:description" content="mmaction人体行为检测脚本demo/demo_spatiotemporal_det.py的分析。">
@@ -266,7 +266,7 @@
                 
               
 
-              <time title="创建时间：2023-09-17 15:34:05 / 修改时间：20:06:45" itemprop="dateCreated datePublished" datetime="2023-09-17T15:34:05+08:00">2023-09-17</time>
+              <time title="创建时间：2023-09-17 15:34:05 / 修改时间：20:13:58" itemprop="dateCreated datePublished" datetime="2023-09-17T15:34:05+08:00">2023-09-17</time>
             </span>
           
             
@@ -331,7 +331,7 @@
 <a id="more"></a>
 <hr>
 <h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><p>对人体行为检测demo脚本demo/demo_spatiotemporal_det.py进行分析。</p>
-<h1 id="extract-all-frames"><a href="#extract-all-frames" class="headerlink" title="extract all frames"></a>extract all frames</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">frame_paths, original_frames = frame_extract(args.video, out_dir=tmp_dir.name) <span class="comment"># extract all frames</span></span><br></pre></td></tr></table></figure>
+<h1 id="extract-all-frames"><a href="#extract-all-frames" class="headerlink" title="extract all frames"></a>extract all frames</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">frame_paths, original_frames = frame_extract(args.video, </span><br><span class="line">			out_dir=tmp_dir.name) <span class="comment"># extract all frames</span></span><br></pre></td></tr></table></figure>
 <h1 id="sample-interval"><a href="#sample-interval" class="headerlink" title="sample interval"></a>sample interval</h1><ol>
 <li>window_size = clip_len * frame_interval, here clip_len is the number of frames in the window,  frame_interval is the interval of frames in window.</li>
 </ol>
@@ -359,12 +359,14 @@
 <p>here the meaning of <code>start = timestamps[0] - old_frame_interval / n * (n - 1) / 2</code>:</p>
 <p><img src="/imgs/Pasted image 20230912092443.png" alt></p>
 <h1 id="修复代码中的问题"><a href="#修复代码中的问题" class="headerlink" title="修复代码中的问题"></a>修复代码中的问题</h1><h2 id="加载大视频"><a href="#加载大视频" class="headerlink" title="加载大视频"></a>加载大视频</h2><p>问题描述: 当处理高清晰图像时，会在运行时崩溃掉。<br>原因如下：</p>
-<pre><code>1. 如我要处理的视频共510M, 但在 [[#extract all frames]] 这一步，把所有视频帧保存下来后，竟占用40多G，原因是视频进行了编码（类似于进行了压缩）。所以若遇到崩溃，首先看下，自己的磁盘空间是否足够。
-2. 更可气的是，每帧大小为(1440, 2560, 3)的图片，磁盘空间占用34G, 而内存却占用了309G, 原因是:
-
-内存 VS 硬盘:`sys.getsizeof()` VS `os.path.getsize()`
-当加载一个文件到内存中时，用sys.getsizeof()获取变量大小，其包括文件数据及可能的其他python对象所占用的内存空间, 所以通常会远远大于文件在磁盘上的实际大小。
-</code></pre><p>解决方案：对代码进行改造，分段进行识别。</p>
+<ol>
+<li>如我要处理的视频共510M, 但在 [[#extract all frames]] 这一步，把所有视频帧保存下来后，竟占用40多G，原因是视频进行了编码（类似于进行了压缩）。所以若遇到崩溃，首先看下，自己的磁盘空间是否足够。</li>
+<li>更可气的是，每帧大小为(1440, 2560, 3)的图片，磁盘空间占用34G, 而内存却占用了309G, 原因是:<ol>
+<li>内存 VS 硬盘( sys.getsizeof() VS os.path.getsize() ):  当加载一个文件到内存中时，用sys.getsizeof()获取变量大小，其包括文件数据及可能的其他python对象所占用的内存空间, 所以通常会远远大于文件在磁盘上的实际大小。</li>
+</ol>
+</li>
+</ol>
+<p>解决方案：对代码进行改造，分段进行识别。</p>
 
     </div>
 
