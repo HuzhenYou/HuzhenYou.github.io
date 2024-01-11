@@ -84,11 +84,11 @@
     
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
       <category term="CVPR2023" scheme="https://huzhenyou.github.io/tags/CVPR2023/"/>
     
       <category term="TemporalActionDetection" scheme="https://huzhenyou.github.io/tags/TemporalActionDetection/"/>
-    
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
