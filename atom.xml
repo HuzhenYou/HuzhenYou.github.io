@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://huzhenyou.github.io/"/>
-  <updated>2024-06-13T06:20:21.084Z</updated>
+  <updated>2024-06-13T08:18:15.151Z</updated>
   <id>https://huzhenyou.github.io/</id>
   
   <author>
@@ -17,11 +17,39 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>MarketSenseAI：利用大模型进行投资</title>
+    <link href="https://huzhenyou.github.io//blog/2024/06/MarketSenseA-GPT-4-%E9%80%89%E8%82%A1%E6%94%B6%E7%9B%8A%E8%B6%85-40.html"/>
+    <id>https://huzhenyou.github.io//blog/2024/06/MarketSenseA-GPT-4-选股收益超-40.html</id>
+    <published>2024-06-13T08:18:14.000Z</published>
+    <updated>2024-06-13T08:18:15.151Z</updated>
+    
+    <content type="html"><![CDATA[<p>对MarketSenseAI利用大模型进行投资进行解读。</p><a id="more"></a><hr><h1 id="MarketSenseAI"><a href="#MarketSenseAI" class="headerlink" title="MarketSenseAI."></a>MarketSenseAI.</h1><h1 id="生成最终决定的四个组件"><a href="#生成最终决定的四个组件" class="headerlink" title="生成最终决定的四个组件"></a>生成最终决定的四个组件</h1><ol><li>新闻分析：评估与目标公司相关的最新新闻摘要，以评估它们对股票绩效的潜在影响。</li><li>价格动态分析：将股票的价格动态与相关股票和整体市场进行比较，提供相对绩效的视角。</li><li>宏观经济环境分析：评估更广泛的宏观经济格局及其对目标公司的影响，考虑全球经济趋势和事件。</li><li>基本面分析：对公司基本的财务数据进行审查，分析其当前的财务状况和未来前景。<br><img src="/imgs/Pasted image 20240122213415.png" alt width="1325px"></li></ol><h1 id="新闻分析"><a href="#新闻分析" class="headerlink" title="新闻分析"></a>新闻分析</h1><ul><li>采用 渐进式新闻摘要器<br><img src="/imgs/Pasted image 20240122213721.png" alt width="875px"><ul><li>步骤：<ol><li>去除与公司无关的文本。</li><li>将最新的新闻摘要和之前的渐进摘要集成。</li></ol></li></ul></li></ul><h1 id="基本面摘要器"><a href="#基本面摘要器" class="headerlink" title="基本面摘要器"></a>基本面摘要器</h1><p><img src="/imgs/Pasted image 20240123102224.png" alt width="600px"></p><ul><li>Object: 提供 公司财务状况的 摘要。</li><li>作者使用EODHD的API获取关键 季度信息。</li><li>将两个季度的财务报表输入到GPT-4进行比较，深入研究 企业利润能力、收入轨迹、债务指标、现金流动态。</li></ul><h1 id="股价动态摘要器"><a href="#股价动态摘要器" class="headerlink" title="股价动态摘要器"></a>股价动态摘要器</h1><ul><li>对股票的价格趋势 和 财务指标 进行深入分析和上下文处理。</li><li><p>不仅关注股票本身，还通过 与其他相似股票进行比较，以及整个市场的背景，提供了更全面的分析，从而更好地理解当前股票在行业和市场整体中的表现。<br><img src="/imgs/Pasted image 20240123110808.png" alt width="550px"></p></li><li><p>识别相似算法：用MPNet对股票描述 (like financial metrics, market performance, news analysis, etc.)进行embedding, 然后用余弦距离计算目标股票和其他股票的相似度，取topN, 具体地：<br>  <img src="/imgs/Pasted image 20240123111659.png" alt width="800px"></p></li></ul><h1 id="宏观经济环境摘要器"><a href="#宏观经济环境摘要器" class="headerlink" title="宏观经济环境摘要器"></a>宏观经济环境摘要器</h1><ul><li>Object: 宏观经济 可帮助更好理解当前经济环境 并 做出明智的投资决策。</li><li>该组件名：MarketDigest。</li><li>方法：<ul><li>确保多个权威信息源：收集各大银行、投资机构等公开报告。</li><li>每两周 综合一次，获得 简明摘要。</li><li>具体地：<ul><li>将报告等 转化为文本，让GPT-4对每个报告生成一个摘要。</li><li>将 所有单独的摘要 给GPT-4, 生成全面的概述。<br><img src="/imgs/Pasted image 20240123113136.png" alt width="1000px"></li></ul></li></ul></li></ul><h1 id="生成最终决定（信号生成：买入、卖出、持有）"><a href="#生成最终决定（信号生成：买入、卖出、持有）" class="headerlink" title="生成最终决定（信号生成：买入、卖出、持有）"></a>生成最终决定（信号生成：买入、卖出、持有）</h1><ul><li>融合上面对所有信息：<ul><li><a href="#新闻分析">新闻分析</a></li><li><a href="#基本面摘要器">基本面摘要器</a></li><li><a href="#股价动态摘要器">股价动态摘要器</a></li><li><a href="#宏观经济环境摘要器">宏观经济环境摘要器</a></li></ul></li><li>Object: 生成决策信号，并 对这个选择 背后的推理进行 清晰、逐步的解释。</li><li>各文本相似性分析：<img src="/imgs/Pasted image 20240123115306.png" alt width="850px"><img src="/imgs/Pasted image 20240123115405.png" alt width="500px"><ul><li>新闻和价格动态摘要有高相似性分数.</li><li>基本面和宏观组件的平均相似性分数较低，对模型每月决策的直接影响较小。</li></ul></li></ul><h2 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h2><blockquote><p><a href="https://mp.weixin.qq.com/s/A0aAVxCCv_VNOVkQlnGDbg" target="_blank" rel="noopener">碾压华尔街，GPT-4 选股收益超 40%</a><br>论文题目: Can Large Language Models Beat Wall Street? Unveiling the Potential of AI in Stock Selection<br>   论文链接: <a href="https://arxiv.org/abs/2401.03737" target="_blank" rel="noopener">https://arxiv.org/abs/2401.03737</a><br>   博客地址: <a href="https://www.marketsense-ai.com/" target="_blank" rel="noopener">https://www.marketsense-ai.com/</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;对MarketSenseAI利用大模型进行投资进行解读。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="LLM+投资" scheme="https://huzhenyou.github.io/categories/LLM-%E6%8A%95%E8%B5%84/"/>
+    
+    
+      <category term="LLM+投资" scheme="https://huzhenyou.github.io/tags/LLM-%E6%8A%95%E8%B5%84/"/>
+    
+      <category term="GPT-4" scheme="https://huzhenyou.github.io/tags/GPT-4/"/>
+    
+      <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Sora解读</title>
     <link href="https://huzhenyou.github.io//blog/2024/06/Sora.html"/>
     <id>https://huzhenyou.github.io//blog/2024/06/Sora.html</id>
     <published>2024-06-13T06:20:21.000Z</published>
-    <updated>2024-06-13T06:20:21.084Z</updated>
+    <updated>2024-06-13T08:22:28.606Z</updated>
     
     <content type="html"><![CDATA[<p>对OpenAI官网的Sora的技术报告的解读。</p><a id="more"></a><hr><h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><ul><li>集中两点：<ul><li>把多种类型的视觉数据转化为统一表示的方法。</li><li>Sora 的能力和限制 的 定性评估。</li></ul></li><li>能力：生成多种时长、宽纵比、清晰度的视频，最长可生成1分钟的高保真视频。</li><li>Sora证明随着视频生成模型越大，对物理和数字世界的模拟越好</li></ul><h2 id="把视频数据打成patches"><a href="#把视频数据打成patches" class="headerlink" title="把视频数据打成patches"></a><strong>把视频数据打成patches</strong></h2><ul><li>受到LLM在多种文本数据（代码、数学和多种自然语言）上训练的启发，作者在想办法 怎么 继承这样的优点：<ul><li>之前已证明：patches 已经展示了对视觉数据是有效的表征。<img src="/imgs/Pasted image 20240306200713.png" alt="Alt text"></li></ul></li></ul><h2 id="视频压缩网络"><a href="#视频压缩网络" class="headerlink" title="视频压缩网络"></a>视频压缩网络</h2><ul><li>如上图，网络输入的是原始视频，输出的是潜在的表征，这个压缩是空间和时间上的。</li><li>Sora 是在这个潜在表征上 训练和推理时生成视频的。</li><li>作者也训练了一个响应的解码器模型，把生成的潜在表征映射回像素空间。</li></ul><h2 id="时空潜在patches（Spacetime-latent-patches）"><a href="#时空潜在patches（Spacetime-latent-patches）" class="headerlink" title="时空潜在patches（Spacetime latent patches）"></a>时空潜在patches（Spacetime latent patches）</h2><ul><li>作者把一个序列的时空patches作为transformer的tokens。</li><li>这个机制也可以用在图片上，因为图片就是单帧的视频。</li><li>这种基于patches的表征，使Sora能够在不同分辨率、时长、长宽比的视频和图片上进行训练。</li><li>在推理时，能通过排列的合适尺寸的随机初始化patches，我们可以控制生产视频的尺寸。</li></ul><h2 id="视频生成的scaling-transformers"><a href="#视频生成的scaling-transformers" class="headerlink" title="视频生成的scaling transformers"></a>视频生成的scaling transformers</h2><ul><li>Sora 是一个diffusion model. 也是一个diffusion transformer.</li><li>输入 noisy的patches（和如文本prompts一样的conditioning information），它被训练预测一个clean的patches.</li><li>Transformers已经被证明，通过规模增大，效果会显著增加，如language modeling, computer vision, image generation.</li><li>这篇工作也随着规模增大，而效果变好。</li></ul><h2 id="可变的-时长、清晰度、长宽比"><a href="#可变的-时长、清晰度、长宽比" class="headerlink" title="可变的 时长、清晰度、长宽比"></a>可变的 时长、清晰度、长宽比</h2><ul><li>过去对图像和视频生成的方法会进行resize, crop, ✂️ videos到一个标准尺寸（4秒的$256 \times 256$ 的视频）。</li><li>然而作者发现在原始数据上训练有一些好处：<ul><li>灵活采样：<ul><li>可生成1920x1080p ，1080x1920p及其间的任何尺寸。</li><li>可以直接生成完美适配任何屏幕的视频。</li><li>还可以快速获得要生成视频的预览版。</li></ul></li><li>改进了取景和构图</li></ul></li></ul><h2 id="自然语言理解"><a href="#自然语言理解" class="headerlink" title="自然语言理解"></a>自然语言理解</h2><ul><li>如何生成text-video的大量训练集：<ul><li>把DALL·E 3中的重新生成字幕技术引入到视频中。</li><li>首先训练一个描述非常丰富的字幕生成模型。通过这种方式，可提升prompt的保真度和整体视频质量。</li></ul></li><li>也用了GPT使prompt变得更长、细节更丰富。</li></ul><h2 id="主要任务"><a href="#主要任务" class="headerlink" title="主要任务"></a>主要任务</h2><ul><li>完美循环视频</li><li>把图片变视频</li><li>向前、向后扩展视频</li><li>根据prompt编辑视频。</li><li>融合来那个完全不同的视频成为新视频。</li><li>生成图像。</li><li>新兴的模拟能力：<ul><li>3D 连贯性：可产生动态相机运动拍摄出来的视频。</li><li>长范围的 关联性 和 物体特征不变形：<ul><li>即使被遮挡或离开画面，也能保持物体的不变形（often, though not always）</li><li>能对同一对象产生不同的镜头。</li></ul></li></ul></li><li>模拟真实的和物理世界的交互。</li><li>模拟数码世界。</li></ul><h2 id="缺陷："><a href="#缺陷：" class="headerlink" title="缺陷："></a>缺陷：</h2><ul><li>不能准确模拟现实世界。</li><li>再交互中，不总是能产生物体状态的正确改变。</li><li>长的视频中出现的不连贯性。</li></ul>]]></content>
     
@@ -31,16 +59,12 @@
     
     </summary>
     
-      <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
+      <category term="视频生成" scheme="https://huzhenyou.github.io/categories/%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90/"/>
     
     
-      <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
+      <category term="视频生成" scheme="https://huzhenyou.github.io/tags/%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90/"/>
     
-      <category term="ProposalGeneration" scheme="https://huzhenyou.github.io/tags/ProposalGeneration/"/>
-    
-      <category term="ActivityNetChallenge2019" scheme="https://huzhenyou.github.io/tags/ActivityNetChallenge2019/"/>
-    
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+      <category term="MML" scheme="https://huzhenyou.github.io/tags/MML/"/>
     
   </entry>
   
@@ -86,9 +110,9 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
-      <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
-    
       <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
+      <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
   </entry>
   
@@ -110,9 +134,9 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
-      <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
-    
       <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
+      <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
       <category term="CVPR2023" scheme="https://huzhenyou.github.io/tags/CVPR2023/"/>
     
@@ -138,13 +162,13 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
       <category term="ProposalGeneration" scheme="https://huzhenyou.github.io/tags/ProposalGeneration/"/>
     
       <category term="ActivityNetChallenge2019" scheme="https://huzhenyou.github.io/tags/ActivityNetChallenge2019/"/>
-    
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
