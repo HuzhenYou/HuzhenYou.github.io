@@ -247,7 +247,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
             
-            <a href="/blog/2024/06/Sora.html" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/blog/2024/06/Sora.html" class="post-title-link" itemprop="url">Sora解读</a>
           
         </h2>
 
@@ -262,7 +262,20 @@
                 
               
 
-              <time title="创建时间：2024-06-03 13:51:03" itemprop="dateCreated datePublished" datetime="2024-06-03T13:51:03+08:00">2024-06-03</time>
+              <time title="创建时间：2024-06-13 14:20:21" itemprop="dateCreated datePublished" datetime="2024-06-13T14:20:21+08:00">2024-06-13</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ActionDetection/" itemprop="url" rel="index"><span itemprop="name">ActionDetection</span></a></span>
+
+                
+                
+              
             </span>
           
 
@@ -298,80 +311,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="技术报告"><a href="#技术报告" class="headerlink" title="技术报告"></a>技术报告</h1><ul>
-<li>集中两点：<ul>
-<li>把多种类型的视觉数据转化为统一表示的方法。</li>
-<li>Sora 的能力和限制 的 定性评估。</li>
-</ul>
-</li>
-<li>能力：生成多种时长、宽纵比、清晰度的视频，最长可生成1分钟的高保真视频。</li>
-<li>Sora证明随着视频生成模型越大，对物理和数字世界的模拟越好<h2 id="把视频数据打成patches"><a href="#把视频数据打成patches" class="headerlink" title="把视频数据打成patches"></a>把视频数据打成patches</h2></li>
-<li>受到LLM在多种文本数据（代码、数学和多种自然语言）上训练的启发，作者在想办法 怎么 继承这样的优点：<ul>
-<li>之前已证明：patches 已经展示了对视觉数据是有效的表征。![[Pasted image 20240306200713.png]]</li>
-</ul>
-</li>
-</ul>
-<h2 id="视频压缩网络"><a href="#视频压缩网络" class="headerlink" title="视频压缩网络"></a>视频压缩网络</h2><ul>
-<li>如上图，网络输入的是原始视频，输出的是潜在的表征，这个压缩是空间和时间上的。</li>
-<li>Sora 是在这个潜在表征上 训练和推理时生成视频的。</li>
-<li>作者也训练了一个响应的解码器模型，把生成的潜在表征映射回像素空间。<h2 id="时空潜在patches（Spacetime-latent-patches）"><a href="#时空潜在patches（Spacetime-latent-patches）" class="headerlink" title="时空潜在patches（Spacetime latent patches）"></a>时空潜在patches（Spacetime latent patches）</h2></li>
-<li>作者把一个序列的时空patches作为transformer的tokens。</li>
-<li>这个机制也可以用在图片上，因为图片就是单帧的视频。</li>
-<li>这种基于patches的表征，使Sora能够在不同分辨率、时长、长宽比的视频和图片上进行训练。</li>
-<li>在推理时，能通过排列的合适尺寸的随机初始化patches，我们可以控制生产视频的尺寸。</li>
-</ul>
-<h2 id="视频生成的scaling-transformers"><a href="#视频生成的scaling-transformers" class="headerlink" title="视频生成的scaling transformers"></a>视频生成的scaling transformers</h2><ul>
-<li>Sora 是一个diffusion model. 也是一个diffusion transformer.</li>
-<li>输入 noisy的patches（和如文本prompts一样的conditioning information），它被训练预测一个clean的patches.</li>
-<li>Transformers已经被证明，通过规模增大，效果会显著增加，如language modeling, computer vision, image generation.</li>
-<li>这篇工作也随着规模增大，而效果变好。</li>
-</ul>
-<h2 id="可变的-时长、清晰度、长宽比"><a href="#可变的-时长、清晰度、长宽比" class="headerlink" title="可变的 时长、清晰度、长宽比"></a>可变的 时长、清晰度、长宽比</h2><ul>
-<li>过去对图像和视频生成的方法会进行resize, crop, ✂️ videos到一个标准尺寸（4秒的$256 \times 256$ 的视频）。</li>
-<li>然而作者发现在原始数据上训练有一些好处：<ul>
-<li>灵活采样：<ul>
-<li>可生成1920x1080p ，1080x1920p及其间的任何尺寸。</li>
-<li>可以直接生成完美适配任何屏幕的视频。</li>
-<li>还可以快速获得要生成视频的预览版。</li>
-</ul>
-</li>
-<li>改进了取景和构图</li>
-</ul>
-</li>
-</ul>
-<h2 id="自然语言理解"><a href="#自然语言理解" class="headerlink" title="自然语言理解"></a>自然语言理解</h2><ul>
-<li>如何生成text-video的大量训练集：<ul>
-<li>把DALL·E 3中的重新生成字幕技术引入到视频中。</li>
-<li>首先训练一个描述非常丰富的字幕生成模型。通过这种方式，可提升prompt的保真度和整体视频质量。</li>
-</ul>
-</li>
-<li>也用了GPT使prompt变得更长、细节更丰富。</li>
-</ul>
-<h2 id="主要任务"><a href="#主要任务" class="headerlink" title="主要任务"></a>主要任务</h2><ul>
-<li>完美循环视频</li>
-<li>把图片变视频</li>
-<li>向前、向后扩展视频</li>
-<li>根据prompt编辑视频。</li>
-<li>融合来那个完全不同的视频成为新视频。</li>
-<li>生成图像。</li>
-<li>新兴的模拟能力：<ul>
-<li>3D 连贯性：可产生动态相机运动拍摄出来的视频。</li>
-<li>长范围的 关联性 和 物体特征不变形：<ul>
-<li>即使被遮挡或离开画面，也能保持物体的不变形（often, though not always）</li>
-<li>能对同一对象产生不同的镜头。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>模拟真实的和物理世界的交互。</li>
-<li>模拟数码世界。</li>
-</ul>
-<h2 id="缺陷："><a href="#缺陷：" class="headerlink" title="缺陷："></a>缺陷：</h2><ul>
-<li>不能准确模拟现实世界。</li>
-<li>再交互中，不总是能产生物体状态的正确改变。</li>
-<li>长的视频中出现的不连贯性。</li>
-</ul>
-
+          <p>对OpenAI官网的Sora的技术报告的解读。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/blog/2024/06/Sora.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -796,7 +745,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-02-07 17:47:52" itemprop="dateModified" datetime="2024-02-07T17:47:52+08:00">2024-02-07</time>
+                <time title="修改时间：2024-06-03 20:09:51" itemprop="dateModified" datetime="2024-06-03T20:09:51+08:00">2024-06-03</time>
               </span>
             
           
@@ -1138,9 +1087,9 @@
   
     
       
-    
-      
         
+      
+    
       
     
       
