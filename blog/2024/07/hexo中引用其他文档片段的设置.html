@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/angry_bird_16.ico?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+  <meta name="google-site-verification" content="3dBwV8OlVnNtYzxCLCFp2w8WMpuSecV7vBmA_zrf9j4">
+  <meta name="baidu-site-verification" content="eoUZD1BDx6">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":"default"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+<link rel="stylesheet" href="/css/custom.css">
+
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      "HTML-CSS": { availableFonts: ["TeX"] },
+      SVG: { font: "TeX" }
+    });
+  </script>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-python.min.js"></script> <!-- Python支持 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      Prism.highlightAll();
+    });
+  </script>
+
+
+
+
+  <meta name="description" content="对obsidian的markdown格式转hexo格式时，如何如obsidian一样很好的引入其他markdown的内容。">
+<meta name="keywords" content="hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo中引用其他文档片段的设置">
+<meta property="og:url" content="https://huzhenyou.github.io/blog/2024/07/hexo中引用其他文档片段的设置.html">
+<meta property="og:site_name" content="九万里">
+<meta property="og:description" content="对obsidian的markdown格式转hexo格式时，如何如obsidian一样很好的引入其他markdown的内容。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240704142219.png">
+<meta property="og:updated_time" content="2024-07-04T16:48:57.480Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hexo中引用其他文档片段的设置">
+<meta name="twitter:description" content="对obsidian的markdown格式转hexo格式时，如何如obsidian一样很好的引入其他markdown的内容。">
+<meta name="twitter:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240704142219.png">
+  <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
+  <link rel="canonical" href="https://huzhenyou.github.io/blog/2024/07/hexo中引用其他文档片段的设置">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>hexo中引用其他文档片段的设置 | 九万里</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">九万里</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">虚怀若谷，大智若愚</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+    
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="https://huzhenyou.github.io/blog/2024/07/hexo中引用其他文档片段的设置.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HuzhenYou">
+      <meta itemprop="description" content="虚怀若谷，大智若愚">
+      <meta itemprop="image" content="/images/angry_bird_128.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="九万里">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">hexo中引用其他文档片段的设置
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2024-07-05 00:48:57" itemprop="dateCreated datePublished" datetime="2024-07-05T00:48:57+08:00">2024-07-05</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>6.4k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>11 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>对obsidian的markdown格式转hexo格式时，如何如obsidian一样很好的引入其他markdown的内容。</p>
+<a id="more"></a>
+<hr>
+<h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><ol>
+<li><strong>可以对引用的标题，按不同级别，设置不同大小的字号。</strong></li>
+<li><strong>引用的内容不影响了文章的目录。badcase如图所示</strong><img src="/imgs/Pasted image 20240704142219.png"></li>
+<li><strong>引用的代码块要正常显示。</strong></li>
+</ol>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><ol>
+<li>在 hexo根目录，若没有，则新建文件夹：scripts。</li>
+<li><p>在文件夹中新建文件include_custom.js， 写入内容：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>); <span class="comment">// 引入文件系统模块</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>); <span class="comment">// 引入路径模块</span></span><br><span class="line"><span class="keyword">const</span> &#123; escapeHTML &#125; = <span class="built_in">require</span>(<span class="string">'hexo-util'</span>); <span class="comment">// 引入 Hexo 工具模块中的 escapeHTML 函数</span></span><br><span class="line"></span><br><span class="line">hexo.extend.tag.register(<span class="string">'include_custom'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">args</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'include_custom tag called with args:'</span>, args); <span class="comment">// 打印调试信息，显示调用标签时传递的参数</span></span><br><span class="line">  <span class="keyword">const</span> relativePath = args[<span class="number">0</span>]; <span class="comment">// 获取相对路径</span></span><br><span class="line">  <span class="keyword">const</span> heading = args[<span class="number">1</span>]; <span class="comment">// 获取标题</span></span><br><span class="line">  <span class="keyword">const</span> absolutePath = path.join(hexo.source_dir, relativePath); <span class="comment">// 获取文件的绝对路径</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!fs.existsSync(absolutePath)) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`File not found: <span class="subst">$&#123;relativePath&#125;</span>`</span>); <span class="comment">// 如果文件不存在，打印调试信息</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">`File not found: <span class="subst">$&#123;relativePath&#125;</span>`</span>; <span class="comment">// 返回错误信息</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> content = fs.readFileSync(absolutePath, <span class="string">'utf8'</span>); <span class="comment">// 读取文件内容</span></span><br><span class="line">  <span class="keyword">const</span> headingLevel = heading.match(<span class="regexp">/^#+/</span>)[<span class="number">0</span>].length; <span class="comment">// 确定标题级别</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Heading level:'</span>, headingLevel); <span class="comment">// 打印调试信息，显示标题级别</span></span><br><span class="line">  <span class="keyword">const</span> escapedHeading = escapeHTML(heading.replace(<span class="regexp">/#+\s*/</span>, <span class="string">''</span>).trim()); <span class="comment">// 转义标题内容</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Escaped heading:'</span>, escapedHeading); <span class="comment">// 打印调试信息，显示转义后的标题</span></span><br><span class="line">  <span class="keyword">const</span> regex = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">`(^#&#123;<span class="subst">$&#123;headingLevel&#125;</span>&#125;\\s+<span class="subst">$&#123;escapedHeading&#125;</span>\\s*$)`</span>, <span class="string">'gm'</span>); <span class="comment">// 创建正则表达式，匹配指定级别的标题</span></span><br><span class="line">  <span class="keyword">const</span> match = regex.exec(content); <span class="comment">// 查找匹配的标题</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (match) &#123;</span><br><span class="line">    <span class="keyword">const</span> startIndex = match.index; <span class="comment">// 获取标题的起始位置</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'startIndex:'</span>, startIndex); </span><br><span class="line">    <span class="keyword">let</span> endIndex = content.length; <span class="comment">// 初始化内容的结束位置为文件末尾</span></span><br><span class="line">    <span class="keyword">let</span> inCodeBlock = <span class="literal">false</span>; <span class="comment">// 初始化代码块标记</span></span><br><span class="line">    <span class="keyword">let</span> currentPos = <span class="number">0</span>; <span class="comment">// 当前字符位置</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查找下一个同级或更高级的标题，确定结束位置</span></span><br><span class="line">    <span class="keyword">const</span> lines = content.split(<span class="string">'\n'</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; lines.length; i++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (currentPos &gt; startIndex) &#123;</span><br><span class="line">        <span class="keyword">const</span> line = lines[i];</span><br><span class="line">        <span class="keyword">if</span> ((line.match(<span class="regexp">/```/g</span>) || []).length % <span class="number">2</span> !== <span class="number">0</span>) &#123;</span><br><span class="line">          inCodeBlock = !inCodeBlock; <span class="comment">// 切换代码块标记</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!inCodeBlock &amp;&amp; <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">`^#&#123;1,<span class="subst">$&#123;headingLevel&#125;</span>&#125;\\s`</span>).test(line)) &#123;</span><br><span class="line">          endIndex = currentPos; <span class="comment">// 更新内容的结束位置</span></span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      currentPos += lines[i].length + <span class="number">1</span>; <span class="comment">// 更新当前字符位置，包含换行符</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'endIndex:'</span>, endIndex); </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'content.length:'</span>, content.length); </span><br><span class="line">    <span class="keyword">let</span> extractedContent = content.substring(startIndex, endIndex).trim(); <span class="comment">// 提取指定标题下的内容</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Extracted content before processing:'</span>, extractedContent); <span class="comment">// 打印调试信息，显示提取的内容</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 标记代码块，排除代码块中的内容</span></span><br><span class="line">    inCodeBlock = <span class="literal">false</span>; <span class="comment">// 重置代码块标记</span></span><br><span class="line">    <span class="keyword">let</span> processedContent = extractedContent.split(<span class="string">'\n'</span>).map(<span class="function"><span class="params">line</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> ((line.match(<span class="regexp">/```/g</span>) || []).length % <span class="number">2</span> !== <span class="number">0</span>) &#123;</span><br><span class="line">        inCodeBlock = !inCodeBlock; <span class="comment">// 切换代码块标记</span></span><br><span class="line">        <span class="keyword">return</span> line; <span class="comment">// 返回当前行（代码块起始或结束）</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (!inCodeBlock) &#123;</span><br><span class="line">        <span class="comment">// 如果不在代码块中，处理标题</span></span><br><span class="line">        <span class="keyword">return</span> line.replace(<span class="regexp">/^# (.+)$/gm</span>, <span class="string">'&lt;div class="custom-quote-h1"&gt;$1&lt;/div&gt;'</span>)</span><br><span class="line">                   .replace(<span class="regexp">/^## (.+)$/gm</span>, <span class="string">'&lt;div class="custom-quote-h2"&gt;$1&lt;/div&gt;'</span>)</span><br><span class="line">                   .replace(<span class="regexp">/^### (.+)$/gm</span>, <span class="string">'&lt;div class="custom-quote-h3"&gt;$1&lt;/div&gt;'</span>)</span><br><span class="line">                   .replace(<span class="regexp">/^#### (.+)$/gm</span>, <span class="string">'&lt;div class="custom-quote-h4"&gt;$1&lt;/div&gt;'</span>)</span><br><span class="line">                   .replace(<span class="regexp">/^##### (.+)$/gm</span>, <span class="string">'&lt;div class="custom-quote-h5"&gt;$1&lt;/div&gt;'</span>)</span><br><span class="line">                   .replace(<span class="regexp">/^###### (.+)$/gm</span>, <span class="string">'&lt;div class="custom-quote-h6"&gt;$1&lt;/div&gt;'</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> line; <span class="comment">// 返回当前行</span></span><br><span class="line">    &#125;).join(<span class="string">'\n'</span>); <span class="comment">// 合并处理后的行</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理代码块，将其包裹在 &lt;pre&gt;&lt;code&gt; 标签中，并添加 Prism.js 类</span></span><br><span class="line">    processedContent = processedContent.replace(<span class="regexp">/```(\w+)?\n([\s\S]*?)```/g</span>, (match, lang, code) =&gt; &#123;</span><br><span class="line">      <span class="keyword">const</span> languageClass = lang ? <span class="string">`language-<span class="subst">$&#123;lang&#125;</span>`</span> : <span class="string">'language-plaintext'</span>; <span class="comment">// 确定代码语言</span></span><br><span class="line">      <span class="keyword">const</span> escapedCode = escapeHTML(code.trim()); <span class="comment">// 转义代码内容</span></span><br><span class="line">      <span class="keyword">return</span> <span class="string">`&lt;pre class="line-numbers <span class="subst">$&#123;languageClass&#125;</span>"&gt;&lt;code class="<span class="subst">$&#123;languageClass&#125;</span>"&gt;<span class="subst">$&#123;escapedCode&#125;</span>&lt;/code&gt;&lt;/pre&gt;`</span>; <span class="comment">// 返回包裹后的代码块</span></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理内联代码块，将其包裹在 &lt;code&gt; 标签中</span></span><br><span class="line">    processedContent = processedContent.replace(<span class="regexp">/`([^`]+)`/g</span>, (match, code) =&gt; &#123;</span><br><span class="line">      <span class="keyword">const</span> escapedCode = escapeHTML(code.trim()); <span class="comment">// 转义内联代码内容</span></span><br><span class="line">      <span class="keyword">return</span> <span class="string">`&lt;code&gt;<span class="subst">$&#123;escapedCode&#125;</span>&lt;/code&gt;`</span>; <span class="comment">// 返回包裹后的内联代码块</span></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Processed content after processing:'</span>, processedContent); <span class="comment">// 打印调试信息，显示处理后的内容</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 Hexo 自带的 Markdown 渲染器解析剩余内容</span></span><br><span class="line">    processedContent = hexo.render.renderSync(&#123; <span class="attr">text</span>: processedContent, <span class="attr">engine</span>: <span class="string">'markdown'</span> &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 包装为自定义样式</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">`&lt;div class="custom-quote"&gt;<span class="subst">$&#123;processedContent&#125;</span>&lt;/div&gt;`</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`No match found for heading: <span class="subst">$&#123;heading&#125;</span>`</span>); <span class="comment">// 如果没有找到匹配的标题，打印调试信息</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">`No match found for heading: <span class="subst">$&#123;heading&#125;</span>`</span>; <span class="comment">// 返回错误信息</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, &#123; <span class="attr">async</span>: <span class="literal">false</span> &#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>确保自定义 CSS 文件中有正确的样式，即在 themes/next/source/css/custom.css或source/css/custom.css 文件中添加以下样式（若没有，则新建，建议themes/next/source/css/custom.css，因为这种做法有助于保持不同主题之间的隔离，避免样式冲突。）：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.custom-quote</span> &#123;</span><br><span class="line">  <span class="attribute">border-left</span>: <span class="number">4px</span> solid <span class="number">#ccc</span>;</span><br><span class="line">  <span class="attribute">padding-left</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">20px</span> <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#f9f9f9</span>;</span><br><span class="line">  <span class="attribute">font-style</span>: italic;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.custom-quote</span> <span class="selector-class">.custom-quote-h1</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">1.5em</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.custom-quote</span> <span class="selector-class">.custom-quote-h2</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">1.3em</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.custom-quote</span> <span class="selector-class">.custom-quote-h3</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">1.1em</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.custom-quote</span> <span class="selector-class">.custom-quote-h4</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.custom-quote</span> <span class="selector-class">.custom-quote-h5</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">0.9em</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.custom-quote</span> <span class="selector-class">.custom-quote-h6</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">0.8em</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.custom-quote</span> <span class="selector-tag">pre</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#f5f5f5</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: auto;</span><br><span class="line">  <span class="attribute">white-space</span>: pre-wrap; <span class="comment">/* 确保换行符被正确处理 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.custom-quote</span> <span class="selector-tag">code</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#f5f5f5</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">2px</span> <span class="number">4px</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">3px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>themes/next/layout/_partials/head/head.swig</code>末尾添加</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> theme.prism_plugin.enable %&#125;</span><br><span class="line">  &lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"</span>&gt;</span><br><span class="line">  &lt;script src=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"</span>&gt;&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">  &lt;script src="https:/</span><span class="regexp">/cdnjs.cloudflare.com/</span>ajax/libs/prism/<span class="number">1.23</span><span class="number">.0</span>/plugins/line-numbers/prism-line-numbers.min.js<span class="string">"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">  &lt;link rel="</span>stylesheet<span class="string">" href="</span>https:<span class="comment">//cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.css"&gt;</span></span><br><span class="line">  &lt;script src=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-python.min.js"</span>&gt;&lt;<span class="regexp">/script&gt; &lt;!-- Python支持 --&gt;</span></span><br><span class="line"><span class="regexp">  &lt;script&gt;</span></span><br><span class="line"><span class="regexp">    document.addEventListener('DOMContentLoaded', (event) =&gt; &#123;</span></span><br><span class="line"><span class="regexp">      Prism.highlightAll();</span></span><br><span class="line"><span class="regexp">    &#125;);</span></span><br><span class="line"><span class="regexp">  &lt;/</span>script&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更改代码块的背景颜色</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 更改代码块的背景颜色，确保生效 */</span></span><br><span class="line">pre[<span class="class"><span class="keyword">class</span>*</span>=<span class="string">"language-"</span>] &#123;</span><br><span class="line">  background: #f5f2f0 !important; /* 设置为你喜欢的背景颜色 */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 这里加!important用于确保Prism.js的样式没有覆盖自定义样式</p>
+</li>
+<li><p>在根目录的_config.yml中添加：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">prism_plugin:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>HuzhenYou</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://huzhenyou.github.io/blog/2024/07/hexo中引用其他文档片段的设置.html" title="hexo中引用其他文档片段的设置">https://huzhenyou.github.io/blog/2024/07/hexo中引用其他文档片段的设置.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/hexo/" rel="tag"># hexo</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/blog/2024/07/hexo中公式无法正常显示.html" rel="next" title="hexo中公式无法正常显示问题的解决方案">
+                  <i class="fa fa-chevron-left"></i> hexo中公式无法正常显示问题的解决方案
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/blog/2024/07/obsidian一键转hexo脚本.html" rel="prev" title="obsidian一键转hexo脚本">
+                  obsidian一键转hexo脚本 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="gitalk-container"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#需求"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决方案"><span class="nav-number">2.</span> <span class="nav-text">解决方案</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/angry_bird_128.ico"
+      alt="HuzhenYou">
+  <p class="site-author-name" itemprop="name">HuzhenYou</p>
+  <div class="site-description" itemprop="description">虚怀若谷，大智若愚</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/HuzhenYou" title="GitHub &rarr; https://github.com/HuzhenYou" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:youhuzhen@gmail.com" title="E-Mail &rarr; mailto:youhuzhen@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/you-jin-cheng/activities" title="https://www.zhihu.com/people/you-jin-cheng/activities" rel="noopener" target="_blank">知乎</a>
+        </li>
+      
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HuzhenYou</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">54k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:30</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/muse.js?v=7.3.0"></script>
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+  
+
+  
+
+  
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '140d0161c7c4631e2764',
+          clientSecret: '90d536de668c0e5a417f895d3af6a037d1528253',
+          repo: 'HuzhenYou.github.io',
+          owner: 'HuzhenYou',
+          admin: ['HuzhenYou'],
+          id:'gitalk_20240705004857',
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: false,
+          distractionFreeMode: false
+        })
+
+        gitalk.render('gitalk-container')           
+       </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
+</html>
