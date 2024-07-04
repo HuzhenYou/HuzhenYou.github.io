@@ -1,0 +1,56 @@
+.custom-quote {
+  border-left: 4px solid #ccc;
+  padding-left: 10px;
+  margin: 20px 0;
+  background-color: #f9f9f9;
+  font-style: italic;
+}
+
+.custom-quote .custom-quote-h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.custom-quote .custom-quote-h2 {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.custom-quote .custom-quote-h3 {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.custom-quote .custom-quote-h4 {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.custom-quote .custom-quote-h5 {
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.custom-quote .custom-quote-h6 {
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.custom-quote pre {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  overflow: auto;
+  white-space: pre-wrap; /* 确保换行符被正确处理 */
+}
+
+.custom-quote code {
+  background: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* 更改代码块的背景颜色，确保生效 */
+pre[class*="language-"] {
+  background: #f8f6f6 !important; /* 设置为你喜欢的背景颜色 */
+}

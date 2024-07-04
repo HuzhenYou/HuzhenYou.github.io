@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/angry_bird_16.ico?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+  <meta name="google-site-verification" content="3dBwV8OlVnNtYzxCLCFp2w8WMpuSecV7vBmA_zrf9j4">
+  <meta name="baidu-site-verification" content="eoUZD1BDx6">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":"default"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+<link rel="stylesheet" href="/css/custom.css">
+
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      "HTML-CSS": { availableFonts: ["TeX"] },
+      SVG: { font: "TeX" }
+    });
+  </script>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-python.min.js"></script> <!-- Python支持 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      Prism.highlightAll();
+    });
+  </script>
+
+
+
+
+  <meta name="description" content="温度系数是的，在深度学习中，温度系数（temperature coefficient）确实对 softmax 函数起作用。温度系数 $T$ 是用来调节 softmax 函数输出概率分布的一个参数。具体来说，softmax 函数通常定义如下： \text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}引入温度系数 $T$ 后的 softmax 函数定">
+<meta property="og:type" content="website">
+<meta property="og:title" content="九万里">
+<meta property="og:url" content="https://huzhenyou.github.io/reference_blogs/conceptAI.html">
+<meta property="og:site_name" content="九万里">
+<meta property="og:description" content="温度系数是的，在深度学习中，温度系数（temperature coefficient）确实对 softmax 函数起作用。温度系数 $T$ 是用来调节 softmax 函数输出概率分布的一个参数。具体来说，softmax 函数通常定义如下： \text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}引入温度系数 $T$ 后的 softmax 函数定">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2024-07-04T09:51:15.402Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="九万里">
+<meta name="twitter:description" content="温度系数是的，在深度学习中，温度系数（temperature coefficient）确实对 softmax 函数起作用。温度系数 $T$ 是用来调节 softmax 函数输出概率分布的一个参数。具体来说，softmax 函数通常定义如下： \text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}引入温度系数 $T$ 后的 softmax 函数定">
+  <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
+  <link rel="canonical" href="https://huzhenyou.github.io/reference_blogs/conceptAI">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false,
+    isPage: true,
+    isArchive: false
+  };
+</script>
+
+  <title> | 九万里</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">九万里</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">虚怀若谷，大智若愚</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+    
+
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+
+  
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+    
+    
+    <div class="post-block page">
+      <header class="post-header">
+
+<h2 class="post-title" itemprop="name headline">
+
+</h2>
+
+<div class="post-meta">
+  
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+        
+          <h1 id="温度系数"><a href="#温度系数" class="headerlink" title="温度系数"></a>温度系数</h1><p>是的，在深度学习中，温度系数（temperature coefficient）确实对 softmax 函数起作用。温度系数 $T$ 是用来调节 softmax 函数输出概率分布的一个参数。具体来说，softmax 函数通常定义如下：</p>
+<script type="math/tex; mode=display">\text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}</script><p>引入温度系数 $T$ 后的 softmax 函数定义为：</p>
+<script type="math/tex; mode=display">\text{softmax}(z_i) = \frac{e^{z_i / T}}{\sum_{j} e^{z_j / T}}</script><p>温度系数的作用是通过调整 $T$ 的值来控制输出概率的“平滑”程度。当 $T$ 趋近于零时，softmax 的输出会更加接近于 one-hot 编码，即概率分布会更加尖锐，接近于0或1。而当 $T$ 趋近于无穷大时，softmax 的输出会趋近于均匀分布，即所有类别的概率相等。</p>
+<p>温度系数在实践中有许多应用，例如在知识蒸馏（knowledge distillation）中，通过调整温度系数来使学生模型（student model）更好地学习教师模型（teacher model）的软标签（soft targets）。</p>
+<h1 id="熵"><a href="#熵" class="headerlink" title="熵"></a>熵</h1><h2 id="自信息量"><a href="#自信息量" class="headerlink" title="自信息量"></a>自信息量</h2><p>$I(x) = -\log P(x)$<br>其中</p>
+<ol>
+<li>P(x)是事件 x发生的概率</li>
+<li>I(x)是事件x的信息量<br>当概率越小，越不常见，信息量越大。</li>
+</ol>
+<h2 id="交叉熵（Cross-Entropy）"><a href="#交叉熵（Cross-Entropy）" class="headerlink" title="交叉熵（Cross Entropy）"></a>交叉熵（Cross Entropy）</h2><p>   交叉熵度量的是两个概率分布之间的平均编码长度。分布 ( P ) 的真实信息量为 ( -\log P(x) )，但使用 ( Q ) 进行编码时的平均信息量为 ( -\log Q(x) )。交叉熵定义为：</p>
+<script type="math/tex; mode=display">H(P, Q) = -\sum_x P(x) \log Q(x)</script><h2 id="分解KL散度"><a href="#分解KL散度" class="headerlink" title="分解KL散度"></a>分解KL散度</h2><p>   将KL散度公式进行分解，使用对数的性质 $\log \frac{a}{b} = \log a - \log b$：</p>
+<script type="math/tex; mode=display">D_{KL}(P \| Q) = \sum_x P(x) \log P(x) - \sum_x P(x) \log Q(x)</script><p>   第一项 $\sum_x P(x) \log P(x)$是 P  分布的熵（Entropy），记为  $H(P)$：<br>   $H(P) = -\sum_x P(x) \log P(x)$</p>
+<p>   第二项$-\sum_x P(x) \log Q(x)$ 是 $P$ 和 $Q$分布的交叉熵$H(P, Q)$。</p>
+<p>KL散度可以用来表示在使用Q来近似P时所带来的  信息损失（编码效率下降，比如原本需要 6 个比特就能编码的信息，现在需要 8 个，这 2 个的差值就是信息损失）。<br>在 教师-学生 模型中，可以通过衡量学生经过 softmax后的分布和教师的KL散度来知道学生的学习。</p>
+<h3 id="这里的信息损失："><a href="#这里的信息损失：" class="headerlink" title="这里的信息损失："></a>这里的信息损失：</h3><p>除了编码效率的下降，我们还可以通过其他例子来说明和量化信息损失。以下是几个常见的例子：</p>
+<h4 id="1-预测模型中的信息损失"><a href="#1-预测模型中的信息损失" class="headerlink" title="1. 预测模型中的信息损失"></a>1. 预测模型中的信息损失</h4><p>在机器学习和统计学中，KL散度可以用来衡量两个概率分布之间的差异，尤其是在预测模型中。例如，当我们训练一个分类模型时，模型预测的类别分布（$Q$）与真实的类别分布（$P$）之间的差异可以通过KL散度来量化。更高的KL散度表示预测分布与真实分布的差异更大，这意味着模型的预测质量较差。</p>
+<h4 id="2-数据压缩中的信息损失"><a href="#2-数据压缩中的信息损失" class="headerlink" title="2. 数据压缩中的信息损失"></a>2. 数据压缩中的信息损失</h4><p>在数据压缩领域，如果我们使用不准确的概率模型$Q$来进行压缩，那么压缩后的数据需要更多的空间来存储，从而导致信息损失。例如，在图像压缩中，如果我们用近似模型来替代真实的图像像素分布，压缩后的图像质量会下降，导致信息丢失，这可以用KL散度来量化。</p>
+<h4 id="3-自然语言处理中的信息损失"><a href="#3-自然语言处理中的信息损失" class="headerlink" title="3. 自然语言处理中的信息损失"></a>3. 自然语言处理中的信息损失</h4><p>在自然语言处理中，KL散度可以用来衡量生成模型与真实语言分布之间的差异。例如，使用语言模型生成文本时，生成的文本分布$Q$与真实文本分布$P$之间的差异可以通过KL散度来衡量。更高的KL散度表示生成的文本与真实文本的差异更大，意味着生成的文本质量较差。</p>
+<h2 id="为什么-Q-x-比-P-x-需要更多比特来编码"><a href="#为什么-Q-x-比-P-x-需要更多比特来编码" class="headerlink" title="为什么 $Q(x)$ 比 $P(x)$ 需要更多比特来编码"></a>为什么 $Q(x)$ 比 $P(x)$ 需要更多比特来编码</h2><p>在信息论中，编码长度指的是对一个事件进行编码所需要的比特数。编码长度越短，表示信息被压缩得越好。为了更好地理解这个概念，我们可以通过以下几个方面来解释：</p>
+<h3 id="自信息量（Self-Information）"><a href="#自信息量（Self-Information）" class="headerlink" title="自信息量（Self-Information）"></a>自信息量（Self-Information）</h3><p>自信息量（Self-Information）是信息论中的一个基本概念，用来度量事件发生所带来的信息量。自信息量的公式为：</p>
+<script type="math/tex; mode=display">I(x) = -\log P(x)</script><p>其中：</p>
+<ul>
+<li>$P(x)$ 是事件 $x$ 发生的概率。</li>
+<li>$I(x)$ 是事件 $x$ 的自信息量。</li>
+</ul>
+<p>自信息量表示当事件 $x$ 发生时所带来的信息量。概率 $P(x)$ 越小，自信息量 $I(x)$ 越大。换句话说，越不常见的事件发生时带来的信息量越大。</p>
+<h3 id="理想编码长度"><a href="#理想编码长度" class="headerlink" title="理想编码长度"></a>理想编码长度</h3><p>在理想情况下，我们希望对事件 $x$ 进行编码，使得编码长度正好等于事件的自信息量。这样可以保证编码的效率和精确度。理想编码长度为：</p>
+<script type="math/tex; mode=display">L(x) = -\log P(x)</script><p>这意味着，如果我们知道事件 $x$ 的真实概率 $P(x)$，我们可以使用 $-\log P(x)$ 比特来对事件 $x$ 进行编码。</p>
+<h3 id="使用近似分布进行编码"><a href="#使用近似分布进行编码" class="headerlink" title="使用近似分布进行编码"></a>使用近似分布进行编码</h3><p>在实际应用中，我们可能无法准确知道事件 $x$ 的真实概率 $P(x)$，而是使用一个近似概率 $Q(x)$ 进行编码。在这种情况下，编码长度变为：</p>
+<script type="math/tex; mode=display">L(x) = -\log Q(x)</script><p>如果 $Q(x)$ 与 $P(x)$ 越接近，编码长度 $-\log Q(x)$ 就越接近理想编码长度 $-\log P(x)$。</p>
+<h3 id="平均编码长度"><a href="#平均编码长度" class="headerlink" title="平均编码长度"></a>平均编码长度</h3><p>对于整个概率分布，我们关心的是使用近似分布 $Q$ 进行编码时的平均编码长度。这就是交叉熵的意义：</p>
+<script type="math/tex; mode=display">H(P, Q) = -\sum_x P(x) \log Q(x)</script><p>交叉熵 $H(P, Q)$ 表示在真实分布 $P$ 下，使用近似分布 $Q$ 进行编码时的平均编码长度。它衡量的是在真实分布 $P$ 下，我们需要多少比特来编码事件 $x$ 。</p>
+<p>因为 $Q(x)$ 不是 $P(x)$，可能会有以下几种情况：</p>
+<ol>
+<li><p><strong>低概率事件被高估</strong>：如果 $Q(x)$ 对某些低概率事件 $x$ 给出了相对较高的概率（比 $P(x)$ 高），这些事件的编码长度会比理想情况下短，但因为它们实际发生的频率较低，这种情况不会显著影响整体的平均编码长度。</p>
+</li>
+<li><p><strong>高概率事件被低估</strong>：如果 $Q(x)$ 对某些高概率事件 $x$ 给出了相对较低的概率（比 $P(x)$ 低），这些事件的编码长度会比理想情况下长，因为这些事件实际发生的频率较高，这种情况会显著增加整体的平均编码长度。</p>
+</li>
+</ol>
+<h3 id="举例说明"><a href="#举例说明" class="headerlink" title="举例说明"></a>举例说明</h3><p>假设我们有两个分布 $P$ 和 $Q$：</p>
+<script type="math/tex; mode=display">
+P(x) = 
+  \begin{cases} 
+   0.5 & x = 1 \\
+   0.25 & x = 2 \\
+   0.125 & x = 3 \\
+   0.125 & x = 4 
+  \end{cases}</script><script type="math/tex; mode=display">
+Q(x) = 
+  \begin{cases} 
+   0.4 & x = 1 \\
+   0.3 & x = 2 \\
+   0.2 & x = 3 \\
+   0.1 & x = 4 
+  \end{cases}</script><p>使用 $Q$ 进行编码的平均编码长度（交叉熵）为：</p>
+<script type="math/tex; mode=display">H(P, Q) = -\sum_x P(x) \log Q(x)</script><p>计算如下：</p>
+<script type="math/tex; mode=display">H(P, Q) = -(0.5 \log 0.4 + 0.25 \log 0.3 + 0.125 \log 0.2 + 0.125 \log 0.1)</script><p>具体计算为：</p>
+<script type="math/tex; mode=display">H(P, Q) = -[0.5 \times (-0.916) + 0.25 \times (-1.737) + 0.125 \times (-2.322) + 0.125 \times (-3.322)]</script><script type="math/tex; mode=display">H(P, Q) = -( -0.458 - 0.43425 - 0.29025 - 0.41525 )</script><script type="math/tex; mode=display">H(P, Q) = 1.598</script><p>这表示在真实分布 $P$ 下，使用近似分布 $Q$ 进行编码时的平均编码长度为 1.598 比特。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>不匹配的概率分布 $Q(x)$ 会导致一些事件的编码长度变得更长，从而增加了整体的平均编码长度。这就是为什么 $Q(x)$ 比 $P(x)$ 需要更多比特来编码的原因。</p>
+<h2 id="交叉熵损失"><a href="#交叉熵损失" class="headerlink" title="交叉熵损失"></a>交叉熵损失</h2><p>交叉熵损失（Cross Entropy Loss）是机器学习和深度学习中常用的一种损失函数，主要用于分类问题。它衡量的是两个概率分布之间的差异，通常是模型预测的概率分布与真实标签的概率分布之间的差异。</p>
+<p>在分类任务中，假设有 $n$ 类，模型预测的概率分布为 $\mathbf{p} = (p_1, p_2, \ldots, p_n)$，真实的概率分布（即真实标签的one-hot表示）为 $\mathbf{q} = (q_1, q_2, \ldots, q_n)$。交叉熵损失的公式为：</p>
+<script type="math/tex; mode=display">L = -\sum_{i=1}^{n} q_i \log(p_i)</script><p>对于二分类问题，假设模型的输出为 $p$，真实标签为 $y$，那么交叉熵损失可以简化为：</p>
+<script type="math/tex; mode=display">L = - (y \log(p) + (1 - y) \log(1 - p))</script><p>在神经网络的训练过程中，交叉熵损失常常与Softmax激活函数结合使用，因为Softmax可以将模型的输出转换为一个概率分布，使得交叉熵损失能够更有效地衡量预测值与真实值之间的差异。</p>
+<p>使用交叉熵损失的优点包括：</p>
+<ol>
+<li><strong>数值稳定性</strong>：与均方误差（MSE）相比，交叉熵损失在处理概率分布时更加稳定，特别是当预测值接近真实值时，梯度不会变得过小。</li>
+<li><strong>梯度信息丰富</strong>：交叉熵损失提供的梯度信息更为丰富，能够更有效地指导模型的学习过程。</li>
+</ol>
+<p>总的来说，交叉熵损失是分类任务中的一个标准选择，尤其是在深度学习模型中应用广泛。</p>
+<h1 id="归纳偏置（Inductive-Bias）"><a href="#归纳偏置（Inductive-Bias）" class="headerlink" title="归纳偏置（Inductive Bias）"></a>归纳偏置（Inductive Bias）</h1><p>归纳偏置（Inductive Bias）指的是一种机器学习模型在学习过程中所做的假设，这些假设帮助模型在有限的数据中学习，并在未知数据上进行预测。不同的模型具有不同的归纳偏置，它们决定了模型在不同类型的数据上表现的好坏。</p>
+<h2 id="Attention机制的优势"><a href="#Attention机制的优势" class="headerlink" title="Attention机制的优势"></a>Attention机制的优势</h2><p>在你的问题中，Attention机制比RNN和CNN表现更好，尽管它不对数据的顺序进行建模，这背后主要是因为Attention机制具有更广泛的归纳偏置。具体来说：</p>
+<ol>
+<li><p><strong>广泛的归纳偏置</strong>：Attention机制的设计允许它能够处理更广泛的和更一般化的信息。这意味着它没有强加于数据的一些特定的假设，比如数据的顺序或空间关系。因此，Attention机制可以在不同类型的数据上表现出色，而不仅仅是在时间序列数据或图像数据上。</p>
+</li>
+<li><p>没有空间假设：因为Attention机制没有像CNN那样假设局部的空间关系，它可以学到更全局的信息。这使得Attention机制在很多任务上能够比CNN取得更好的结果，特别是在需要全局上下文信息的任务中。</p>
+</li>
+<li><p><strong>代价</strong>：正因为Attention机制的假设更为一般化，它需要更多的数据和更大的模型来弥补其在具体结构信息（如序列和空间信息）上的不足。因此，尽管它可以达到甚至超越RNN和CNN的效果，但需要在数据和计算资源上进行更多的投入。</p>
+</li>
+</ol>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>总的来说，归纳偏置是指导机器学习模型如何处理和理解数据的关键假设。不同模型的归纳偏置不同，使得它们在不同类型的数据和任务上有不同的表现。Attention机制的广泛归纳偏置使其在很多任务上表现优异，但也需要更多的数据和更大的模型来弥补其对具体结构信息处理能力的不足。</p>
+<h1 id="softmax"><a href="#softmax" class="headerlink" title="softmax"></a>softmax</h1><script type="math/tex; mode=display">
+\text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}</script><h2 id="Softmax求梯度的公式推导"><a href="#Softmax求梯度的公式推导" class="headerlink" title="Softmax求梯度的公式推导"></a>Softmax求梯度的公式推导</h2><p>Softmax函数是机器学习中常用的激活函数，特别是在多分类任务中。它将一个向量中的每个分量映射为0到1之间的值，并且这些值的和为1。Softmax函数的公式为：</p>
+<script type="math/tex; mode=display">
+\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^K e^{z_j}}</script><p>其中，$\mathbf{z}$是输入向量，$z_i$是向量$\mathbf{z}$的第i个分量，K是向量$\mathbf{z}$的长度。</p>
+<p>为了推导Softmax函数的梯度，我们需要计算它对输入$\mathbf{z}$的导数。具体来说，我们希望计算$\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j}$。</p>
+<h3 id="步骤-1-Softmax的偏导数"><a href="#步骤-1-Softmax的偏导数" class="headerlink" title="步骤 1: Softmax的偏导数"></a>步骤 1: Softmax的偏导数</h3><p>首先，记$\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{k=1}^K e^{z_k}}$。</p>
+<p>对第i个分量进行导数计算有两种情况：$i = j$和$i \neq j$。</p>
+<h4 id="情况-1-i-j"><a href="#情况-1-i-j" class="headerlink" title="情况 1: $i = j$"></a>情况 1: $i = j$</h4><p>当i等于j时，我们得到：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_i} = \frac{\partial}{\partial z_i} \left( \frac{e^{z_i}}{\sum_{k=1}^K e^{z_k}} \right)</script><p>使用商的导数法则，我们有：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_i} = \frac{ \left( e^{z_i} \cdot \sum_{k=1}^K e^{z_k} \right) - \left( e^{z_i} \cdot e^{z_i} \right) }{\left( \sum_{k=1}^K e^{z_k} \right)^2}</script><p>将公式简化，我们得到：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_i} = \frac{ e^{z_i} \left( \sum_{k=1}^K e^{z_k} - e^{z_i} \right) }{\left( \sum_{k=1}^K e^{z_k} \right)^2}</script><p>进一步简化为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_i} = \sigma(\mathbf{z})_i \left( 1 - \sigma(\mathbf{z})_i \right)</script><h4 id="情况-2-i-neq-j"><a href="#情况-2-i-neq-j" class="headerlink" title="情况 2: $i \neq j$"></a>情况 2: $i \neq j$</h4><p>当i不等于j时，我们得到：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j} = \frac{\partial}{\partial z_j} \left( \frac{e^{z_i}}{\sum_{k=1}^K e^{z_k}} \right)</script><p>同样使用商的导数法则，我们有：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j} = \frac{ 0 \cdot \sum_{k=1}^K e^{z_k} - e^{z_i} \cdot e^{z_j} }{\left( \sum_{k=1}^K e^{z_k} \right)^2}</script><p>将公式简化，我们得到：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j} = - \frac{ e^{z_i} \cdot e^{z_j} }{\left( \sum_{k=1}^K e^{z_k} \right)^2}</script><p>进一步简化为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j} = -\sigma(\mathbf{z})_i \sigma(\mathbf{z})_j</script><h3 id="合并结果"><a href="#合并结果" class="headerlink" title="合并结果"></a>合并结果</h3><p>结合以上两种情况，我们可以写出Softmax函数对输入向量$\mathbf{z}$的梯度公式：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j} = \sigma(\mathbf{z})_i (\delta_{ij} - \sigma(\mathbf{z})_j)</script><p>其中，$\delta_{ij}$是Kronecker delta函数，当$i=j$时，$\delta_{ij}=1$，否则$\delta_{ij}=0$。</p>
+<p>总结一下，Softmax函数的梯度推导过程涉及对输入向量的每个分量进行求导，并且结果表示为矩阵形式，该矩阵的每个元素是上述两种情况之一。</p>
+<h2 id="Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸"><a href="#Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸" class="headerlink" title="Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸"></a>Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸</h2><h3 id="梯度消失的原因"><a href="#梯度消失的原因" class="headerlink" title="梯度消失的原因"></a>梯度消失的原因</h3><p>当Softmax函数的输入值范围较大时，Softmax的输出值会非常极端，即某些输出值接近1，而其他输出值接近0。这会导致在计算梯度时，梯度值会非常小，从而导致梯度消失。</p>
+<h3 id="具体分析"><a href="#具体分析" class="headerlink" title="具体分析"></a>具体分析</h3><p>对于Softmax函数 $\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{k} e^{z_k}}$，其梯度为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \sigma(z_i)}{\partial z_j} = \sigma(z_i) (\delta_{ij} - \sigma(z_j))</script><p>在极端情况下：</p>
+<ul>
+<li>当 $z_i$ 远大于其他所有 $z_k$ 时，$\sigma(z_i)$ 接近1，而$\sigma(z_j)$（$j \neq i$）接近0。</li>
+<li>这种情况下，$\sigma(z_i) (1 - \sigma(z_i))$ 会接近0，而 $\sigma(z_i) (-\sigma(z_j))$ 也会接近0。</li>
+</ul>
+<p>因此，梯度值会非常小，导致梯度消失。</p>
+<h3 id="使用-sqrt-d-k-进行缩放的原因"><a href="#使用-sqrt-d-k-进行缩放的原因" class="headerlink" title="使用 $\sqrt{d_k}$ 进行缩放的原因"></a>使用 $\sqrt{d_k}$ 进行缩放的原因</h3><p>为了避免这种梯度消失的问题，自注意力机制中对点积进行缩放：</p>
+<script type="math/tex; mode=display">
+\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right) V</script><p>通过除以 $\sqrt{d_k}$：</p>
+<ul>
+<li>缩小点积的值，使得输入值不会过大，从而使得Softmax的输出值更为均匀，不至于过于极端。</li>
+<li>使得Softmax输入值的方差变为1，确保输入值处于一个合理的范围内，避免梯度消失。</li>
+</ul>
+<h3 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h3><p>使用 $\sqrt{d_k}$ 进行缩放，主要目的是防止由于输入值范围较大导致的梯度消失问题。通过控制输入值的范围，可以确保Softmax函数的输出值更为均匀，从而避免梯度消失，确保网络的稳定训练。</p>
+<p>所以，Softmax函数在输入值范围较大时，确实主要会导致梯度消失，而不是梯度爆炸。</p>
+<h1 id="OOD-accuracy"><a href="#OOD-accuracy" class="headerlink" title="OOD accuracy"></a>OOD accuracy</h1><p>out-of-distribution (OOD) accuracy</p>
+<h1 id="向量的高效搜索"><a href="#向量的高效搜索" class="headerlink" title="向量的高效搜索"></a>向量的高效搜索</h1><ul>
+<li>近似最邻近（Approximate Nearest Neighbor, ANN）搜索</li>
+<li>向量量化：将高维向量映射为低纬，在根据相似度分桶。</li>
+<li>分布式检索：当数据量极大时，可在多台服务器上并行处理。</li>
+<li>索引结构优化：不懂，略。<h1 id="近似最邻近"><a href="#近似最邻近" class="headerlink" title="近似最邻近"></a>近似最邻近</h1>Approximate Nearest Neighbor, ANN<h2 id="如何实现"><a href="#如何实现" class="headerlink" title="如何实现"></a>如何实现</h2></li>
+</ul>
+<ol>
+<li><p>分区：把数据空间分成许多“区域”，每个区域包含一些点。搜索时，先找到查询点所在的区域或相邻的区域，然后在这些区域中搜索最近的点。这就像图书馆中的书架，每个书架代表一个区域，书架上的书相对更接近。</p>
+</li>
+<li><p>树结构：使用树结构（如KD树或球树）来组织数据点。每次分支代表对空间的一次分割，最终将查询点快速引导至包含最近邻点的区域。</p>
+</li>
+<li><p>哈希：利用哈希函数将点映射到哈希表的桶中。相近的点通过哈希函数映射到相同或相近的桶，从而在搜索时可以直接定位到这些桶来查找最近邻。</p>
+</li>
+</ol>
+<h3 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h3><ol>
+<li>桶划分：通过相似度，并确保每个区域数量大致相同。</li>
+<li>区域定位：如树，从根节点一直到叶子结点，这里每个节点代表一个区域。</li>
+<li>相邻区域搜索：搜索向量所在区域及附近区域。</li>
+<li>距离计算：计算 向量所在区域及附近区域 中所以向量的相似度，找到最相似的。</li>
+</ol>
+<h1 id="三种局部敏感哈希函数原理"><a href="#三种局部敏感哈希函数原理" class="headerlink" title="三种局部敏感哈希函数原理"></a>三种局部敏感哈希函数原理</h1><ul>
+<li><strong>位采样</strong>：根据特定位的数值，作为区分向量的依据。</li>
+<li><strong>MinHash</strong>：专注于比较集合之间的相似度。对于一个集合，用一组哈希函数，分别计算集合中所有元素，得到一组最小值，那这些最小值作为集合的指纹。用较短的哈希值代表集合，特别适合大数据集，在保持高精度的同时，减少计算复杂度。</li>
+<li><strong>SimHash</strong>：用于文本等相似度的比较。取每个元素中的一系列特征，每个特征的向量表示长度相同，数值随机且固定。然后用数据分析等方法获得每个特征等权重，再加权求和。然后整流，对于向量中的值，大于0，则设为1，否则便是0。这样边得到了固定长度的二进制哈希指纹。</li>
+</ul>
+<h1 id="Incremental-learning"><a href="#Incremental-learning" class="headerlink" title="Incremental learning"></a>Incremental learning</h1><ul>
+<li>Also known as online learning, continual learning, or lifelong learning.</li>
+<li>Continuously update the model as new data arrives, while retaining important old information(to avoid catastrophic forgetting).</li>
+<li>Key aspects:<ol>
+<li>Continuous Adaptation</li>
+<li>Handling Concept Drift</li>
+<li>Memory Management</li>
+<li>Computational Efficiency</li>
+<li>Application Areas</li>
+<li>Algorithms and Techniques</li>
+</ol>
+</li>
+</ul>
+<h1 id="思维链方法（CoT）"><a href="#思维链方法（CoT）" class="headerlink" title="思维链方法（CoT）"></a>思维链方法（CoT）</h1><p>让模型一步步去解决问题，而不是一下子去跳到答案。<br><a href="https://chat.openai.com/share/d7d3574a-e8d4-4824-aa0e-d827a5ecf9d5" target="_blank" rel="noopener">思维链方法（CoT）解释</a><br><a href="https://chat.openai.com/share/c267bd5d-9063-427b-864e-436d352c23a0" target="_blank" rel="noopener">思维链示例</a></p>
+<h1 id="MoE"><a href="#MoE" class="headerlink" title="MoE"></a>MoE</h1><p>Mixture of Experts<br>Two parts:</p>
+<ol>
+<li><strong>Experts:</strong>   lots of small models that specialize in certain types of tasks.</li>
+<li><strong>Gating Network:</strong> select the proper expert. 生成的概率分布，表示每个专家的激活值。</li>
+<li>加权组合：被激活的专家 根据门控机制的权重进行加权组合，最终形成模型的输出。<br>优势:</li>
+<li>效率高，每次进激活几个专家。</li>
+<li>可扩展性好：可以增加更多的专家提高模型的能力，而不显著增加计算成本。</li>
+<li>灵活性强：不同专家可以专注于各种细分场景的任务。<h1 id="RAG"><a href="#RAG" class="headerlink" title="RAG"></a>RAG</h1>Retrieval-augmented generation<br>Main 2 steps:</li>
+<li>Retrieval information: external information, such as up-to-date documents, webs on the internet.</li>
+<li>Generation: input the retrieval information and the input query into LLM (GPT etc.) to generate answers.</li>
+</ol>
+<p>Pros: the response are greatly enhanced by the incorporation of external information</p>
+<h1 id="Sparse-Convolution"><a href="#Sparse-Convolution" class="headerlink" title="Sparse Convolution"></a>Sparse Convolution</h1><h2 id="卷积核结构"><a href="#卷积核结构" class="headerlink" title="卷积核结构"></a>卷积核结构</h2><ol>
+<li>普通： 密集</li>
+<li>稀疏：有许多零，不参与训练。</li>
+</ol>
+<h2 id="计算效率"><a href="#计算效率" class="headerlink" title="计算效率"></a>计算效率</h2><ol>
+<li>普通： 缦</li>
+<li>稀疏：快。常用于 训练、推理 的 加速。</li>
+</ol>
+<h2 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h2><ol>
+<li>普通：需要全局信息 和 特征密集表示 的应用。</li>
+<li>稀疏：<ol>
+<li>大规模图像、点云等稀疏数据（使普通卷积运算时，计算复杂度很高）。</li>
+<li>可用于 需要 快速推理的应用，如无人驾驶的感知任务。</li>
+</ol>
+</li>
+</ol>
+<h1 id="one-shot-few-shot"><a href="#one-shot-few-shot" class="headerlink" title="one-shot, few shot"></a>one-shot, few shot</h1><p>![[lw1.png|650]]</p>
+<h1 id="Zero-Shot-Learning-零次学习"><a href="#Zero-Shot-Learning-零次学习" class="headerlink" title="Zero-Shot Learning (零次学习)"></a>Zero-Shot Learning (零次学习)</h1><p>基本概念：  </p>
+<p>![[lw13.png]]</p>
+<p>数据：  </p>
+<ol>
+<li>训练集图片$X_{tr}$、类别标签$Y_{tr}$</li>
+<li>测试集图片$X_{te}$、类别标签$Y_{te}$</li>
+<li>训练集、测试集各类别的描述：$A_{tr}$、$A_{te}$: 语意向量的 每一维 代表 一种属性。比如是否有尾巴，1代表有，0代表无。</li>
+<li>其中 描述A： <ol>
+<li>人工标注。</li>
+<li>自学习。（效果差很多）</li>
+</ol>
+</li>
+<li>目前研究方式：<ol>
+<li>获取合适的类别描述A。(集中于 nlp 方法，发展缓慢，难度大)</li>
+<li>建立 合适的 分类模型。（易出成果）</li>
+</ol>
+</li>
+<li>每个类别向量$y_i \in Y$与 语义向量$a_i \in A$一一对应， 故 可忘记 Y。</li>
+<li>我们要做的，是建立 特征空间 与 语义空间 之间的映射。</li>
+<li>岭回归： 带 范数约束 的 均方误差。</li>
+</ol>
+<p>![[lw14.png]]</p>
+<p>$\Omega ()$通常为2范数约束，  $\eta $为超参，对 W求导，并让导为0，即可求出W的值  </p>
+<p>![[lw15.png]]</p>
+<ol>
+<li>上诉结果 较naive, 精度为59.1%，可建立更好模型。</li>
+<li>ZSL 存在的问题：<ol>
+<li>领域漂移问题（domain shift problem）:<br> 同样的特征，但差别很大，如马的尾巴 和 猪的尾巴。       </li>
+</ol>
+</li>
+</ol>
+<p>![[lw16.png]]</p>
+<ol>
+<li><p>枢纽点问题（Hubness problem）<br> 在高维空间内，某些点 会成为 大多数点的 最近邻点。<br> 基于 岭回归 的方法 会 加重 该问题。</p>
+</li>
+<li><p>领域漂移 解决方法：<br>样本 特征维度 &gt; 语义维度。所以 X 映射到 语义空间 会 丢失信息。<br>所以， 可先把 X 映射到 语义空间, 再把 语义空间 映射回去。<br>这样可 保留 更多信息。    </p>
+</li>
+</ol>
+<p>![[lw17.png]]</p>
+<p>得到83.2%的准确率</p>
+<ol>
+<li>枢纽点问题 解决方案 有2:<ol>
+<li>若模型 为 岭回归，则 可以建立 语义空间 到 特征空间 的映射。    </li>
+</ol>
+</li>
+</ol>
+<p>![[lw18.png]]</p>
+<pre><code>      得到76.5%的正确率
+
+2. 可用生成模型：不太懂
+</code></pre><p>参考： <a href="https://zhuanlan.zhihu.com/p/34656727" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/34656727</a></p>
+<p>​    </p>
+<h1 id="top-1-accuracy-VS-top-5-accuracy"><a href="#top-1-accuracy-VS-top-5-accuracy" class="headerlink" title="top-1 accuracy VS top-5 accuracy"></a>top-1 accuracy VS top-5 accuracy</h1><p>拿一张 blueberry图片 预测， 得：<br>cherry: 0.35<br>raspberry: 0.25<br>blueberry: 0.2<br>strawberry: 0.1<br>apple: 0.06<br>orange: 0.04<br>则：  </p>
+<ol>
+<li>top-1 acc: blueberry != cherry,  False.</li>
+<li>top-5 acc: blueberry 在概率最高的前五个预测， True.</li>
+</ol>
+<p>又例：<br>![[lw4.png]]</p>
+<p>top-1 acc: 2/5<br>top-5 acc: 3/5</p>
+<h1 id="Color-Jittering"><a href="#Color-Jittering" class="headerlink" title="Color Jittering"></a>Color Jittering</h1><p>图像增强 的一种，随机 改变：</p>
+<ol>
+<li>亮度</li>
+<li>对比度</li>
+<li>饱和度</li>
+</ol>
+<h1 id="Beam-search"><a href="#Beam-search" class="headerlink" title="Beam search"></a>Beam search</h1><ol>
+<li>nlp中，用来生成相识问，没有类似ctc中的“-”符号， 所以token都是有意义的，不可消。</li>
+<li>ctc中，每次一步（3*3=9路径），都需要合并，再取top-3.</li>
+</ol>
+<h1 id="sklearn-算法图鉴（待学习）"><a href="#sklearn-算法图鉴（待学习）" class="headerlink" title="sklearn 算法图鉴（待学习）?"></a>sklearn 算法图鉴（待学习）?</h1><p>![[lw49.png]]</p>
+<h1 id="K-Means-Clusters"><a href="#K-Means-Clusters" class="headerlink" title="K-Means Clusters"></a>K-Means Clusters</h1><ol>
+<li>K个初始点 的选择， 可用K-Means++算法，但也 无法避免 被 离群点 影响。<ol>
+<li>K-Means++：选择距离已知 中心 最远的点 作为 新的中心点， 代码如下。 </li>
+<li>最好的方法是，多选择几次不同 的 初始点，分别聚类， 选择误差 最小的一个。<br>[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">euler_distance</span><span class="params">(point1: list, point2: list)</span> -&gt; float:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    计算两点之间的欧拉距离，支持多维</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    distance = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> a, b <span class="keyword">in</span> zip(point1, point2):</span><br><span class="line">        distance += math.pow(a - b, <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> math.sqrt(distance)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_closest_dist</span><span class="params">(point, centroids)</span>:</span></span><br><span class="line">    min_dist = math.inf  <span class="comment"># 初始设为无穷大</span></span><br><span class="line">    <span class="keyword">for</span> i, centroid <span class="keyword">in</span> enumerate(centroids):</span><br><span class="line">        dist = euler_distance(centroid, point)</span><br><span class="line">        <span class="keyword">if</span> dist &lt; min_dist:</span><br><span class="line">            min_dist = dist</span><br><span class="line">    <span class="keyword">return</span> min_dist</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kpp_centers</span><span class="params">(data_set: list, k: int)</span> -&gt; list:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    从数据集中返回 k 个对象可作为质心</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    cluster_centers = []</span><br><span class="line">    cluster_centers.append(random.choice(data_set))</span><br><span class="line">    d = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(len(data_set))]</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">1</span>, k):</span><br><span class="line">        total = <span class="number">0.0</span></span><br><span class="line">        <span class="keyword">for</span> i, point <span class="keyword">in</span> enumerate(data_set):</span><br><span class="line">            d[i] = get_closest_dist(point, cluster_centers) <span class="comment"># 与最近一个聚类中心的距离</span></span><br><span class="line">            total += d[i]</span><br><span class="line">        total *= random.random()</span><br><span class="line">        <span class="keyword">for</span> i, di <span class="keyword">in</span> enumerate(d): <span class="comment"># 轮盘法选出下一个聚类中心；</span></span><br><span class="line">            total -= di</span><br><span class="line">            <span class="keyword">if</span> total &gt; <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            cluster_centers.append(data_set[i])</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> cluster_centers</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    iris = datasets.load_iris()</span><br><span class="line">    print(kpp_centers(iris.data, <span class="number">4</span>))</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[array([6.2, 2.2, 4.5, 1.5]), array([5.1, 3.7, 1.5, 0.4]), array([4.8, 3.4, 1.6, 0.2]), array([7.4, 2.8, 6.1, 1.9])]</span><br></pre></td></tr></table></figure>
+<p>参考文档： <a href="https://zhuanlan.zhihu.com/p/32375430" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/32375430</a>   </p>
+<ol>
+<li>如何选择中心数量K: 手肘法<br> 误差下降 突然平缓的点，就是K<br> 有时聚类的K比较主观。</li>
+<li>缺点：<ol>
+<li>K值、初始点不好找。</li>
+<li>得到的结果 是 局部最优。</li>
+<li>受 离群点 影响较大。</li>
+</ol>
+</li>
+</ol>
+<p>参考文档： <a href="https://zhuanlan.zhihu.com/p/75477709" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/75477709</a></p>
+<h1 id="KNN（K-Nearest-Neighbors）"><a href="#KNN（K-Nearest-Neighbors）" class="headerlink" title="KNN（K Nearest Neighbors）"></a>KNN（K Nearest Neighbors）</h1><ol>
+<li>根据最近的K个数据点，来判断 预测数据点 的类别。</li>
+<li>优点： <ol>
+<li>简单易用。</li>
+<li>不需要训练。</li>
+<li>预测效果好。</li>
+<li>对异常值不敏感。</li>
+</ol>
+</li>
+<li>缺点： <ol>
+<li>对内存要求高，需存储 所有训练数据 的特征向量。</li>
+<li>预测 可能 很慢： 需要和所有数据进行比对。</li>
+<li>对数据规模敏感。   </li>
+</ol>
+</li>
+</ol>
+<p>参考文档： <a href="https://zhuanlan.zhihu.com/p/61341071" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/61341071</a></p>
+<h1 id="Self-training（半监督学习方法）"><a href="#Self-training（半监督学习方法）" class="headerlink" title="Self-training（半监督学习方法）"></a>Self-training（半监督学习方法）</h1><p>方法：   </p>
+<ol>
+<li>利用标号数据 训练一个模型</li>
+<li>用该模型 对未标号的数据 进行预测，取置信度较大的预测结果，获得伪标签。</li>
+<li>联合真实数据、伪标签数据， 从头训练 一个新的模型，获得新模型。</li>
+<li>重复2，3步。      </li>
+</ol>
+<p>![[lw100.png]]</p>
+<h1 id="Noisy-Student"><a href="#Noisy-Student" class="headerlink" title="Noisy Student"></a>Noisy Student</h1><p>论文： Self-training with Noisy Student improves ImageNet classification（CVPR2020）</p>
+<ol>
+<li>在 伪标签数据和真实数据对 模型（student model） 训练时，该模型一般比用于生成伪标签的模型（teacher model）要大。因为在训练student model时，使用了大量 noisy的方法（起的扩充样本的作用）： 数据增强、dropout、stochastic depth. 所以 student model应该比teacher model容量要大。</li>
+<li>与 self-straining类似，主要区别： 给学生加了噪声。</li>
+<li>在作为teacher model时，对 unlable的数据，并为进行噪声干扰。</li>
+<li>需平衡数据，每类数量相同时效果最好。      </li>
+</ol>
+<p>![[lw101.png]]</p>
+<p>参考文献：  <a href="https://zhuanlan.zhihu.com/p/164597142" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/164597142</a></p>
+<h1 id="stochastic-depth"><a href="#stochastic-depth" class="headerlink" title="stochastic depth"></a>stochastic depth</h1><ol>
+<li>随机的对batch中的样本进行删除。</li>
+<li>该结构只可应用于shot-cut这类残差结构里，通过原始X加上随机去除样本后经过残差块的输出，这样，某些样本的前向推理深度就随机下降了。</li>
+</ol>
+<p>参考文献：  <a href="https://www.zhihu.com/question/540433389/answer/2629056736" target="_blank" rel="noopener">https://www.zhihu.com/question/540433389/answer/2629056736</a></p>
+<h1 id="cosine-学习率衰减策略"><a href="#cosine-学习率衰减策略" class="headerlink" title="cosine 学习率衰减策略"></a>cosine 学习率衰减策略</h1><p>论文《SGDR: Stochastic Gradient Descent with Warm Restarts》  </p>
+<ol>
+<li>学习率光滑的下降   </li>
+</ol>
+<p>![[lw103.png]]</p>
+<ol>
+<li>公式：  </li>
+</ol>
+<p>![[lw104.png]]</p>
+<ol>
+<li>在周期性重启时，需要把学习率从最低 调到 最高：   </li>
+</ol>
+<p>![[lw105.png]]</p>
+<p>详情：<br>![[lw102.png]]</p>
+<p>参考文献： <a href="https://www.cxyzjd.com/article/Roaddd/113260677" target="_blank" rel="noopener">https://www.cxyzjd.com/article/Roaddd/113260677</a></p>
+<h1 id="计算-模型-计算浮点数"><a href="#计算-模型-计算浮点数" class="headerlink" title="计算 模型 计算浮点数"></a>计算 模型 计算浮点数</h1><p>卷积层： feature map 的宽 <em> 高 </em> 通道数 <em> 卷积核的宽</em>高 <em> 输出通道数<br>全连接层：全连接的矩阵 的 宽 </em> 高<br>所以， 计算量 主要在 卷积层， 参数量在线性层。  </p>
+<h1 id="L2-norm-L2-Normalize"><a href="#L2-norm-L2-Normalize" class="headerlink" title="L2 norm, L2 Normalize"></a>L2 norm, L2 Normalize</h1><p>![[lw202.png]]</p>
+<h1 id="迁移学习。"><a href="#迁移学习。" class="headerlink" title="迁移学习。"></a>迁移学习。</h1><p>就是先预训练一个模型，在下游任务上做微调。</p>
+<h1 id="Closed-book-QA"><a href="#Closed-book-QA" class="headerlink" title="Closed book QA:"></a>Closed book QA:</h1><ol>
+<li>一般的QA，有一段话+一个问题，根据这段话，回答问题。</li>
+<li>Closed book QA： 直接就只有一个问题，要求得到答案。</li>
+</ol>
+<h1 id="FLOPs"><a href="#FLOPs" class="headerlink" title="FLOPs"></a>FLOPs</h1><p>FLOPS：注意全大写，是floating point operations per second的缩写，意指每秒浮点运算次数，理解为计算速度。是一个衡量硬件性能的指标。<br>FLOPs：注意s小写，是floating point operations的缩写（s表复数），意指浮点运算数，理解为计算量。可以用来衡量算法/模型的复杂度。<br>卷积层 FLOPs 计算：  </p>
+<pre><code>![[lw224.png]]
+</code></pre><p>参考文档： <a href="https://zhuanlan.zhihu.com/p/137719986" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/137719986</a></p>
+<h1 id="GLUE"><a href="#GLUE" class="headerlink" title="GLUE:"></a>GLUE:</h1><p>![[lw236.png]]<br>![[lw237.png]]</p>
+<p>参考文档： <a href="https://paperswithcode.com/method/gelu" target="_blank" rel="noopener">https://paperswithcode.com/method/gelu</a></p>
+<h1 id="EMA"><a href="#EMA" class="headerlink" title="EMA"></a>EMA</h1><p>![[lw238.png]]</p>
+<p>参考文档： <a href="https://www.investopedia.com/terms/e/ema.asp" target="_blank" rel="noopener">https://www.investopedia.com/terms/e/ema.asp</a></p>
+<h1 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h1><h1 id="NMS"><a href="#NMS" class="headerlink" title="NMS"></a>NMS</h1><p>Non Maximum Suppression<br>Step 1 : Select the prediction S with highest confidence score and remove it from P and add it to the final prediction list keep. (keep is empty initially).<br>Step 2 : Now compare this prediction S with all the predictions present in P. Calculate the IoU of this prediction S with every other predictions in P. If the IoU is greater than the threshold thresh_iou for any prediction T present in P, remove prediction T from P.<br>Step 3 : If there are still predictions left in P, then go to Step 1 again, else return the list keep containing the filtered predictions.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nms_pytorch</span><span class="params">(P : torch.tensor ,thresh_iou : float)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Apply non-maximum suppression to avoid detecting too many</span></span><br><span class="line"><span class="string">    overlapping bounding boxes for a given object.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        boxes: (tensor) The location preds for the image </span></span><br><span class="line"><span class="string">            along with the class predscores, Shape: [num_boxes,5].</span></span><br><span class="line"><span class="string">        thresh_iou: (float) The overlap thresh for suppressing unnecessary boxes.</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        A list of filtered boxes, Shape: [ , 5]</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment"># we extract coordinates for every </span></span><br><span class="line">    <span class="comment"># prediction box present in P</span></span><br><span class="line">    x1 = P[:, <span class="number">0</span>]</span><br><span class="line">    y1 = P[:, <span class="number">1</span>]</span><br><span class="line">    x2 = P[:, <span class="number">2</span>]</span><br><span class="line">    y2 = P[:, <span class="number">3</span>]</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># we extract the confidence scores as well</span></span><br><span class="line">    scores = P[:, <span class="number">4</span>]</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># calculate area of every block in P</span></span><br><span class="line">    areas = (x2 - x1) * (y2 - y1)</span><br><span class="line">     </span><br><span class="line">    <span class="comment"># sort the prediction boxes in P</span></span><br><span class="line">    <span class="comment"># according to their confidence scores</span></span><br><span class="line">    order = scores.argsort()</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># initialise an empty list for </span></span><br><span class="line">    <span class="comment"># filtered prediction boxes</span></span><br><span class="line">    keep = []</span><br><span class="line">     </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> len(order) &gt; <span class="number">0</span>:</span><br><span class="line">         </span><br><span class="line">        <span class="comment"># extract the index of the </span></span><br><span class="line">        <span class="comment"># prediction with highest score</span></span><br><span class="line">        <span class="comment"># we call this prediction S</span></span><br><span class="line">        idx = order[<span class="number">-1</span>]</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># push S in filtered predictions list</span></span><br><span class="line">        keep.append(P[idx])</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># remove S from P</span></span><br><span class="line">        order = order[:<span class="number">-1</span>]</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># sanity check</span></span><br><span class="line">        <span class="keyword">if</span> len(order) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">         </span><br><span class="line">        <span class="comment"># select coordinates of BBoxes according to </span></span><br><span class="line">        <span class="comment"># the indices in order</span></span><br><span class="line">        xx1 = torch.index_select(x1,dim = <span class="number">0</span>, index = order)</span><br><span class="line">        xx2 = torch.index_select(x2,dim = <span class="number">0</span>, index = order)</span><br><span class="line">        yy1 = torch.index_select(y1,dim = <span class="number">0</span>, index = order)</span><br><span class="line">        yy2 = torch.index_select(y2,dim = <span class="number">0</span>, index = order)</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># find the coordinates of the intersection boxes</span></span><br><span class="line">        xx1 = torch.max(xx1, x1[idx])</span><br><span class="line">        yy1 = torch.max(yy1, y1[idx])</span><br><span class="line">        xx2 = torch.min(xx2, x2[idx])</span><br><span class="line">        yy2 = torch.min(yy2, y2[idx])</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># find height and width of the intersection boxes</span></span><br><span class="line">        w = xx2 - xx1</span><br><span class="line">        h = yy2 - yy1</span><br><span class="line">         </span><br><span class="line">        <span class="comment"># take max with 0.0 to avoid negative w and h</span></span><br><span class="line">        <span class="comment"># due to non-overlapping boxes</span></span><br><span class="line">        w = torch.clamp(w, min=<span class="number">0.0</span>)</span><br><span class="line">        h = torch.clamp(h, min=<span class="number">0.0</span>)</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># find the intersection area</span></span><br><span class="line">        inter = w*h</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># find the areas of BBoxes according the indices in order</span></span><br><span class="line">        rem_areas = torch.index_select(areas, dim = <span class="number">0</span>, index = order) </span><br><span class="line"> </span><br><span class="line">        <span class="comment"># find the union of every prediction T in P</span></span><br><span class="line">        <span class="comment"># with the prediction S</span></span><br><span class="line">        <span class="comment"># Note that areas[idx] represents area of S</span></span><br><span class="line">        union = (rem_areas - inter) + areas[idx]</span><br><span class="line">         </span><br><span class="line">        <span class="comment"># find the IoU of every prediction in P with S</span></span><br><span class="line">        IoU = inter / union</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># keep the boxes with IoU less than thresh_iou</span></span><br><span class="line">        mask = IoU &lt; thresh_iou</span><br><span class="line">        order = order[mask]</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">return</span> keep</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Let P be the following</span></span><br><span class="line">P = torch.tensor([</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">0.95</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">0.93</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">0.9</span>, <span class="number">3.6</span>, <span class="number">3</span>, <span class="number">0.98</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">0.9</span>, <span class="number">3.5</span>, <span class="number">3</span>, <span class="number">0.97</span>]</span><br><span class="line">])</span><br><span class="line">nms_pytorch(P,<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>[tensor([1.0000, 0.9000, 3.6000, 3.0000, 0.9800])]
+</code></pre><p>Refs: <a href="https://learnopencv.com/non-maximum-suppression-theory-and-implementation-in-pytorch/#:~:text=Non%20Maximum%20Suppression%20(NMS)%20is,arrive%20at%20the%20desired%20results" target="_blank" rel="noopener">https://learnopencv.com/non-maximum-suppression-theory-and-implementation-in-pytorch/#:~:text=Non%20Maximum%20Suppression%20(NMS)%20is,arrive%20at%20the%20desired%20results</a>.</p>
+<h1 id="ill-posed-problems"><a href="#ill-posed-problems" class="headerlink" title="ill-posed problems"></a>ill-posed problems</h1><ol>
+<li>Antonym: Well-posed problems.</li>
+<li>Well-posed: 3 conditions:<ol>
+<li>a solution exists, </li>
+<li>the solution is unique, </li>
+<li>the solution’s behavior changes continuously with the initial conditions.(<strong>when x changes little, the result y changes little too.</strong> )</li>
+</ol>
+</li>
+<li>The ill-posed problem is compared to overfitting.</li>
+<li>often because small changes in input can lead to large changes in output, making them unstable or difficult to resolve without additional constraints or regularization.<h1 id="sigmoid"><a href="#sigmoid" class="headerlink" title="sigmoid"></a>sigmoid</h1><script type="math/tex; mode=display">
+\sigma(x) = \frac{1}{1 + e^{-x}}</script>![[Figure_1.png]]</li>
+</ol>
+<h3 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h3><ol>
+<li>把输入 归一化到 （0， 1）</li>
+<li>可微分的阈值单元，与模拟真实神经元阈值较像。  </li>
+<li>在隐含层中已很少使用，求导后最大值为0.25，会造成梯度消失，被relu取代。    </li>
+</ol>
+<p>![[ds11.png]]</p>
+<ol>
+<li>接近0时近似线性。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import torch</span><br><span class="line">from d2l import torch as d2l</span><br><span class="line">x = torch.arange(-8.0, 8.0, 0.1, requires_grad=True)</span><br><span class="line">y = torch.sigmoid( x)</span><br><span class="line">d2l.plot(x.detach(), y.detach(), &apos;x&apos;, &apos;sigmoid(x)&apos;, figsize=(5, 2.5))</span><br><span class="line">d2l.plt.show()</span><br></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import torch</span><br><span class="line">from d2l import torch as d2l</span><br><span class="line">x = torch.arange(-8.0, 8.0, 0.1, requires_grad=True)</span><br><span class="line">y = torch.sigmoid( x)</span><br><span class="line">if hasattr(x.grad, &apos;data&apos;):</span><br><span class="line">    x.grad.data.zero_()</span><br><span class="line">y.backward(torch.ones_like(x), retain_graph=True)</span><br><span class="line">d2l.plot(x.detach(), x.grad, &apos;x&apos;, &apos;grad of sigmoid&apos;, figsize=(5, 2.5))</span><br></pre></td></tr></table></figure>
+<h1 id="semantic-Instance-Panoramic-segmentation"><a href="#semantic-Instance-Panoramic-segmentation" class="headerlink" title="(semantic, Instance, Panoramic) segmentation"></a>(semantic, Instance, Panoramic) segmentation</h1><h2 id="semantic-segmentation"><a href="#semantic-segmentation" class="headerlink" title="semantic segmentation"></a>semantic segmentation</h2><ol>
+<li>Be pure for pixel classification,  don’t need to distinguish the same kind instances.<br>![[Pasted image 20230903105909.png]]<h2 id="Instance-segmentation"><a href="#Instance-segmentation" class="headerlink" title="Instance segmentation"></a>Instance segmentation</h2></li>
+<li>Need to distinguish the same kind instances.<br>![[Pasted image 20230903105916.png]]</li>
+</ol>
+<h2 id="Panoramic-segmentation"><a href="#Panoramic-segmentation" class="headerlink" title="Panoramic segmentation"></a>Panoramic segmentation</h2><ol>
+<li>Segment all objection including the background.<br>![[Pasted image 20230903110051.png|400]]</li>
+</ol>
+<h1 id="convex-combination"><a href="#convex-combination" class="headerlink" title="convex combination"></a>convex combination</h1><p>$V’_i=\sum_{n}w_nV_n$, Where $W_n\ge0$ and $\sum_{n}w_n=1$</p>
+<p>Like the below, the convex combination of those input points must be in Convex Hull.<br>![[Pasted image 20230904205822.png|575]]<br>and, the biggest angle of the convex combination is must be equal to or less than the biggest angle of the original input points(features). (assuming the input points don’t contain the origin)<br>![[Pasted image 20230904210239.png|575]]</p>
+
+        
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="gitalk-container"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#温度系数"><span class="nav-number">1.</span> <span class="nav-text">温度系数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#熵"><span class="nav-number">2.</span> <span class="nav-text">熵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自信息量"><span class="nav-number">2.1.</span> <span class="nav-text">自信息量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵（Cross-Entropy）"><span class="nav-number">2.2.</span> <span class="nav-text">交叉熵（Cross Entropy）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分解KL散度"><span class="nav-number">2.3.</span> <span class="nav-text">分解KL散度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#这里的信息损失："><span class="nav-number">2.3.1.</span> <span class="nav-text">这里的信息损失：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-预测模型中的信息损失"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">1. 预测模型中的信息损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数据压缩中的信息损失"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">2. 数据压缩中的信息损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-自然语言处理中的信息损失"><span class="nav-number">2.3.1.3.</span> <span class="nav-text">3. 自然语言处理中的信息损失</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么-Q-x-比-P-x-需要更多比特来编码"><span class="nav-number">2.4.</span> <span class="nav-text">为什么 $Q(x)$ 比 $P(x)$ 需要更多比特来编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自信息量（Self-Information）"><span class="nav-number">2.4.1.</span> <span class="nav-text">自信息量（Self-Information）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理想编码长度"><span class="nav-number">2.4.2.</span> <span class="nav-text">理想编码长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用近似分布进行编码"><span class="nav-number">2.4.3.</span> <span class="nav-text">使用近似分布进行编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平均编码长度"><span class="nav-number">2.4.4.</span> <span class="nav-text">平均编码长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#举例说明"><span class="nav-number">2.4.5.</span> <span class="nav-text">举例说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.4.6.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵损失"><span class="nav-number">2.5.</span> <span class="nav-text">交叉熵损失</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归纳偏置（Inductive-Bias）"><span class="nav-number">3.</span> <span class="nav-text">归纳偏置（Inductive Bias）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention机制的优势"><span class="nav-number">3.1.</span> <span class="nav-text">Attention机制的优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-1"><span class="nav-number">3.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#softmax"><span class="nav-number">4.</span> <span class="nav-text">softmax</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax求梯度的公式推导"><span class="nav-number">4.1.</span> <span class="nav-text">Softmax求梯度的公式推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤-1-Softmax的偏导数"><span class="nav-number">4.1.1.</span> <span class="nav-text">步骤 1: Softmax的偏导数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#情况-1-i-j"><span class="nav-number">4.1.1.1.</span> <span class="nav-text">情况 1: $i = j$</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#情况-2-i-neq-j"><span class="nav-number">4.1.1.2.</span> <span class="nav-text">情况 2: $i \neq j$</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并结果"><span class="nav-number">4.1.2.</span> <span class="nav-text">合并结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸"><span class="nav-number">4.2.</span> <span class="nav-text">Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度消失的原因"><span class="nav-number">4.2.1.</span> <span class="nav-text">梯度消失的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体分析"><span class="nav-number">4.2.2.</span> <span class="nav-text">具体分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-sqrt-d-k-进行缩放的原因"><span class="nav-number">4.2.3.</span> <span class="nav-text">使用 $\sqrt{d_k}$ 进行缩放的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-2"><span class="nav-number">4.2.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OOD-accuracy"><span class="nav-number">5.</span> <span class="nav-text">OOD accuracy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#向量的高效搜索"><span class="nav-number">6.</span> <span class="nav-text">向量的高效搜索</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#近似最邻近"><span class="nav-number">7.</span> <span class="nav-text">近似最邻近</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现"><span class="nav-number">7.1.</span> <span class="nav-text">如何实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分区"><span class="nav-number">7.1.1.</span> <span class="nav-text">分区</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三种局部敏感哈希函数原理"><span class="nav-number">8.</span> <span class="nav-text">三种局部敏感哈希函数原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Incremental-learning"><span class="nav-number">9.</span> <span class="nav-text">Incremental learning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维链方法（CoT）"><span class="nav-number">10.</span> <span class="nav-text">思维链方法（CoT）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MoE"><span class="nav-number">11.</span> <span class="nav-text">MoE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RAG"><span class="nav-number">12.</span> <span class="nav-text">RAG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sparse-Convolution"><span class="nav-number">13.</span> <span class="nav-text">Sparse Convolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积核结构"><span class="nav-number">13.1.</span> <span class="nav-text">卷积核结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算效率"><span class="nav-number">13.2.</span> <span class="nav-text">计算效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用领域"><span class="nav-number">13.3.</span> <span class="nav-text">应用领域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#one-shot-few-shot"><span class="nav-number">14.</span> <span class="nav-text">one-shot, few shot</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zero-Shot-Learning-零次学习"><span class="nav-number">15.</span> <span class="nav-text">Zero-Shot Learning (零次学习)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#top-1-accuracy-VS-top-5-accuracy"><span class="nav-number">16.</span> <span class="nav-text">top-1 accuracy VS top-5 accuracy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Color-Jittering"><span class="nav-number">17.</span> <span class="nav-text">Color Jittering</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Beam-search"><span class="nav-number">18.</span> <span class="nav-text">Beam search</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn-算法图鉴（待学习）"><span class="nav-number">19.</span> <span class="nav-text">sklearn 算法图鉴（待学习）?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#K-Means-Clusters"><span class="nav-number">20.</span> <span class="nav-text">K-Means Clusters</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KNN（K-Nearest-Neighbors）"><span class="nav-number">21.</span> <span class="nav-text">KNN（K Nearest Neighbors）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Self-training（半监督学习方法）"><span class="nav-number">22.</span> <span class="nav-text">Self-training（半监督学习方法）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Noisy-Student"><span class="nav-number">23.</span> <span class="nav-text">Noisy Student</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stochastic-depth"><span class="nav-number">24.</span> <span class="nav-text">stochastic depth</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cosine-学习率衰减策略"><span class="nav-number">25.</span> <span class="nav-text">cosine 学习率衰减策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算-模型-计算浮点数"><span class="nav-number">26.</span> <span class="nav-text">计算 模型 计算浮点数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#L2-norm-L2-Normalize"><span class="nav-number">27.</span> <span class="nav-text">L2 norm, L2 Normalize</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迁移学习。"><span class="nav-number">28.</span> <span class="nav-text">迁移学习。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Closed-book-QA"><span class="nav-number">29.</span> <span class="nav-text">Closed book QA:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FLOPs"><span class="nav-number">30.</span> <span class="nav-text">FLOPs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GLUE"><span class="nav-number">31.</span> <span class="nav-text">GLUE:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EMA"><span class="nav-number">32.</span> <span class="nav-text">EMA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Adam"><span class="nav-number">33.</span> <span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NMS"><span class="nav-number">34.</span> <span class="nav-text">NMS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ill-posed-problems"><span class="nav-number">35.</span> <span class="nav-text">ill-posed problems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sigmoid"><span class="nav-number">36.</span> <span class="nav-text">sigmoid</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点："><span class="nav-number">36.0.1.</span> <span class="nav-text">特点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#semantic-Instance-Panoramic-segmentation"><span class="nav-number">37.</span> <span class="nav-text">(semantic, Instance, Panoramic) segmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#semantic-segmentation"><span class="nav-number">37.1.</span> <span class="nav-text">semantic segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instance-segmentation"><span class="nav-number">37.2.</span> <span class="nav-text">Instance segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Panoramic-segmentation"><span class="nav-number">37.3.</span> <span class="nav-text">Panoramic segmentation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#convex-combination"><span class="nav-number">38.</span> <span class="nav-text">convex combination</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/angry_bird_128.ico"
+      alt="HuzhenYou">
+  <p class="site-author-name" itemprop="name">HuzhenYou</p>
+  <div class="site-description" itemprop="description">虚怀若谷，大智若愚</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/HuzhenYou" title="GitHub &rarr; https://github.com/HuzhenYou" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:youhuzhen@gmail.com" title="E-Mail &rarr; mailto:youhuzhen@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/you-jin-cheng/activities" title="https://www.zhihu.com/people/you-jin-cheng/activities" rel="noopener" target="_blank">知乎</a>
+        </li>
+      
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HuzhenYou</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">36k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:01</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/muse.js?v=7.3.0"></script>
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '140d0161c7c4631e2764',
+          clientSecret: '90d536de668c0e5a417f895d3af6a037d1528253',
+          repo: 'HuzhenYou.github.io',
+          owner: 'HuzhenYou',
+          admin: ['HuzhenYou'],
+          id:'gitalk_20240704175115',
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: false,
+          distractionFreeMode: false
+        })
+
+        gitalk.render('gitalk-container')           
+       </script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
