@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://huzhenyou.github.io/"/>
-  <updated>2024-07-04T07:46:02.163Z</updated>
+  <updated>2024-07-04T16:42:49.099Z</updated>
   <id>https://huzhenyou.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hexo中公式无法正常显示问题的解决方案</title>
+    <link href="https://huzhenyou.github.io//blog/2024/07/hexo%E4%B8%AD%E5%85%AC%E5%BC%8F%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA.html"/>
+    <id>https://huzhenyou.github.io//blog/2024/07/hexo中公式无法正常显示.html</id>
+    <published>2024-07-04T16:42:48.000Z</published>
+    <updated>2024-07-04T16:42:49.099Z</updated>
+    
+    <content type="html"><![CDATA[<p>对obsidian的markdown格式转hexo格式时，一些公式无法正常显示，及根号显示异常的解决方案。</p><a id="more"></a><hr><h1 id="一些内嵌公式无法正常显示的问题"><a href="#一些内嵌公式无法正常显示的问题" class="headerlink" title="一些内嵌公式无法正常显示的问题"></a>一些内嵌公式无法正常显示的问题</h1><p>内嵌公式：文字内嵌入的公式<br>我的解决方案是：</p><p>替换公式渲染引擎：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure></p><p>修改 node_modules/kramed/lib/rules/inline.js：<br>修改第 11 行:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// escape: /^\\([\\`*&#123;&#125;\[\]()#$+\-.!_&gt;])/,</span></span><br><span class="line"><span class="built_in">escape</span>: <span class="regexp">/^\\([`*\[\]()#$+\-.!_&gt;])/</span>,</span><br></pre></td></tr></table></figure></p><p>修改第 20 行：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// em: /^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</span><br><span class="line">em: /^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</span><br></pre></td></tr></table></figure></p><p>重启：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure></p><h1 id="根号无法正常显示"><a href="#根号无法正常显示" class="headerlink" title="根号无法正常显示"></a>根号无法正常显示</h1><p>如<br><img src="/imgs/Pasted image 20240704140958.png" alt width="132px"></p><p>打开浏览器的开发者工具，发现控制台上有报错，如下图所示。原因是MathJax 在尝试执行某些 DOM 操作时遇到了问题。<br><img src="/imgs/Pasted image 20240704141107.png"><br>我的解决方案是：<br>hexo根目录的_config.yml添加：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mathjax:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">per_page:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">engine:</span> <span class="string">mathjax</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">2.7</span><span class="number">.7</span></span><br><span class="line">  <span class="attr">config:</span></span><br><span class="line">    <span class="attr">tex2jax:</span></span><br><span class="line">      <span class="attr">inlineMath:</span> <span class="string">[["$",</span> <span class="string">"$"</span><span class="string">],</span> <span class="string">["\\(",</span> <span class="string">"\\)"</span><span class="string">]]</span></span><br><span class="line">      <span class="attr">processEscapes:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p><p>主题的配置文件，我的是themes/next/_config.yml 中添加：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mathjax:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p><p>在主题布局文件中添加 MathJax 脚本（例如 themes/next/layout/_partials/head.swig 或 themes/next/layout/_partials/head.njk）<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> theme.mathjax %&#125;</span><br><span class="line">  &lt;script type=<span class="string">"text/x-mathjax-config"</span>&gt;</span><br><span class="line">    MathJax.Hub.Config(&#123;</span><br><span class="line">      tex2jax: &#123;</span><br><span class="line">        inlineMath: [[<span class="string">'$'</span>, <span class="string">'$'</span>], [<span class="string">'\\('</span>, <span class="string">'\\)'</span>]],</span><br><span class="line">        processEscapes: <span class="literal">true</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">"HTML-CSS"</span>: &#123; <span class="attr">availableFonts</span>: [<span class="string">"TeX"</span>] &#125;,</span><br><span class="line">      SVG: &#123; <span class="attr">font</span>: <span class="string">"TeX"</span> &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">  &lt;script type="text/</span>javascript<span class="string">" async</span></span><br><span class="line"><span class="string">    src="</span>https:<span class="comment">//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&gt;</span></span><br><span class="line">  &lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&#123;% endif %&#125;</span></span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;对obsidian的markdown格式转hexo格式时，一些公式无法正常显示，及根号显示异常的解决方案。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="hexo" scheme="https://huzhenyou.github.io/categories/hexo/"/>
+    
+    
+      <category term="hexo" scheme="https://huzhenyou.github.io/tags/hexo/"/>
+    
+  </entry>
   
   <entry>
     <title>MarketSenseAI：利用大模型进行投资</title>
@@ -34,13 +56,13 @@
       <category term="LLM+投资" scheme="https://huzhenyou.github.io/categories/LLM-%E6%8A%95%E8%B5%84/"/>
     
     
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
       <category term="LLM+投资" scheme="https://huzhenyou.github.io/tags/LLM-%E6%8A%95%E8%B5%84/"/>
     
       <category term="GPT-4" scheme="https://huzhenyou.github.io/tags/GPT-4/"/>
     
       <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
-    
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -110,9 +132,9 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
-    
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -134,9 +156,9 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
-    
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
       <category term="CVPR2023" scheme="https://huzhenyou.github.io/tags/CVPR2023/"/>
     
@@ -162,13 +184,13 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
-    
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
       <category term="ProposalGeneration" scheme="https://huzhenyou.github.io/tags/ProposalGeneration/"/>
     
       <category term="ActivityNetChallenge2019" scheme="https://huzhenyou.github.io/tags/ActivityNetChallenge2019/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -190,9 +212,9 @@
       <category term="backbone" scheme="https://huzhenyou.github.io/categories/backbone/"/>
     
     
-      <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
-    
       <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
+      <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
     
       <category term="backbone" scheme="https://huzhenyou.github.io/tags/backbone/"/>
     
