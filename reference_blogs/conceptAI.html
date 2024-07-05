@@ -90,17 +90,18 @@
 
 
 
-  <meta name="description" content="温度系数是的，在深度学习中，温度系数（temperature coefficient）确实对 softmax 函数起作用。温度系数 $T$ 是用来调节 softmax 函数输出概率分布的一个参数。具体来说，softmax 函数通常定义如下： \text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}引入温度系数 $T$ 后的 softmax 函数定">
+  <meta name="description" content="The detail of TriDet.">
+<meta name="keywords" content="&#39;ActionDetection&#39;,&#39;TemporalActionDetection&#39;,&#39;CVPR2023&#39;,&#39;极市直播&#39;,&#39;TemporalActionDetection&#39;,&#39;ActionDetection&#39;,&#39;CVPR2023&#39;,&#39;极市直播&#39;,TemporalActionDetection,ActionDetection,CVPR2023,极市直播">
 <meta property="og:type" content="website">
-<meta property="og:title" content="九万里">
+<meta property="og:title" content="TriDet">
 <meta property="og:url" content="https://huzhenyou.github.io/reference_blogs/conceptAI.html">
 <meta property="og:site_name" content="九万里">
-<meta property="og:description" content="温度系数是的，在深度学习中，温度系数（temperature coefficient）确实对 softmax 函数起作用。温度系数 $T$ 是用来调节 softmax 函数输出概率分布的一个参数。具体来说，softmax 函数通常定义如下： \text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}引入温度系数 $T$ 后的 softmax 函数定">
+<meta property="og:description" content="The detail of TriDet.">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2024-07-04T09:51:15.402Z">
+<meta property="og:updated_time" content="2024-07-05T16:00:50.879Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="九万里">
-<meta name="twitter:description" content="温度系数是的，在深度学习中，温度系数（temperature coefficient）确实对 softmax 函数起作用。温度系数 $T$ 是用来调节 softmax 函数输出概率分布的一个参数。具体来说，softmax 函数通常定义如下： \text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}引入温度系数 $T$ 后的 softmax 函数定">
+<meta name="twitter:title" content="TriDet">
+<meta name="twitter:description" content="The detail of TriDet.">
   <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
   <link rel="canonical" href="https://huzhenyou.github.io/reference_blogs/conceptAI">
 
@@ -116,7 +117,7 @@
   };
 </script>
 
-  <title> | 九万里</title>
+  <title>TriDet | 九万里</title>
   <meta name="generator" content="Hexo 3.9.0">
   
 
@@ -149,9 +150,9 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
-<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
@@ -289,7 +290,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-<h2 class="post-title" itemprop="name headline">
+<h2 class="post-title" itemprop="name headline">TriDet
 
 </h2>
 
@@ -305,7 +306,19 @@
       
       <div class="post-body">
         
-          <h1 id="温度系数"><a href="#温度系数" class="headerlink" title="温度系数"></a>温度系数</h1><p>是的，在深度学习中，温度系数（temperature coefficient）确实对 softmax 函数起作用。温度系数 $T$ 是用来调节 softmax 函数输出概率分布的一个参数。具体来说，softmax 函数通常定义如下：</p>
+          <p>The detail of TriDet.</p>
+<a id="more"></a>
+<hr>
+<h1 id="The-Rank-Loss-Problem-of-Self-Attention"><a href="#The-Rank-Loss-Problem-of-Self-Attention" class="headerlink" title="The Rank Loss Problem of Self Attention"></a>The Rank Loss Problem of Self Attention</h1><ol>
+<li>Self attention loses rank doubly exponentially with depth at initialization.(i.e. the more deep, the more same the outputs  are)</li>
+<li>The skip connections and MLPs mitigate this situation.</li>
+</ol>
+<p>Why:<br>![[#convex combination]]</p>
+<p>[[TriDet#The second question Attention in Temporal Dimension.|Self attention is Convex combination]]</p>
+<blockquote>
+<p>Attention is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth</p>
+</blockquote>
+<h1 id="温度系数"><a href="#温度系数" class="headerlink" title="温度系数"></a>温度系数</h1><p>是的，在深度学习中，温度系数（temperature coefficient）确实对 softmax 函数起作用。温度系数 $T$ 是用来调节 softmax 函数输出概率分布的一个参数。具体来说，softmax 函数通常定义如下：</p>
 <script type="math/tex; mode=display">\text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}</script><p>引入温度系数 $T$ 后的 softmax 函数定义为：</p>
 <script type="math/tex; mode=display">\text{softmax}(z_i) = \frac{e^{z_i / T}}{\sum_{j} e^{z_j / T}}</script><p>温度系数的作用是通过调整 $T$ 的值来控制输出概率的“平滑”程度。当 $T$ 趋近于零时，softmax 的输出会更加接近于 one-hot 编码，即概率分布会更加尖锐，接近于0或1。而当 $T$ 趋近于无穷大时，softmax 的输出会趋近于均匀分布，即所有类别的概率相等。</p>
 <p>温度系数在实践中有许多应用，例如在知识蒸馏（knowledge distillation）中，通过调整温度系数来使学生模型（student model）更好地学习教师模型（teacher model）的软标签（soft targets）。</p>
@@ -318,7 +331,7 @@
 <script type="math/tex; mode=display">H(P, Q) = -\sum_x P(x) \log Q(x)</script><h2 id="分解KL散度"><a href="#分解KL散度" class="headerlink" title="分解KL散度"></a>分解KL散度</h2><p>   将KL散度公式进行分解，使用对数的性质 $\log \frac{a}{b} = \log a - \log b$：</p>
 <script type="math/tex; mode=display">D_{KL}(P \| Q) = \sum_x P(x) \log P(x) - \sum_x P(x) \log Q(x)</script><p>   第一项 $\sum_x P(x) \log P(x)$是 P  分布的熵（Entropy），记为  $H(P)$：<br>   $H(P) = -\sum_x P(x) \log P(x)$</p>
 <p>   第二项$-\sum_x P(x) \log Q(x)$ 是 $P$ 和 $Q$分布的交叉熵$H(P, Q)$。</p>
-<p>KL散度可以用来表示在使用Q来近似P时所带来的  信息损失（编码效率下降，比如原本需要 6 个比特就能编码的信息，现在需要 8 个，这 2 个的差值就是信息损失）。<br>在 教师-学生 模型中，可以通过衡量学生经过 softmax后的分布和教师的KL散度来知道学生的学习。</p>
+<p>KL散度可以用来表示在使用Q来近似P时所带来的  信息损失（编码效率下降，比如原本需要 6 个比特就能编码的信息，现在需要 8 个，这 2 个的差值就是信息损失）。<br>在 教师-学生 模型中，可以通过衡量学生经过 softmax后的分布和教师的KL散度来知道学生的学习。 ^f594ee</p>
 <h3 id="这里的信息损失："><a href="#这里的信息损失：" class="headerlink" title="这里的信息损失："></a>这里的信息损失：</h3><p>除了编码效率的下降，我们还可以通过其他例子来说明和量化信息损失。以下是几个常见的例子：</p>
 <h4 id="1-预测模型中的信息损失"><a href="#1-预测模型中的信息损失" class="headerlink" title="1. 预测模型中的信息损失"></a>1. 预测模型中的信息损失</h4><p>在机器学习和统计学中，KL散度可以用来衡量两个概率分布之间的差异，尤其是在预测模型中。例如，当我们训练一个分类模型时，模型预测的类别分布（$Q$）与真实的类别分布（$P$）之间的差异可以通过KL散度来量化。更高的KL散度表示预测分布与真实分布的差异更大，这意味着模型的预测质量较差。</p>
 <h4 id="2-数据压缩中的信息损失"><a href="#2-数据压缩中的信息损失" class="headerlink" title="2. 数据压缩中的信息损失"></a>2. 数据压缩中的信息损失</h4><p>在数据压缩领域，如果我们使用不准确的概率模型$Q$来进行压缩，那么压缩后的数据需要更多的空间来存储，从而导致信息损失。例如，在图像压缩中，如果我们用近似模型来替代真实的图像像素分布，压缩后的图像质量会下降，导致信息丢失，这可以用KL散度来量化。</p>
@@ -745,7 +758,7 @@ Q(x) =
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#温度系数"><span class="nav-number">1.</span> <span class="nav-text">温度系数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#熵"><span class="nav-number">2.</span> <span class="nav-text">熵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自信息量"><span class="nav-number">2.1.</span> <span class="nav-text">自信息量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵（Cross-Entropy）"><span class="nav-number">2.2.</span> <span class="nav-text">交叉熵（Cross Entropy）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分解KL散度"><span class="nav-number">2.3.</span> <span class="nav-text">分解KL散度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#这里的信息损失："><span class="nav-number">2.3.1.</span> <span class="nav-text">这里的信息损失：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-预测模型中的信息损失"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">1. 预测模型中的信息损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数据压缩中的信息损失"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">2. 数据压缩中的信息损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-自然语言处理中的信息损失"><span class="nav-number">2.3.1.3.</span> <span class="nav-text">3. 自然语言处理中的信息损失</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么-Q-x-比-P-x-需要更多比特来编码"><span class="nav-number">2.4.</span> <span class="nav-text">为什么 $Q(x)$ 比 $P(x)$ 需要更多比特来编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自信息量（Self-Information）"><span class="nav-number">2.4.1.</span> <span class="nav-text">自信息量（Self-Information）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理想编码长度"><span class="nav-number">2.4.2.</span> <span class="nav-text">理想编码长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用近似分布进行编码"><span class="nav-number">2.4.3.</span> <span class="nav-text">使用近似分布进行编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平均编码长度"><span class="nav-number">2.4.4.</span> <span class="nav-text">平均编码长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#举例说明"><span class="nav-number">2.4.5.</span> <span class="nav-text">举例说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.4.6.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵损失"><span class="nav-number">2.5.</span> <span class="nav-text">交叉熵损失</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归纳偏置（Inductive-Bias）"><span class="nav-number">3.</span> <span class="nav-text">归纳偏置（Inductive Bias）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention机制的优势"><span class="nav-number">3.1.</span> <span class="nav-text">Attention机制的优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-1"><span class="nav-number">3.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#softmax"><span class="nav-number">4.</span> <span class="nav-text">softmax</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax求梯度的公式推导"><span class="nav-number">4.1.</span> <span class="nav-text">Softmax求梯度的公式推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤-1-Softmax的偏导数"><span class="nav-number">4.1.1.</span> <span class="nav-text">步骤 1: Softmax的偏导数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#情况-1-i-j"><span class="nav-number">4.1.1.1.</span> <span class="nav-text">情况 1: $i = j$</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#情况-2-i-neq-j"><span class="nav-number">4.1.1.2.</span> <span class="nav-text">情况 2: $i \neq j$</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并结果"><span class="nav-number">4.1.2.</span> <span class="nav-text">合并结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸"><span class="nav-number">4.2.</span> <span class="nav-text">Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度消失的原因"><span class="nav-number">4.2.1.</span> <span class="nav-text">梯度消失的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体分析"><span class="nav-number">4.2.2.</span> <span class="nav-text">具体分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-sqrt-d-k-进行缩放的原因"><span class="nav-number">4.2.3.</span> <span class="nav-text">使用 $\sqrt{d_k}$ 进行缩放的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-2"><span class="nav-number">4.2.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OOD-accuracy"><span class="nav-number">5.</span> <span class="nav-text">OOD accuracy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#向量的高效搜索"><span class="nav-number">6.</span> <span class="nav-text">向量的高效搜索</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#近似最邻近"><span class="nav-number">7.</span> <span class="nav-text">近似最邻近</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现"><span class="nav-number">7.1.</span> <span class="nav-text">如何实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分区"><span class="nav-number">7.1.1.</span> <span class="nav-text">分区</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三种局部敏感哈希函数原理"><span class="nav-number">8.</span> <span class="nav-text">三种局部敏感哈希函数原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Incremental-learning"><span class="nav-number">9.</span> <span class="nav-text">Incremental learning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维链方法（CoT）"><span class="nav-number">10.</span> <span class="nav-text">思维链方法（CoT）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MoE"><span class="nav-number">11.</span> <span class="nav-text">MoE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RAG"><span class="nav-number">12.</span> <span class="nav-text">RAG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sparse-Convolution"><span class="nav-number">13.</span> <span class="nav-text">Sparse Convolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积核结构"><span class="nav-number">13.1.</span> <span class="nav-text">卷积核结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算效率"><span class="nav-number">13.2.</span> <span class="nav-text">计算效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用领域"><span class="nav-number">13.3.</span> <span class="nav-text">应用领域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#one-shot-few-shot"><span class="nav-number">14.</span> <span class="nav-text">one-shot, few shot</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zero-Shot-Learning-零次学习"><span class="nav-number">15.</span> <span class="nav-text">Zero-Shot Learning (零次学习)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#top-1-accuracy-VS-top-5-accuracy"><span class="nav-number">16.</span> <span class="nav-text">top-1 accuracy VS top-5 accuracy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Color-Jittering"><span class="nav-number">17.</span> <span class="nav-text">Color Jittering</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Beam-search"><span class="nav-number">18.</span> <span class="nav-text">Beam search</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn-算法图鉴（待学习）"><span class="nav-number">19.</span> <span class="nav-text">sklearn 算法图鉴（待学习）?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#K-Means-Clusters"><span class="nav-number">20.</span> <span class="nav-text">K-Means Clusters</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KNN（K-Nearest-Neighbors）"><span class="nav-number">21.</span> <span class="nav-text">KNN（K Nearest Neighbors）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Self-training（半监督学习方法）"><span class="nav-number">22.</span> <span class="nav-text">Self-training（半监督学习方法）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Noisy-Student"><span class="nav-number">23.</span> <span class="nav-text">Noisy Student</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stochastic-depth"><span class="nav-number">24.</span> <span class="nav-text">stochastic depth</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cosine-学习率衰减策略"><span class="nav-number">25.</span> <span class="nav-text">cosine 学习率衰减策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算-模型-计算浮点数"><span class="nav-number">26.</span> <span class="nav-text">计算 模型 计算浮点数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#L2-norm-L2-Normalize"><span class="nav-number">27.</span> <span class="nav-text">L2 norm, L2 Normalize</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迁移学习。"><span class="nav-number">28.</span> <span class="nav-text">迁移学习。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Closed-book-QA"><span class="nav-number">29.</span> <span class="nav-text">Closed book QA:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FLOPs"><span class="nav-number">30.</span> <span class="nav-text">FLOPs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GLUE"><span class="nav-number">31.</span> <span class="nav-text">GLUE:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EMA"><span class="nav-number">32.</span> <span class="nav-text">EMA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Adam"><span class="nav-number">33.</span> <span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NMS"><span class="nav-number">34.</span> <span class="nav-text">NMS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ill-posed-problems"><span class="nav-number">35.</span> <span class="nav-text">ill-posed problems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sigmoid"><span class="nav-number">36.</span> <span class="nav-text">sigmoid</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点："><span class="nav-number">36.0.1.</span> <span class="nav-text">特点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#semantic-Instance-Panoramic-segmentation"><span class="nav-number">37.</span> <span class="nav-text">(semantic, Instance, Panoramic) segmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#semantic-segmentation"><span class="nav-number">37.1.</span> <span class="nav-text">semantic segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instance-segmentation"><span class="nav-number">37.2.</span> <span class="nav-text">Instance segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Panoramic-segmentation"><span class="nav-number">37.3.</span> <span class="nav-text">Panoramic segmentation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#convex-combination"><span class="nav-number">38.</span> <span class="nav-text">convex combination</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Rank-Loss-Problem-of-Self-Attention"><span class="nav-number">1.</span> <span class="nav-text">The Rank Loss Problem of Self Attention</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#温度系数"><span class="nav-number">2.</span> <span class="nav-text">温度系数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#熵"><span class="nav-number">3.</span> <span class="nav-text">熵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自信息量"><span class="nav-number">3.1.</span> <span class="nav-text">自信息量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵（Cross-Entropy）"><span class="nav-number">3.2.</span> <span class="nav-text">交叉熵（Cross Entropy）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分解KL散度"><span class="nav-number">3.3.</span> <span class="nav-text">分解KL散度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#这里的信息损失："><span class="nav-number">3.3.1.</span> <span class="nav-text">这里的信息损失：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-预测模型中的信息损失"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">1. 预测模型中的信息损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数据压缩中的信息损失"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">2. 数据压缩中的信息损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-自然语言处理中的信息损失"><span class="nav-number">3.3.1.3.</span> <span class="nav-text">3. 自然语言处理中的信息损失</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么-Q-x-比-P-x-需要更多比特来编码"><span class="nav-number">3.4.</span> <span class="nav-text">为什么 $Q(x)$ 比 $P(x)$ 需要更多比特来编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自信息量（Self-Information）"><span class="nav-number">3.4.1.</span> <span class="nav-text">自信息量（Self-Information）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理想编码长度"><span class="nav-number">3.4.2.</span> <span class="nav-text">理想编码长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用近似分布进行编码"><span class="nav-number">3.4.3.</span> <span class="nav-text">使用近似分布进行编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平均编码长度"><span class="nav-number">3.4.4.</span> <span class="nav-text">平均编码长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#举例说明"><span class="nav-number">3.4.5.</span> <span class="nav-text">举例说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.4.6.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵损失"><span class="nav-number">3.5.</span> <span class="nav-text">交叉熵损失</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归纳偏置（Inductive-Bias）"><span class="nav-number">4.</span> <span class="nav-text">归纳偏置（Inductive Bias）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention机制的优势"><span class="nav-number">4.1.</span> <span class="nav-text">Attention机制的优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-1"><span class="nav-number">4.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#softmax"><span class="nav-number">5.</span> <span class="nav-text">softmax</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax求梯度的公式推导"><span class="nav-number">5.1.</span> <span class="nav-text">Softmax求梯度的公式推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤-1-Softmax的偏导数"><span class="nav-number">5.1.1.</span> <span class="nav-text">步骤 1: Softmax的偏导数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#情况-1-i-j"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">情况 1: $i = j$</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#情况-2-i-neq-j"><span class="nav-number">5.1.1.2.</span> <span class="nav-text">情况 2: $i \neq j$</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并结果"><span class="nav-number">5.1.2.</span> <span class="nav-text">合并结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸"><span class="nav-number">5.2.</span> <span class="nav-text">Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度消失的原因"><span class="nav-number">5.2.1.</span> <span class="nav-text">梯度消失的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体分析"><span class="nav-number">5.2.2.</span> <span class="nav-text">具体分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-sqrt-d-k-进行缩放的原因"><span class="nav-number">5.2.3.</span> <span class="nav-text">使用 $\sqrt{d_k}$ 进行缩放的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-2"><span class="nav-number">5.2.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OOD-accuracy"><span class="nav-number">6.</span> <span class="nav-text">OOD accuracy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#向量的高效搜索"><span class="nav-number">7.</span> <span class="nav-text">向量的高效搜索</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#近似最邻近"><span class="nav-number">8.</span> <span class="nav-text">近似最邻近</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现"><span class="nav-number">8.1.</span> <span class="nav-text">如何实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分区"><span class="nav-number">8.1.1.</span> <span class="nav-text">分区</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三种局部敏感哈希函数原理"><span class="nav-number">9.</span> <span class="nav-text">三种局部敏感哈希函数原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Incremental-learning"><span class="nav-number">10.</span> <span class="nav-text">Incremental learning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维链方法（CoT）"><span class="nav-number">11.</span> <span class="nav-text">思维链方法（CoT）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MoE"><span class="nav-number">12.</span> <span class="nav-text">MoE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RAG"><span class="nav-number">13.</span> <span class="nav-text">RAG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sparse-Convolution"><span class="nav-number">14.</span> <span class="nav-text">Sparse Convolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积核结构"><span class="nav-number">14.1.</span> <span class="nav-text">卷积核结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算效率"><span class="nav-number">14.2.</span> <span class="nav-text">计算效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用领域"><span class="nav-number">14.3.</span> <span class="nav-text">应用领域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#one-shot-few-shot"><span class="nav-number">15.</span> <span class="nav-text">one-shot, few shot</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zero-Shot-Learning-零次学习"><span class="nav-number">16.</span> <span class="nav-text">Zero-Shot Learning (零次学习)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#top-1-accuracy-VS-top-5-accuracy"><span class="nav-number">17.</span> <span class="nav-text">top-1 accuracy VS top-5 accuracy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Color-Jittering"><span class="nav-number">18.</span> <span class="nav-text">Color Jittering</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Beam-search"><span class="nav-number">19.</span> <span class="nav-text">Beam search</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn-算法图鉴（待学习）"><span class="nav-number">20.</span> <span class="nav-text">sklearn 算法图鉴（待学习）?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#K-Means-Clusters"><span class="nav-number">21.</span> <span class="nav-text">K-Means Clusters</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KNN（K-Nearest-Neighbors）"><span class="nav-number">22.</span> <span class="nav-text">KNN（K Nearest Neighbors）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Self-training（半监督学习方法）"><span class="nav-number">23.</span> <span class="nav-text">Self-training（半监督学习方法）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Noisy-Student"><span class="nav-number">24.</span> <span class="nav-text">Noisy Student</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stochastic-depth"><span class="nav-number">25.</span> <span class="nav-text">stochastic depth</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cosine-学习率衰减策略"><span class="nav-number">26.</span> <span class="nav-text">cosine 学习率衰减策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算-模型-计算浮点数"><span class="nav-number">27.</span> <span class="nav-text">计算 模型 计算浮点数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#L2-norm-L2-Normalize"><span class="nav-number">28.</span> <span class="nav-text">L2 norm, L2 Normalize</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迁移学习。"><span class="nav-number">29.</span> <span class="nav-text">迁移学习。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Closed-book-QA"><span class="nav-number">30.</span> <span class="nav-text">Closed book QA:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FLOPs"><span class="nav-number">31.</span> <span class="nav-text">FLOPs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GLUE"><span class="nav-number">32.</span> <span class="nav-text">GLUE:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EMA"><span class="nav-number">33.</span> <span class="nav-text">EMA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Adam"><span class="nav-number">34.</span> <span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NMS"><span class="nav-number">35.</span> <span class="nav-text">NMS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ill-posed-problems"><span class="nav-number">36.</span> <span class="nav-text">ill-posed problems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sigmoid"><span class="nav-number">37.</span> <span class="nav-text">sigmoid</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点："><span class="nav-number">37.0.1.</span> <span class="nav-text">特点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#semantic-Instance-Panoramic-segmentation"><span class="nav-number">38.</span> <span class="nav-text">(semantic, Instance, Panoramic) segmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#semantic-segmentation"><span class="nav-number">38.1.</span> <span class="nav-text">semantic segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instance-segmentation"><span class="nav-number">38.2.</span> <span class="nav-text">Instance segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Panoramic-segmentation"><span class="nav-number">38.3.</span> <span class="nav-text">Panoramic segmentation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#convex-combination"><span class="nav-number">39.</span> <span class="nav-text">convex combination</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -763,7 +776,7 @@ Q(x) =
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -833,7 +846,17 @@ Q(x) =
         
           
         
-        <span class="site-state-item-count">14</span>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
@@ -904,12 +927,12 @@ Q(x) =
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">54k</span>
+    <span title="站点总字数">59k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:30</span>
+    <span title="站点阅读时长">1:39</span>
 </div>
 
         
@@ -998,6 +1021,56 @@ Q(x) =
   
 
   
+    
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+  
 
   
 
@@ -1014,7 +1087,7 @@ Q(x) =
           repo: 'HuzhenYou.github.io',
           owner: 'HuzhenYou',
           admin: ['HuzhenYou'],
-          id:'gitalk_20240704175115',
+          id:'gitalk_20230910202136',
           labels: 'gitalk'.split(',').filter(l => l),
           perPage: 10,
           pagerDirection: 'last',
@@ -1023,7 +1096,7 @@ Q(x) =
         })
 
         gitalk.render('gitalk-container')           
-       </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+       </script>
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

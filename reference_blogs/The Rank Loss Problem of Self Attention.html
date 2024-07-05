@@ -90,18 +90,19 @@
 
 
 
-  <meta name="description" content="虚怀若谷，大智若愚">
+  <meta name="description" content="Self attention loses rank doubly exponentially with depth at initialization.(i.e. the more deep, the more same the outputs  are) The skip connections and MLPs mitigate this situation.  Why: convex co">
 <meta property="og:type" content="website">
 <meta property="og:title" content="九万里">
-<meta property="og:url" content="https://huzhenyou.github.io/tags/backbone/index.html">
+<meta property="og:url" content="https://huzhenyou.github.io/reference_blogs/The Rank Loss Problem of Self Attention.html">
 <meta property="og:site_name" content="九万里">
-<meta property="og:description" content="虚怀若谷，大智若愚">
+<meta property="og:description" content="Self attention loses rank doubly exponentially with depth at initialization.(i.e. the more deep, the more same the outputs  are) The skip connections and MLPs mitigate this situation.  Why: convex co">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2024-07-05T06:46:53.381Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="九万里">
-<meta name="twitter:description" content="虚怀若谷，大智若愚">
+<meta name="twitter:description" content="Self attention loses rank doubly exponentially with depth at initialization.(i.e. the more deep, the more same the outputs  are) The skip connections and MLPs mitigate this situation.  Why: convex co">
   <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
-  <link rel="canonical" href="https://huzhenyou.github.io/tags/backbone/">
+  <link rel="canonical" href="https://huzhenyou.github.io/reference_blogs/The Rank Loss Problem of Self Attention">
 
 
 <script id="page-configurations">
@@ -110,12 +111,12 @@
     sidebar: "",
     isHome: false,
     isPost: false,
-    isPage: false,
+    isPage: true,
     isArchive: false
   };
 </script>
 
-  <title>标签: backbone | 九万里</title>
+  <title> | 九万里</title>
   <meta name="generator" content="Hexo 3.9.0">
   
 
@@ -281,64 +282,61 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+    
+    
+    <div class="post-block page">
+      <header class="post-header">
+
+<h2 class="post-title" itemprop="name headline">
+
+</h2>
+
+<div class="post-meta">
   
-  
-  
-  <div class="post-block tag">
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">backbone<small>标签</small>
-        </h2>
-      </div>
+
+</div>
+
+</header>
 
       
-
-  
-  
-
-  
-    
-    <div class="collection-year">
-      <h2 class="collection-header">2020</h2>
-    </div>
-  
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
+      
+      
+      <div class="post-body">
         
-          <a class="post-title-link" href="/blog/2020/06/Transformer-Attention-Is-All-You-Need.html" itemprop="url">
-            <span itemprop="name">Transformer架构解读</span>
-          </a>
-        
-      </h3>
+          <ol>
+<li>Self attention loses rank doubly exponentially with depth at initialization.(i.e. the more deep, the more same the outputs  are)</li>
+<li>The skip connections and MLPs mitigate this situation.</li>
+</ol>
+<p>Why:</p>
+<div class="custom-quote"><p><div class="custom-quote-h1">convex combination</div><br>$V’_i=\sum_{n}w_nV_n$, Where $W_n\ge0$ and $\sum_{n}w_n=1$</p>
+<p>Like the below, the convex combination of those input points must be in Convex Hull.<br>![[Pasted image 20230904205822.png|575]]<br>and, the biggest angle of the convex combination is must be equal to or less than the biggest angle of the original input points(features). (assuming the input points don’t contain the origin)<br>![[Pasted image 20230904210239.png|575]]</p>
+</div>
+<p>[[AI/otherTech/humanRepresentation/action_detection/TriDet#The second question Attention in Temporal Dimension.|Self attention is Convex combination]]</p>
+<blockquote>
+<p>Attention is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth</p>
+</blockquote>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-06-07T21:10:21+08:00"
-              content="2020-06-07">
-          06-07
-        </time>
+        
       </div>
-
-    </header>
-  </article>
-
-
-
+      
+      
+      
     </div>
+    
+
+    
+    
+    
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
           
+    
+    <div class="comments" id="gitalk-container"></div>
+  
 
         </div>
           
@@ -353,6 +351,11 @@
 
   <aside class="sidebar">
     <div class="sidebar-inner">
+        
+        
+        
+        
+      
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
@@ -630,6 +633,28 @@
   
 
   
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '140d0161c7c4631e2764',
+          clientSecret: '90d536de668c0e5a417f895d3af6a037d1528253',
+          repo: 'HuzhenYou.github.io',
+          owner: 'HuzhenYou',
+          admin: ['HuzhenYou'],
+          id:'gitalk_20240705144653',
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: false,
+          distractionFreeMode: false
+        })
+
+        gitalk.render('gitalk-container')           
+       </script>
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

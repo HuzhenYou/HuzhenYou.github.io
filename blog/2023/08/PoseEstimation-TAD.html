@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/angry_bird_16.ico?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+  <meta name="google-site-verification" content="3dBwV8OlVnNtYzxCLCFp2w8WMpuSecV7vBmA_zrf9j4">
+  <meta name="baidu-site-verification" content="eoUZD1BDx6">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":"default"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+<link rel="stylesheet" href="/css/custom.css">
+
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      "HTML-CSS": { availableFonts: ["TeX"] },
+      SVG: { font: "TeX" }
+    });
+  </script>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-python.min.js"></script> <!-- Python支持 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      Prism.highlightAll();
+    });
+  </script>
+
+
+
+
+  <meta name="description" content="The detail of TriDet.">
+<meta name="keywords" content="&#39;ActionDetection&#39;,&#39;TemporalActionDetection&#39;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人体姿态估计&amp;动作识别">
+<meta property="og:url" content="https://huzhenyou.github.io/blog/2023/08/PoseEstimation-TAD.html">
+<meta property="og:site_name" content="九万里">
+<meta property="og:description" content="The detail of TriDet.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230628214336.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230630211014.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230630211843.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230707100616.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230707103847.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230630181600.png">
+<meta property="og:updated_time" content="2024-07-05T16:17:30.033Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="人体姿态估计&amp;动作识别">
+<meta name="twitter:description" content="The detail of TriDet.">
+<meta name="twitter:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230628214336.png">
+  <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
+  <link rel="canonical" href="https://huzhenyou.github.io/blog/2023/08/PoseEstimation-TAD">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>人体姿态估计&动作识别 | 九万里</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">九万里</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">虚怀若谷，大智若愚</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+    
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="https://huzhenyou.github.io/blog/2023/08/PoseEstimation-TAD.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HuzhenYou">
+      <meta itemprop="description" content="虚怀若谷，大智若愚">
+      <meta itemprop="image" content="/images/angry_bird_128.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="九万里">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">人体姿态估计&动作识别
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2023-08-15 20:21:36" itemprop="dateCreated datePublished" datetime="2023-08-15T20:21:36+08:00">2023-08-15</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-06 00:17:30" itemprop="dateModified" datetime="2024-07-06T00:17:30+08:00">2024-07-06</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ActionDetection/" itemprop="url" rel="index"><span itemprop="name">ActionDetection</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>5.1k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>9 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>The detail of TriDet.</p>
+<a id="more"></a>
+<hr>
+<h1 id="人体姿态估计-amp-动作识别"><a href="#人体姿态估计-amp-动作识别" class="headerlink" title="人体姿态估计&amp;动作识别"></a>人体姿态估计&amp;动作识别</h1><h2 id="Refs"><a href="#Refs" class="headerlink" title="Refs:"></a>Refs:</h2><p>To see: </p>
+<ol>
+<li>mmaction2 source code: <a href="https://github.com/open-mmlab/mmaction2" target="_blank" rel="noopener">https://github.com/open-mmlab/mmaction2</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/575573336" target="_blank" rel="noopener"># VideoMAE: 简单高效的视频自监督预训练新范式</a></li>
+</ol>
+<p>Others:</p>
+<ol>
+<li><a href="https://github.com/MVIG-SJTU/AlphaPose" target="_blank" rel="noopener">alphaPose</a></li>
+<li>姿态估计开源项目汇总: <a href="https://zhuanlan.zhihu.com/p/234797403" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/234797403</a></li>
+<li><a href="https://github.com/jinwchoi/awesome-action-recognition" target="_blank" rel="noopener">awesome-action-recognition</a></li>
+</ol>
+<h2 id="视频演示"><a href="#视频演示" class="headerlink" title="视频演示"></a>视频演示</h2><p><video controls width="640" height="360"><source src="/imgs/61e229b6-64f4-11ea-866a-4e8934bfbff0.mp4" type="video/mp4"></video><br>Refs: <a href="https://www.zhihu.com/zvideo/1227562268420235264" target="_blank" rel="noopener">https://www.zhihu.com/zvideo/1227562268420235264</a></p>
+<h2 id="姿态估计与行为识别（行为检测、行为分类）的区别"><a href="#姿态估计与行为识别（行为检测、行为分类）的区别" class="headerlink" title="姿态估计与行为识别（行为检测、行为分类）的区别"></a>姿态估计与行为识别（行为检测、行为分类）的区别</h2><p>Refs：<a href="https://blog.csdn.net/qq_28301007/article/details/103096381" target="_blank" rel="noopener">姿态估计与行为识别（行为检测、行为分类）的区别</a></p>
+<h3 id="姿态估计"><a href="#姿态估计" class="headerlink" title="姿态估计"></a>姿态估计</h3><ol>
+<li>定位图片和视频中的人体关节，重建人的关节和肢干。</li>
+<li>四个方向：<ol>
+<li><strong>单人姿态估计</strong>（Single-Person Skeleton Estimation）：先定位人体，再根据行人区域，找出关键点。</li>
+<li><strong>多人姿态估计</strong>（Multi-Person Pose Estimation）：两种方式：<ol>
+<li>Top-down： 先定位到图片中的所有人体，在找出关键点。</li>
+<li>bottom-up：先找出关键点，再组装成行人。</li>
+</ol>
+</li>
+<li><strong>人体姿态跟踪</strong>（Video Pose Tracking）：<ol>
+<li>人体关键点在视频中的temporal motion会比较大，比如一个行走的行人，手跟脚会不停的摆动，所以跟踪难度会比跟踪人体框大。</li>
+<li>数据集：PoseTrack</li>
+</ol>
+</li>
+<li><strong>3D人体姿态估计</strong>（3D skeleton Estimation）： <a id="^764e2c"></a><ol>
+<li>VS 2D：<ol>
+<li>2D姿势估计：从RGB图像估计每个关节的2D姿势（x，y）坐标。</li>
+<li>3D姿势估计：从RGB图像估计3D姿势（x，y，z）坐标。</li>
+<li>即使基于轻量主干网络（MobileNetV2）所预测的2D姿态用于动作识别时，效果也好于任何来源的3D人体姿态估计。<a href="https://zhuanlan.zhihu.com/p/395588459" target="_blank" rel="noopener">Ref</a></li>
+</ol>
+</li>
+<li>数据集：Human3.6M</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="行为识别">行为识别(Action Detection/Regnition)</h3>
+
+<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><ol>
+<li>图像或视频中目标的行为类别。</li>
+<li>两个方向：<ol>
+<li>行为分类（Action Recognition)<ol>
+<li>定义：一般使用的数据集会将动作分割好，一个视频片段包含一段明确的动作。</li>
+<li>特点：时间短且有唯一确定标签。所以input为视频，输出为label。类似Image Classification。</li>
+<li>数据集：<ol>
+<li><a href="https://zhuanlan.zhihu.com/p/86461157" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/86461157</a> （都是剪切好的视频，不符合行为检测的要求）</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>行为检测（Temporal Action Localization）<ol>
+<li>当前主流利用<a href="#I3D">I3D</a>来做：<br><img src="/imgs/Pasted image 20230628214336.png"><br> Refs： <a href="https://paperswithcode.com/sota/temporal-action-localization-on-thumos14" target="_blank" rel="noopener">https://paperswithcode.com/sota/temporal-action-localization-on-thumos14</a></li>
+<li>定义：需要输出动作发生的起始和结束时间，以及这个动作的类别。</li>
+<li>特点：需要处理较长的、未分割的视频，且视频中通常有较多干扰，目标动作一般只占视频的一小部分。类似图像中的Object Detectio。</li>
+<li>相关模型：two-stream、C3D、iDT。</li>
+<li>难点：<ul>
+<li>时序信息。与行为识别/分类一样，视频理解的通用难点就是时序信息的处理。所以针对这一点目前的主要方法基本上都是使用RNN读入CNN提取的特征，或者直接使用C3D一样的时序卷积。</li>
+<li>边界不明确。不同于行为识别的是，行为检测要求做精确的动作区间检测，而生活中一个动作的产生往往边界不是十分确定的，所以这也是导致目前行为检测mAP偏低的原因。</li>
+<li>时间跨度大。在生活中，一个行为动作往往跨度非常大，短的动作几秒左右，比如挥手。长的动作有的持续数十分钟，比如攀岩、骑行等等。这使得我们在提取Proposal的时候变得异常的艰难。</li>
+</ul>
+</li>
+<li>数据集:<ol>
+<li><strong>动作检测最大的数据集</strong>：HACS.</li>
+<li><strong>行为检测方向常用的数据集主要是: THUMOS 2014和ActivityNet</strong></li>
+<li>THUMOS 2014来自于THUMOS Challenge 2014,。它的训练集为UCF101数据集，验证集和测试集分别包括1010和1574个未分割的视频片段。在行为检测任务中只有20类动作的未分割视频是有时序行为片段标注的，包括200个验证集(3007个行为片段)和213个测试集视频(包含3358个行为片段)。</li>
+<li><strong>MEXaction2</strong>：MEXaction2数据集中包含两类动作：骑马和斗牛。该数据集由三个部分组成：YouTube视频，UCF101中的骑马视频以及INA视频。其中YouTube视频片段和UCF101中的骑马视频是分割好的短视频片段，被用于训练集。而INA视频为多段长的未分割的视频，时长共计77小时，且被分为训练，验证和测试集三部分。训练集中共有1336个行为片段，验证集中有310个行为片段，测试集中有329个行为片断。且MEXaction2数据集的特点是其中的未分割视频长度都非常长，被标注的行为片段仅占视频总长的很低比例。</li>
+<li><strong>ActivityNet</strong>: 目前最大的数据库，同样包含分类和检测两个任务。这个数据集仅提供视频的youtube链接，而不能直接下载视频，所以还需要用python中的youtube下载工具来自动下载。该数据集包含200个动作类别，20000（训练+验证+测试集）左右的视频，视频时长共计约700小时。由于这个数据集实在太大了，我的实验条件下很难完成对其的实验，所以我之前主要还是在THUMOS14和MEXaction2上进行实验。</li>
+</ol>
+</li>
+<li>技术方案：<br> 19年以前：<ol>
+<li><a href="#CDC">CDC</a></li>
+<li><a href="/blog/2023/08/BMNDetail.html">BMN</a></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>难点：<ol>
+<li>类内和类间差异, 同样一个动作，不同人的表现可能有极大的差异。</li>
+<li>时间变化, 人在执行动作时的速度变化很大，很难确定动作的起始点，从而在对视频提取特征表示动作时影响最大。</li>
+<li>缺乏标注良好的大的数据集。</li>
+</ol>
+</li>
+<li>以CVPR组织的ACTIVITYNET为例，2017年总共有5个Task被提出。<ul>
+<li>Task1：未修剪视频分类(Untrimmed Video Classification)。这个有点类似于图像的分类，未修剪的视频中通常含有多个动作，而且视频很长。有许多动作或许都不是我们所关注的。所以这里提出的Task就是希望通过对输入的长视频进行全局分析，然后软分类到多个类别。</li>
+<li>Task2：修剪视频识别(Trimmed Action Recognition)。这个在计算机视觉领域已经研究多年，给出一段只包含一个动作的修剪视频，要求给视频分类。</li>
+<li>Task3：时序行为提名(Temporal Action Proposal)。这个同样类似于图像目标检测任务中的候选框提取。在一段长视频中通常含有很多动作，这个任务就是从视频中找出可能含有动作的视频段。</li>
+<li>Task4：时序行为定位(Temporal Action Localization)。相比于上面的时序行为提名而言，时序行为定位于我们常说的目标检测一致。要求从视频中找到可能存在行为的视频段，并且给视频段分类。</li>
+<li>Task5：密集行为描述(Dense-Captioning Events)。之所以称为密集行为描述，主要是因为该任务要求在时序行为定位(检测)的基础上进行视频行为描述。也就是说，该任务需要将一段未修剪的视频进行时序行为定位得到许多包含行为的视频段后，对该视频段进行行为描述。比如：man playing a piano</li>
+</ul>
+</li>
+</ol>
+<p> Refs:  <a href="https://blog.csdn.net/qq_28301007/article/details/103096381" target="_blank" rel="noopener">姿态估计与行为识别（行为检测、行为分类）的区别</a></p>
+<h2 id="R-C3D"><a href="#R-C3D" class="headerlink" title="R-C3D"></a>R-C3D</h2><p>R-C3D(Region 3-Dimensional Convolution)网络[10]是基于Faster R-CNN和C3D网络思想。对于任意的输入视频L，先进行Proposal，然后用3D-pooling，最后进行分类和回归操作。文章主要贡献点有以下3个：</p>
+<ul>
+<li>可以针对任意长度视频、任意长度行为进行端到端的检测</li>
+<li>速度很快(是目前网络的5倍)，通过共享Proposal generation 和Classification网络的C3D参数。</li>
+<li>作者测试了3个不同的数据集，效果都很好，显示了通用性。</li>
+</ul>
+<p>Refs: <a href="https://zhuanlan.zhihu.com/p/34439558" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/34439558</a></p>
+<h2 id="CDC"><a href="#CDC" class="headerlink" title="CDC"></a>CDC</h2><ol>
+<li>CDC: convolutional-de-convolutional networks for precise temporal action localization in untrimmed videos(2017)</li>
+<li>主要贡献点:<ol>
+<li>第一次将卷积、反卷积操作应用到行为检测领域，CDC同时在空间下采样，在时间域上上采样。</li>
+<li>利用CDC网络结构可以做到端到端的学习。</li>
+<li>通过反卷积操作可以做到帧预测(Per-frame action labeling)。</li>
+</ol>
+</li>
+<li><p>网络结构:</p>
+<ol>
+<li>CDC网络在C3D的基础上用反卷积，将时序升维。做到了帧预测。以下是CDC网络的结构图:<br> <img src="/imgs/Pasted image 20230630211014.png" alt width="500px"></li>
+<li><p>网络步骤如下所示:</p>
+<ul>
+<li>输入的视频段是112x112xL，连续L帧112x112的图像</li>
+<li>经过C3D网络后，时间域上L下采样到 L/8, 空间上图像的大小由 112x112下采样到了4x4</li>
+<li>CDC6: 时间域上上采样到 L/4, 空间上继续下采样到 1x1</li>
+<li>CDC7: 时间域上上采样到 L/2</li>
+<li>CDC8：时间域上上采样到 L，而且全连接层用的是 4096xK+1, K是类别数</li>
+<li>softmax层</li>
+</ul>
+</li>
+<li><p>4.3.2 CDC FILTER</p>
+<p> 文章的还有一大贡献点是反卷积的设计，因为经过C3D网络输出后，存在时间和空间两个维度，文章中的CDC6完成了时序上采样，空间下采样的同时操作。</p>
+<p> 如下图所示，一般的都是先进行空间的下采样，然后进行时序上采样。但是CDC中设计了两个独立的卷积核(下图中的红色和绿色)。同时作用于4x4xL/8的特征图上。每个卷积核作用都会生成2个1x1的点，如上conv6，那么两个卷积核就生成了4个。相当于在时间域上进行了上采样过程。<br> <img src="/imgs/Pasted image 20230630211843.png" alt width="500px"><br>Refs: <a href="https://zhuanlan.zhihu.com/p/34439558" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/34439558</a></p>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="PoseC3D-基于人体姿态的动作识别新范式"><a href="#PoseC3D-基于人体姿态的动作识别新范式" class="headerlink" title="PoseC3D: 基于人体姿态的动作识别新范式"></a>PoseC3D: 基于人体姿态的动作识别新范式</h2><p>Comments: CVPR 2022 Oral</p>
+<ol>
+<li>已在<strong>MMAtion2</strong>开源。</li>
+<li>使用3D-CNN, 超越了基于GCN的SOTA.</li>
+<li>去冗余：<ol>
+<li>对2D姿态先由热图存储为坐标，在行为识别时再由坐标转换为热图。</li>
+<li>选取每帧的最紧的框以包含图片中的所有人，然后再缩放只特定大小。</li>
+<li>均匀采样：需要采 N 帧时，我们先将整个视频均分为长度相同的 N 段，并在每段中随机选取一帧。在实验中，我们发现这样的采帧方式对骨骼行为识别尤其适用。<br>  <img src="/imgs/Pasted image 20230707100616.png"></li>
+<li></li>
+</ol>
+</li>
+<li><a href="#^764e2c">2D VS 3D</a> </li>
+<li>使用3D-CNN进行行为识别：<ol>
+<li>骨骼 + RGB 模态：RGBPose-SlowFast。</li>
+<li>包含两个分支，分别处理 RGB 和骨骼两个模态。 </li>
+<li>RGB 分支具有低帧率以及更大的网络宽度，骨骼分支具有高帧率和更小的网络宽度。</li>
+<li>两分支间存在双向连接，以促进模态间的特征融合。我们将两分支的预测结果融合，作为最终的预测。</li>
+<li>在训练时，我们用两个单独的损失函数分别训练两个分支，以避免过拟合。</li>
+<li>网络结构：<br> <img src="/imgs/Pasted image 20230707103847.png" alt width="500px"></li>
+</ol>
+</li>
+<li>可扩展性：GCN 所需计算量随人数增加线性增长，在群体识别中并不高效，而3D-CNN不存在这个问题。<br><strong>Refs:</strong> </li>
+<li>知乎: <a href="https://zhuanlan.zhihu.com/p/395588459" target="_blank" rel="noopener">PoseC3D: 基于人体姿态的动作识别新范式</a></li>
+<li>Papers: <a href="https://arxiv.org/abs/2104.13586" target="_blank" rel="noopener">Revisiting Skeleton-based Action Recognition</a></li>
+</ol>
+<h2 id="I3D"><a href="#I3D" class="headerlink" title="I3D"></a>I3D</h2><ol>
+<li>2018年工作。</li>
+<li>任务：Action Recognition。</li>
+<li>4种结构：    <img src="/imgs/Pasted image 20230630181600.png"><ol>
+<li><strong>ConvNet+LSTM</strong>： <ol>
+<li>利用最后一帧对视频特征表示。</li>
+<li>缺点：由于LSTM，所以不能捕捉<code>low-level motion</code>的特征。</li>
+</ol>
+</li>
+<li><strong>3D ConvNets:</strong><ol>
+<li>问题：<ol>
+<li>参数量大，训练困难。</li>
+<li>无法利用在Imagenet上的预训练模型。</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><strong>Two-Stream Networks:</strong><ol>
+<li>用每个clip的预测分数平均的方式获得最终预测（最原始的，或者在最后softmax做融合）。</li>
+<li>10张<code>optical flow</code>(其实是5张，x/y两个方向，运动特征)</li>
+<li>论文实现一个类似的two-stream方案，在最后一层用<code>3d conv</code>将spatial和flow特征进行融合。</li>
+</ol>
+</li>
+<li><strong>Two-Stream Inflated 3D ConvNets</strong>:<ol>
+<li>利用imagenet的预训练模型, 对预训练的<code>2D conv</code>增加temporal维度，把N×N的filter变为N×N×N。简单的办法就是对N×N的filter重复复制N遍，并归一化，这样多的出发点是短期内时间不变性的假设，姑且把这当成<code>3D filter</code>初始化的一种策略吧。</li>
+<li>考虑到时间因素，对称感受野不是必须的，这主要还是依赖帧率和图片大小。时间相对于空间变化过快，将合并不同object的边信息，过慢将不能捕捉场景变化。</li>
+<li>对RGB和光流，分开训练网络。</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p><strong>Refs:</strong> </p>
+<ol>
+<li><a href="https://zhuanlan.zhihu.com/p/34919655" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/34919655</a></li>
+</ol>
+<p><strong>Refs:</strong> <a href="https://zhuanlan.zhihu.com/p/34439558" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/34439558</a></p>
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>HuzhenYou</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://huzhenyou.github.io/blog/2023/08/PoseEstimation-TAD.html" title="人体姿态估计&动作识别">https://huzhenyou.github.io/blog/2023/08/PoseEstimation-TAD.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/ActionDetection/" rel="tag"># 'ActionDetection'</a>
+            
+              <a href="/tags/TemporalActionDetection/" rel="tag"># 'TemporalActionDetection'</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/blog/2023/08/BMNDetail.html" rel="next" title="BMN详解">
+                  <i class="fa fa-chevron-left"></i> BMN详解
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/blog/2023/09/TriDet.html" rel="prev" title="TriDet">
+                  TriDet <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="gitalk-container"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#人体姿态估计-amp-动作识别"><span class="nav-number">1.</span> <span class="nav-text">人体姿态估计&amp;动作识别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Refs"><span class="nav-number">1.1.</span> <span class="nav-text">Refs:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视频演示"><span class="nav-number">1.2.</span> <span class="nav-text">视频演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#姿态估计与行为识别（行为检测、行为分类）的区别"><span class="nav-number">1.3.</span> <span class="nav-text">姿态估计与行为识别（行为检测、行为分类）的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#姿态估计"><span class="nav-number">1.3.1.</span> <span class="nav-text">姿态估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行为识别"><span class="nav-number">1.3.2.</span> <span class="nav-text">行为识别(Action Detection/Regnition)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概述"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">概述</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#R-C3D"><span class="nav-number">1.4.</span> <span class="nav-text">R-C3D</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CDC"><span class="nav-number">1.5.</span> <span class="nav-text">CDC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PoseC3D-基于人体姿态的动作识别新范式"><span class="nav-number">1.6.</span> <span class="nav-text">PoseC3D: 基于人体姿态的动作识别新范式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I3D"><span class="nav-number">1.7.</span> <span class="nav-text">I3D</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/angry_bird_128.ico"
+      alt="HuzhenYou">
+  <p class="site-author-name" itemprop="name">HuzhenYou</p>
+  <div class="site-description" itemprop="description">虚怀若谷，大智若愚</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/HuzhenYou" title="GitHub &rarr; https://github.com/HuzhenYou" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:youhuzhen@gmail.com" title="E-Mail &rarr; mailto:youhuzhen@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/you-jin-cheng/activities" title="https://www.zhihu.com/people/you-jin-cheng/activities" rel="noopener" target="_blank">知乎</a>
+        </li>
+      
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HuzhenYou</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">59k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:39</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/muse.js?v=7.3.0"></script>
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+  
+
+  
+
+  
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '140d0161c7c4631e2764',
+          clientSecret: '90d536de668c0e5a417f895d3af6a037d1528253',
+          repo: 'HuzhenYou.github.io',
+          owner: 'HuzhenYou',
+          admin: ['HuzhenYou'],
+          id:'gitalk_20230815202136',
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: false,
+          distractionFreeMode: false
+        })
+
+        gitalk.render('gitalk-container')           
+       </script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>

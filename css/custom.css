@@ -54,3 +54,13 @@
 pre[class*="language-"] {
   background: #f8f6f6 !important; /* 设置为你喜欢的背景颜色 */
 }
+
+
+.image-row {
+  display: flex;
+  gap: 10px; /* 图片之间的间隔 */
+}
+
+.image-row img {
+  max-width: 100%; /* 确保图片不会超出容器宽度 */
+}

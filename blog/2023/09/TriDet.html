@@ -91,7 +91,7 @@
 
 
   <meta name="description" content="The detail of TriDet.">
-<meta name="keywords" content="ActionDetection,DeepLearning,CVPR2023,TemporalActionDetection">
+<meta name="keywords" content="ActionDetection,&#39;ActionDetection&#39;,&#39;TemporalActionDetection&#39;,&#39;CVPR2023&#39;,&#39;极市直播&#39;,TemporalActionDetection,CVPR2023,极市直播">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TriDet">
 <meta property="og:url" content="https://huzhenyou.github.io/blog/2023/09/TriDet.html">
@@ -108,12 +108,15 @@
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904182444.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904184206.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904193650.png">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/4.%20![[The%20Rank%20Loss%20Problem%20of%20Self%20Attention">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Screenshot%202024-07-06%20at%2012.39.02 AM.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904203951.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230904211744.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905084929.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905085024.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905085210.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905085404.png">
 <meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020230905085657.png">
-<meta property="og:updated_time" content="2024-07-04T07:46:02.160Z">
+<meta property="og:updated_time" content="2024-07-05T16:40:35.076Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TriDet">
 <meta name="twitter:description" content="The detail of TriDet.">
@@ -166,9 +169,9 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
-<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
@@ -312,7 +315,7 @@
                 
               
 
-              <time title="创建时间：2023-09-10 15:34:05" itemprop="dateCreated datePublished" datetime="2023-09-10T15:34:05+08:00">2023-09-10</time>
+              <time title="创建时间：2023-09-10 20:21:36" itemprop="dateCreated datePublished" datetime="2023-09-10T20:21:36+08:00">2023-09-10</time>
             </span>
           
             
@@ -323,7 +326,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-04 15:46:02" itemprop="dateModified" datetime="2024-07-04T15:46:02+08:00">2024-07-04</time>
+                <time title="修改时间：2024-07-06 00:40:35" itemprop="dateModified" datetime="2024-07-06T00:40:35+08:00">2024-07-06</time>
               </span>
             
           
@@ -383,15 +386,18 @@
       
         <p>The detail of TriDet.</p>
 <a id="more"></a>
+<hr>
 <h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ol>
 <li>TriDet: Temporal Action Detection <strong>with</strong> Relative Boundary Modeling.</li>
 <li><p>Temporal Action Detection(TAD)</p>
 <ol>
-<li>Detect all action boundaries and categories from an untrimmed video.<br><img src="/imgs/Pasted image 20230815192206.png" alt></li>
-<li>The pipeline of TAD:<br><img src="/imgs/Pasted image 20230815192350.png" alt><ol>
-<li>backbone:</li>
-<li>use the pre-trained model in [[PoseEstimation_TAD#行为识别(Action Detection/Regnition)|Action Recognition Task]].</li>
-<li>to get the feature map of each frame.</li>
+<li>Detect all action boundaries and categories from an untrimmed video.<br> <img src="/imgs/Pasted image 20230815192206.png" alt width="900px"></li>
+<li>The pipeline of TAD:<br> <img src="/imgs/Pasted image 20230815192350.png" alt width="675px"><ol>
+<li>backbone: <ol>
+<li>use the pre-trained model in <a href="/blog/2023/08/PoseEstimation-TAD.html#行为识别">Action Recognition Task</a>.</li>
+<li>to get the feature map of each frame. </li>
+</ol>
+</li>
 </ol>
 </li>
 </ol>
@@ -405,15 +411,15 @@
 </ol>
 <h1 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h1><h2 id="Intro-1"><a href="#Intro-1" class="headerlink" title="Intro"></a>Intro</h2><ol>
 <li>two classes by the method of boundary dividing for TAD works using Transformer:<ol>
-<li>[[#Segment-level prediction]]</li>
-<li>[[#Instance-level prediction]]</li>
+<li><a href="#Segment-level-prediction">Segment-level prediction</a></li>
+<li><a href="#Instance-level-prediction">Instance-level prediction</a></li>
 </ol>
 </li>
 </ol>
 <h2 id="Segment-level-prediction"><a href="#Segment-level-prediction" class="headerlink" title="Segment-level prediction"></a>Segment-level prediction</h2><ol>
 <li>based on extracted feature maps, get a clip, and simple, global expression(e.g., pooling), finally judge whether the clip is the target.</li>
 <li>e.g. both of the below are two-stage network(like Faster-Rcnn, one stage generate lots of proposals, the second stage regresses and classifies proposals):<ol>
-<li>[[BMNDetail|BMN]]</li>
+<li><a href="/blog/2023/08/BMNDetail.html">BMN</a></li>
 <li>PGCN：<ol>
 <li>use GCN to refine every proposal.</li>
 </ol>
@@ -427,18 +433,18 @@
 </ol>
 </li>
 </ol>
-<h2 id="Instance-level-prediction"><a href="#Instance-level-prediction" class="headerlink" title="Instance-level prediction"></a>Instance-level prediction</h2><h3 id="Anchor-free-Detection"><a href="#Anchor-free-Detection" class="headerlink" title="Anchor-free Detection"></a>Anchor-free Detection</h3><h4 id="AFSD"><a href="#AFSD" class="headerlink" title="AFSD"></a>AFSD</h4><p><img src="/imgs/Pasted image 20230824200202.png" alt></p>
+<h2 id="Instance-level-prediction"><a href="#Instance-level-prediction" class="headerlink" title="Instance-level prediction"></a>Instance-level prediction</h2><h3 id="Anchor-free-Detection"><a href="#Anchor-free-Detection" class="headerlink" title="Anchor-free Detection"></a>Anchor-free Detection</h3><h4 id="AFSD"><a href="#AFSD" class="headerlink" title="AFSD"></a>AFSD</h4><p><img src="/imgs/Pasted image 20230824200202.png" alt width="225px"></p>
 <ol>
 <li>predict the distance to the start or end boundary.</li>
 <li>then make the position pointed by most other position as the boundary.</li>
 </ol>
-<h4 id="ActionFormer"><a href="#ActionFormer" class="headerlink" title="ActionFormer"></a>ActionFormer</h4><p><img src="/imgs/Pasted image 20230824195951.png" alt></p>
+<h4 id="ActionFormer"><a href="#ActionFormer" class="headerlink" title="ActionFormer"></a>ActionFormer</h4><p><img src="/imgs/Pasted image 20230824195951.png" alt width="525px"></p>
 <ol>
 <li>Using slide-window to apply self-attention.</li>
 <li>In 2022, the work in TAD improved obviously.</li>
 <li>So TriDet carry out based on the work.</li>
 </ol>
-<h3 id="Segmentation"><a href="#Segmentation" class="headerlink" title="Segmentation"></a>Segmentation</h3><p><img src="/imgs/Pasted image 20230824201525.png" alt></p>
+<h3 id="Segmentation"><a href="#Segmentation" class="headerlink" title="Segmentation"></a>Segmentation</h3><p><img src="/imgs/Pasted image 20230824201525.png" alt width="725px"></p>
 <h4 id="MLAD"><a href="#MLAD" class="headerlink" title="MLAD"></a>MLAD</h4><ol>
 <li>Apply self-attention in the time level dimension and the classes level dimension.</li>
 <li>Add the two attentions of  the two level dimensions to build the final feature map.</li>
@@ -456,7 +462,7 @@
 <li>Larger receptive field.</li>
 <li>More information.</li>
 <li>Detailed Information at each instant is discarded.</li>
-<li>Highly depend on the accuracy of segments.<br><img src="/imgs/Pasted image 20230829191215.png" alt></li>
+<li>Highly depend on the accuracy of segments.<br> <img src="/imgs/Pasted image 20230829191215.png"></li>
 </ol>
 <h3 id="Instant-level-prediction"><a href="#Instant-level-prediction" class="headerlink" title="Instant-level prediction"></a>Instant-level prediction</h3><ol>
 <li>Contain detailed representation of instants.</li>
@@ -469,58 +475,69 @@
 <li>Set it as the segment-level feature that the predicted frame with the  fixed number of adjacent frames.</li>
 <li>Set the segment-level feature as instant-level feature?</li>
 </ol>
-<h1 id="Trident-head"><a href="#Trident-head" class="headerlink" title="Trident-head"></a>Trident-head</h1><p><img src="/imgs/Pasted image 20230904090904.png" alt></p>
+<h1 id="Trident-head"><a href="#Trident-head" class="headerlink" title="Trident-head"></a>Trident-head</h1><p><img src="/imgs/Pasted image 20230904090904.png" alt width="300px"></p>
 <ol>
 <li>Three branch:<ol>
-<li><span style="color:#FF8C00;">Start Boundary </span>  and <span style="color:#FF8C00;">End Boundary </span> would extract the segment-level feature.</li>
-<li><span style="color:#FF8C00;">Center Offset </span> would extract instance-level feature.</li>
+<li><font color="#FF8C00">Start Boundary </font> and <font color="#FF8C00">End Boundary </font> would extract the segment-level feature.</li>
+<li><font color="#FF8C00">Center Offset</font> would extract instance-level feature.</li>
 </ol>
 </li>
-<li>E.G., Predicted <span style="color:Purple;">Start Boundary</span>  is decided by <span style="color:#FF8C00;">Start Boundary </span> and  <span style="color:#FF8C00;">Center Offset </span>:<br><img src="/imgs/Pasted image 20230904182444.png" alt></li>
+<li>E.G., Predicted <font color="Purple">Start Boundary </font> is decided by <font color="#FF8C00">Start Boundary </font> and <font color="#FF8C00">Center Offset</font>:<br><img src="/imgs/Pasted image 20230904182444.png" alt width="725px"></li>
 <li>Expectation is decided by B:<ol>
-<li>if B is too small, we can’t find the more far boundary.</li>
+<li>if B is too small, we can’t find the more far boundary.   </li>
 <li>if B is too big, the difficulty of  learning and convergence of training is more great, so that the predicted result is not accuracy.</li>
 </ol>
 </li>
-<li>Combined with FPN:<br><img src="/imgs/Pasted image 20230904184206.png" alt><ol>
-<li>In the different level layers, the fixed number of B is set to product different Bs, so it can have small and big Bs simultaneously.</li>
+<li>Combined with FPN:<br> <img src="/imgs/Pasted image 20230904184206.png" alt width="675px"><ol>
+<li>In the different level layers, the fixed number of B is set to product different Bs, so it can have small and big Bs simultaneously. </li>
 <li>While finally outputting, the predicted results in different layers times corresponding scale ratio to get real position.</li>
 </ol>
 </li>
 </ol>
 <h1 id="The-second-question-Attention-in-Temporal-Dimension"><a href="#The-second-question-Attention-in-Temporal-Dimension" class="headerlink" title="The second question: Attention in Temporal Dimension."></a>The second question: Attention in Temporal Dimension.</h1><ol>
 <li>Many methods require complex attention mechanisms to make the network work.</li>
-<li>The success of the previous transformer-based layers(in TAD) primarily relies on their macro-architecture, rather than the self-attention mechanism.<br><img src="/imgs/Pasted image 20230904193650.png" alt></li>
-<li>Above, when 1D-Conv take the place of Self-attention, the Avg map only drops by 1.9, but  when CNN baseline takes the place of Transformer baseline, the Avg map drops very much,  which indicates that Transformer is effective depending to its structure not Self-attention.<br><img src="/imgs/4. ![[The Rank Loss Problem of Self Attention" alt><br>In TAD, making the features same is disastrous, because we need to distinguish a position is the action or not.</li>
-<li><p>Pure LayerNorm will normalize the features <script type="math/tex">x\in R^n</script> to a modulus <script type="math/tex">\sqrt{n}</script> :</p>
-<script type="math/tex; mode=display">x' = LayerNorm(x)</script><script type="math/tex; mode=display">x'_i = \frac{x_i-mean(x)}{\frac{1}{n} {\textstyle \sum_{n}^{}(x_i-mean(x))^2}}</script><script type="math/tex; mode=display">\left \| x' \right \| ^2_2 = {\textstyle \sum_{n}^{}x'^2_i}=n</script></li>
-<li><p>The Evidence on HACS:<br>we consider the cosine similarity:<br><img src="/imgs/Pasted image 20230904203951.png" alt></p>
+<li>The success of the previous transformer-based layers(in TAD) primarily relies on their macro-architecture, rather than the self-attention mechanism.<br> <img src="/imgs/Pasted image 20230904193650.png" alt width="700px"></li>
+<li>Above, when 1D-Conv take the place of Self-attention, the Avg map only drops by 1.9, but  when CNN baseline takes the place of Transformer baseline, the Avg map drops very much,  which indicates that Transformer is effective depending to its structure not Self-attention.</li>
+<li><p>The Rank Loss Problem of Self Attention<br> <img src="/imgs/Screenshot 2024-07-06 at 12.39.02 AM.png" alt width="700px" style="display: block; margin-left: 0;"></p>
+<p> In TAD, making the features same is disastrous, because we need to distinguish a position is the action or not.</p>
+</li>
+<li><p>Pure LayerNorm will normalize the features $x\in R^n$ to a modulus $\sqrt{n}$ :<br> $x’ = LayerNorm(x)$</p>
+<p> $x’_i = \frac{x_i-mean(x)}{\frac{1}{n} {\textstyle \sum_{n}^{}(x_i-mean(x))^2}}$</p>
+<p> $\left | x’ \right | ^2_2 = {\textstyle \sum_{n}^{}x’^2_i}=n$</p>
+</li>
+<li><p>The Evidence on HACS:<br> we consider the cosine similarity:<br> <img src="/imgs/Pasted image 20230904203951.png" alt width="400px"></p>
 <ol>
 <li>here SA is Self-Attention, SGP is proposed by the author, BackB is the backbone network to extract the feature.</li>
 <li>here the value is the average of the cosine similarity of every feature and average feature in the same layer ?</li>
 </ol>
 </li>
-<li>Consider the Self Attention:<script type="math/tex; mode=display">V'=WV</script><script type="math/tex; mode=display">W=Softmax(\frac{QK^T}{\sqrt{d}})</script>W is non-negative and the sum of each row is 1, thus the <script type="math/tex">V'</script> are [[conceptAI#convex combination|convex combination]] for the input <script type="math/tex">V</script>.<br>But the value in Convolution kernel can be negative, and the sum can be not 1.</li>
+<li>Consider the Self Attention:<br> $V’=WV$<br> $W=Softmax(\frac{QK^T}{\sqrt{d}})$<br> W is non-negative and the sum of each row is 1, thus the $V’$ are [[conceptAI#convex combination|convex combination]] for the input $V$.<br> But the value in Convolution kernel can be negative, and the sum can be not 1.  </li>
 </ol>
 <h1 id="The-author’s-Solution-The-SGP-layer"><a href="#The-author’s-Solution-The-SGP-layer" class="headerlink" title="The author’s Solution: The SGP layer"></a>The author’s Solution: The SGP layer</h1><ol>
 <li>increase the discrimination of feature.</li>
-<li><p>capture temporal information with different scales of receptive fields.</p>
-<script type="math/tex; mode=display">f_{SGP}=\Phi (x)FC(x)+\psi(x)(Conv_w(x)+Conv_{kw}(x))+x$$,
-
-$$\Phi(x)=ReLU(FC(AvgPool(x)))$$,
-
-$$\psi(x)=Conv_w(x)</script><p>Window-level: make the network extract features in different scales adaptively.</p>
-<p>In detail:</p>
+<li><p>capture temporal information with different scales of receptive fields.<br> $f_{SGP}=\Phi (x)FC(x)+\psi(x)(Conv_w(x)+Conv_{kw}(x))+x$,</p>
+<p> $\Phi(x)=ReLU(FC(AvgPool(x)))$,</p>
+<p> $\psi(x)=Conv_w(x)$</p>
+<p> Window-level: make the network extract features in different scales adaptively.</p>
+<p> In detail:</p>
 <ol>
 <li>the author uses the depth-wise convolution to reduce the computation of the network.</li>
 <li>add a additional residual connection.</li>
 </ol>
 </li>
 </ol>
-<p><img src="/imgs/Pasted image 20230904211744.png" alt></p>
+<p><img src="/imgs/Pasted image 20230904211744.png" alt width="350px"></p>
 <h1 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h1><p>The performance is so good: the accuracy is higher, the speed is faster.</p>
-<p><img src="/imgs/Pasted image 20230905084929.png" alt></p>
-<p><img src="/imgs/Pasted image 20230905085657.png" alt></p>
+<div class="image-row">
+  <img src="/imgs/Pasted image 20230905084929.png" alt width="300px">
+  <img src="/imgs/Pasted image 20230905085024.png" alt width="375px">
+</div>
+<div class="image-row">
+  <img src="/imgs/Pasted image 20230905085210.png" alt width="300px">
+  <img src="/imgs/Pasted image 20230905085404.png" alt width="375px">
+</div>
+
+<p><img src="/imgs/Pasted image 20230905085657.png" alt width="775px"></p>
 <h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ol>
 <li><a href="https://www.bilibili.com/video/BV12M4y117GZ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=2c23be48ba22c91130ce4868020ab598" target="_blank" rel="noopener">https://www.bilibili.com/video/BV12M4y117GZ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=2c23be48ba22c91130ce4868020ab598</a>  (‘4.10)</li>
 <li>Paper: <a href="https://arxiv.org/abs/2303.07347" target="_blank" rel="noopener">https://arxiv.org/abs/2303.07347</a></li>
@@ -559,11 +576,19 @@ $$\psi(x)=Conv_w(x)</script><p>Window-level: make the network extract features i
             
               <a href="/tags/ActionDetection/" rel="tag"># ActionDetection</a>
             
-              <a href="/tags/DeepLearning/" rel="tag"># DeepLearning</a>
+              <a href="/tags/ActionDetection/" rel="tag"># 'ActionDetection'</a>
+            
+              <a href="/tags/TemporalActionDetection/" rel="tag"># 'TemporalActionDetection'</a>
+            
+              <a href="/tags/CVPR2023/" rel="tag"># 'CVPR2023'</a>
+            
+              <a href="/tags/极市直播/" rel="tag"># '极市直播'</a>
+            
+              <a href="/tags/TemporalActionDetection/" rel="tag"># TemporalActionDetection</a>
             
               <a href="/tags/CVPR2023/" rel="tag"># CVPR2023</a>
             
-              <a href="/tags/TemporalActionDetection/" rel="tag"># TemporalActionDetection</a>
+              <a href="/tags/极市直播/" rel="tag"># 极市直播</a>
             
           </div>
         
@@ -573,8 +598,8 @@ $$\psi(x)=Conv_w(x)</script><p>Window-level: make the network extract features i
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/blog/2023/08/BMN详解.html" rel="next" title="BMN详解">
-                  <i class="fa fa-chevron-left"></i> BMN详解
+                <a href="/blog/2023/08/PoseEstimation-TAD.html" rel="next" title="人体姿态估计&动作识别">
+                  <i class="fa fa-chevron-left"></i> 人体姿态估计&动作识别
                 </a>
               
             </div>
@@ -655,7 +680,7 @@ $$\psi(x)=Conv_w(x)</script><p>Window-level: make the network extract features i
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -725,7 +750,17 @@ $$\psi(x)=Conv_w(x)</script><p>Window-level: make the network extract features i
         
           
         
-        <span class="site-state-item-count">14</span>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
@@ -796,12 +831,12 @@ $$\psi(x)=Conv_w(x)</script><p>Window-level: make the network extract features i
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">54k</span>
+    <span title="站点总字数">59k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:30</span>
+    <span title="站点阅读时长">1:39</span>
 </div>
 
         
@@ -956,7 +991,7 @@ $$\psi(x)=Conv_w(x)</script><p>Window-level: make the network extract features i
           repo: 'HuzhenYou.github.io',
           owner: 'HuzhenYou',
           admin: ['HuzhenYou'],
-          id:'gitalk_20230910153405',
+          id:'gitalk_20230910202136',
           labels: 'gitalk'.split(',').filter(l => l),
           perPage: 10,
           pagerDirection: 'last',
@@ -965,7 +1000,7 @@ $$\psi(x)=Conv_w(x)</script><p>Window-level: make the network extract features i
         })
 
         gitalk.render('gitalk-container')           
-       </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+       </script>
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>
