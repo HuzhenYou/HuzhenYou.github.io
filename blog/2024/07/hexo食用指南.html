@@ -90,23 +90,20 @@
 
 
 
-  <meta name="description" content="对obsidian的markdown格式转hexo格式时，一些公式无法正常显示，及根号显示异常的解决方案。">
+  <meta name="description" content="对一些hexo常见有效操作的记录。">
 <meta name="keywords" content="hexo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo中公式无法正常显示问题的解决方案">
-<meta property="og:url" content="https://huzhenyou.github.io/blog/2024/07/hexo中公式无法正常显示.html">
+<meta property="og:title" content="hexo食用指南">
+<meta property="og:url" content="https://huzhenyou.github.io/blog/2024/07/hexo食用指南.html">
 <meta property="og:site_name" content="九万里">
-<meta property="og:description" content="对obsidian的markdown格式转hexo格式时，一些公式无法正常显示，及根号显示异常的解决方案。">
+<meta property="og:description" content="对一些hexo常见有效操作的记录。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240704140958.png">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240704141107.png">
-<meta property="og:updated_time" content="2024-07-04T16:42:49.099Z">
+<meta property="og:updated_time" content="2024-07-05T17:07:41.720Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo中公式无法正常显示问题的解决方案">
-<meta name="twitter:description" content="对obsidian的markdown格式转hexo格式时，一些公式无法正常显示，及根号显示异常的解决方案。">
-<meta name="twitter:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240704140958.png">
+<meta name="twitter:title" content="hexo食用指南">
+<meta name="twitter:description" content="对一些hexo常见有效操作的记录。">
   <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
-  <link rel="canonical" href="https://huzhenyou.github.io/blog/2024/07/hexo中公式无法正常显示">
+  <link rel="canonical" href="https://huzhenyou.github.io/blog/2024/07/hexo食用指南">
 
 
 <script id="page-configurations">
@@ -120,7 +117,7 @@
   };
 </script>
 
-  <title>hexo中公式无法正常显示问题的解决方案 | 九万里</title>
+  <title>hexo食用指南 | 九万里</title>
   <meta name="generator" content="Hexo 3.9.0">
   
 
@@ -271,7 +268,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="https://huzhenyou.github.io/blog/2024/07/hexo中公式无法正常显示.html">
+    <link itemprop="mainEntityOfPage" href="https://huzhenyou.github.io/blog/2024/07/hexo食用指南.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="HuzhenYou">
@@ -283,7 +280,7 @@
       <meta itemprop="name" content="九万里">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">hexo中公式无法正常显示问题的解决方案
+        <h2 class="post-title" itemprop="name headline">hexo食用指南
 
           
         </h2>
@@ -299,7 +296,7 @@
                 
               
 
-              <time title="创建时间：2024-07-05 00:42:48 / 修改时间：00:42:49" itemprop="dateCreated datePublished" datetime="2024-07-05T00:42:48+08:00">2024-07-05</time>
+              <time title="创建时间：2024-07-06 00:58:21 / 修改时间：01:07:41" itemprop="dateCreated datePublished" datetime="2024-07-06T00:58:21+08:00">2024-07-06</time>
             </span>
           
             
@@ -337,7 +334,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>1.3k</span>
+              <span>1.2k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -360,18 +357,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>对obsidian的markdown格式转hexo格式时，一些公式无法正常显示，及根号显示异常的解决方案。</p>
+        <p>对一些hexo常见有效操作的记录。</p>
 <a id="more"></a>
 <hr>
-<h1 id="一些内嵌公式无法正常显示的问题"><a href="#一些内嵌公式无法正常显示的问题" class="headerlink" title="一些内嵌公式无法正常显示的问题"></a>一些内嵌公式无法正常显示的问题</h1><p>内嵌公式：文字内嵌入的公式<br>我的解决方案是：</p>
-<p>替换公式渲染引擎：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure></p>
-<p>修改 node_modules/kramed/lib/rules/inline.js：<br>修改第 11 行:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// escape: /^\\([\\`*&#123;&#125;\[\]()#$+\-.!_&gt;])/,</span></span><br><span class="line"><span class="built_in">escape</span>: <span class="regexp">/^\\([`*\[\]()#$+\-.!_&gt;])/</span>,</span><br></pre></td></tr></table></figure></p>
-<p>修改第 20 行：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// em: /^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</span><br><span class="line">em: /^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</span><br></pre></td></tr></table></figure></p>
-<p>重启：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure></p>
-<h1 id="根号无法正常显示"><a href="#根号无法正常显示" class="headerlink" title="根号无法正常显示"></a>根号无法正常显示</h1><p>如<br><img src="/imgs/Pasted image 20240704140958.png" alt width="132px"></p>
-<p>打开浏览器的开发者工具，发现控制台上有报错，如下图所示。原因是MathJax 在尝试执行某些 DOM 操作时遇到了问题。<br><img src="/imgs/Pasted image 20240704141107.png"><br>我的解决方案是：<br>hexo根目录的_config.yml添加：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mathjax:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">per_page:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">engine:</span> <span class="string">mathjax</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">2.7</span><span class="number">.7</span></span><br><span class="line">  <span class="attr">config:</span></span><br><span class="line">    <span class="attr">tex2jax:</span></span><br><span class="line">      <span class="attr">inlineMath:</span> <span class="string">[["$",</span> <span class="string">"$"</span><span class="string">],</span> <span class="string">["\\(",</span> <span class="string">"\\)"</span><span class="string">]]</span></span><br><span class="line">      <span class="attr">processEscapes:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
-<p>主题的配置文件，我的是themes/next/_config.yml 中添加：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mathjax:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
-<p>在主题布局文件中添加 MathJax 脚本（例如 themes/next/layout/_partials/head.swig 或 themes/next/layout/_partials/head.njk）<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> theme.mathjax %&#125;</span><br><span class="line">  &lt;script type=<span class="string">"text/x-mathjax-config"</span>&gt;</span><br><span class="line">    MathJax.Hub.Config(&#123;</span><br><span class="line">      tex2jax: &#123;</span><br><span class="line">        inlineMath: [[<span class="string">'$'</span>, <span class="string">'$'</span>], [<span class="string">'\\('</span>, <span class="string">'\\)'</span>]],</span><br><span class="line">        processEscapes: <span class="literal">true</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">"HTML-CSS"</span>: &#123; <span class="attr">availableFonts</span>: [<span class="string">"TeX"</span>] &#125;,</span><br><span class="line">      SVG: &#123; <span class="attr">font</span>: <span class="string">"TeX"</span> &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">  &lt;script type="text/</span>javascript<span class="string">" async</span></span><br><span class="line"><span class="string">    src="</span>https:<span class="comment">//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&gt;</span></span><br><span class="line">  &lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&#123;% endif %&#125;</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="对图片左对齐"><a href="#对图片左对齐" class="headerlink" title="对图片左对齐"></a>对图片左对齐</h1><p>有效的格式：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src="/imgs/Screenshot 2024-07-06 at 12.25.42 AM.png" alt="" width="700px" style="display: block; margin-left: 0;"&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="使用标签页加锚点"><a href="#使用标签页加锚点" class="headerlink" title="使用标签页加锚点"></a>使用标签页加锚点</h1><p>如：<br><code>&lt;h4 id=&quot;概述11&quot;&gt;概述&lt;/h4&gt;</code><br>显示为：</p>
+<h4 id="概述11">概述</h4>
+
+
+<h1 id="加载视频"><a href="#加载视频" class="headerlink" title="加载视频"></a>加载视频</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span> <span class="attr">width</span>=<span class="string">"640"</span> <span class="attr">height</span>=<span class="string">"360"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">"/imgs/61e229b6-64f4-11ea-866a-4e8934bfbff0.mp4 "</span> <span class="attr">type</span>=<span class="string">"video/mp4"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="使图片并排显示"><a href="#使图片并排显示" class="headerlink" title="使图片并排显示"></a>使图片并排显示</h1><p>在Hexo的CSS文件（例如custom.css）中定义一个类，然后在Markdown文件中使用该类。<br>在custom.css中定义类：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.image-row</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">gap</span>: <span class="number">10px</span>; <span class="comment">/* 图片之间的间隔 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.image-row</span> <span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">max-width</span>: <span class="number">100%</span>; <span class="comment">/* 确保图片不会超出容器宽度 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在Markdown文件中使用：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"image-row"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"/imgs/Pasted image 20230905084929.png"</span> <span class="attr">alt</span>=<span class="string">""</span> <span class="attr">width</span>=<span class="string">"300px"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"/imgs/Pasted image 20230905085024.png"</span> <span class="attr">alt</span>=<span class="string">""</span> <span class="attr">width</span>=<span class="string">"375px"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="跳转多级标题时多个标题名字相同"><a href="#跳转多级标题时多个标题名字相同" class="headerlink" title="跳转多级标题时多个标题名字相同"></a>跳转多级标题时多个标题名字相同</h1><p>你可以在 Markdown 文件中为每个二级标题添加 ID，这样在引用时可以通过这个唯一 ID 来区分它们。<br>假设你有如下标题：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="section"># Segment-level prediction</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">## Example Title</span></span><br><span class="line">Some content here...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">## Example Title</span></span><br><span class="line">Some different content here...</span><br></pre></td></tr></table></figure>
+<p>你可以修改为：<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="section"># Segment-level prediction</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">## Example Title &#123;#example-title-1&#125;</span></span><br><span class="line">Some content here...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">## Example Title &#123;#example-title-2&#125;</span></span><br><span class="line">Some different content here...</span><br></pre></td></tr></table></figure></p>
+<p>然后，你可以在引用时使用这些唯一的 ID：<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">First Example Title</span>](<span class="link">#example-title-1</span>)</span><br><span class="line">[<span class="string">Second Example Title</span>](<span class="link">#example-title-2</span>)</span><br></pre></td></tr></table></figure></p>
 
     </div>
 
@@ -388,7 +388,7 @@
     <strong>本文作者： </strong>HuzhenYou</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://huzhenyou.github.io/blog/2024/07/hexo中公式无法正常显示.html" title="hexo中公式无法正常显示问题的解决方案">https://huzhenyou.github.io/blog/2024/07/hexo中公式无法正常显示.html</a>
+    <a href="https://huzhenyou.github.io/blog/2024/07/hexo食用指南.html" title="hexo食用指南">https://huzhenyou.github.io/blog/2024/07/hexo食用指南.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -413,8 +413,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/blog/2024/06/MarketSenseA-GPT-4-选股收益超-40.html" rel="next" title="MarketSenseAI：利用大模型进行投资">
-                  <i class="fa fa-chevron-left"></i> MarketSenseAI：利用大模型进行投资
+                <a href="/blog/2024/07/obsidian一键转hexo脚本.html" rel="next" title="obsidian一键转hexo脚本">
+                  <i class="fa fa-chevron-left"></i> obsidian一键转hexo脚本
                 </a>
               
             </div>
@@ -422,10 +422,6 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/blog/2024/07/hexo中引用其他文档片段的设置.html" rel="prev" title="hexo中引用其他文档片段的设置">
-                  hexo中引用其他文档片段的设置 <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -477,7 +473,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一些内嵌公式无法正常显示的问题"><span class="nav-number">1.</span> <span class="nav-text">一些内嵌公式无法正常显示的问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#根号无法正常显示"><span class="nav-number">2.</span> <span class="nav-text">根号无法正常显示</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对图片左对齐"><span class="nav-number">1.</span> <span class="nav-text">对图片左对齐</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用标签页加锚点"><span class="nav-number">2.</span> <span class="nav-text">使用标签页加锚点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概述11"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">概述</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#加载视频"><span class="nav-number">3.</span> <span class="nav-text">加载视频</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使图片并排显示"><span class="nav-number">4.</span> <span class="nav-text">使图片并排显示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跳转多级标题时多个标题名字相同"><span class="nav-number">5.</span> <span class="nav-text">跳转多级标题时多个标题名字相同</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -806,7 +802,7 @@
           repo: 'HuzhenYou.github.io',
           owner: 'HuzhenYou',
           admin: ['HuzhenYou'],
-          id:'gitalk_20240705004248',
+          id:'gitalk_20240706005821',
           labels: 'gitalk'.split(',').filter(l => l),
           perPage: 10,
           pagerDirection: 'last',
