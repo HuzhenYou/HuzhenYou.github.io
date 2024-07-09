@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://huzhenyou.github.io/"/>
-  <updated>2024-07-09T15:26:40.935Z</updated>
+  <updated>2024-07-09T15:33:40.966Z</updated>
   <id>https://huzhenyou.github.io/</id>
   
   <author>
@@ -18,10 +18,10 @@
   
   <entry>
     <title>老年人自动喂饭轮椅</title>
-    <link href="https://huzhenyou.github.io//blog/2024/07/%E8%80%81%E5%B9%B4%E4%BA%BA%E8%87%AA%E5%8A%A8%E5%96%82%E9%A5%AD%E8%AE%BE%E8%AE%A1.html"/>
-    <id>https://huzhenyou.github.io//blog/2024/07/老年人自动喂饭设计.html</id>
-    <published>2024-07-09T15:26:40.000Z</published>
-    <updated>2024-07-09T15:26:40.935Z</updated>
+    <link href="https://huzhenyou.github.io//blog/2024/07/automaticallyFeedTheElderlyChair.html"/>
+    <id>https://huzhenyou.github.io//blog/2024/07/automaticallyFeedTheElderlyChair.html</id>
+    <published>2024-07-09T15:32:55.260Z</published>
+    <updated>2024-07-09T15:33:40.966Z</updated>
     
     <content type="html"><![CDATA[<p>这是我本科的毕业设计作品，收拾东西的时候发现的，重看后给了我一点小小的震撼，发现之前的自己还是挺牛逼的嘛。</p><a id="more"></a><hr><video controls width="640" height="360"><source src="/imgs/1480.mp4" type="video/mp4"></video>]]></content>
     
@@ -34,7 +34,7 @@
       <category term="毕业设计" scheme="https://huzhenyou.github.io/categories/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/"/>
     
     
-      <category term="&#39;毕业设计&#39;" scheme="https://huzhenyou.github.io/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/"/>
+      <category term="毕业设计" scheme="https://huzhenyou.github.io/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/"/>
     
   </entry>
   
@@ -144,13 +144,13 @@
       <category term="LLM+投资" scheme="https://huzhenyou.github.io/categories/LLM-%E6%8A%95%E8%B5%84/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
-    
       <category term="LLM+投资" scheme="https://huzhenyou.github.io/tags/LLM-%E6%8A%95%E8%B5%84/"/>
     
       <category term="GPT-4" scheme="https://huzhenyou.github.io/tags/GPT-4/"/>
     
       <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -220,9 +220,9 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
-      <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
-    
       <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
+      <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
   </entry>
   
@@ -304,13 +304,13 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
       <category term="ProposalGeneration" scheme="https://huzhenyou.github.io/tags/ProposalGeneration/"/>
     
       <category term="ActivityNetChallenge2019" scheme="https://huzhenyou.github.io/tags/ActivityNetChallenge2019/"/>
-    
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -332,9 +332,9 @@
       <category term="backbone" scheme="https://huzhenyou.github.io/categories/backbone/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
-    
       <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
       <category term="backbone" scheme="https://huzhenyou.github.io/tags/backbone/"/>
     
