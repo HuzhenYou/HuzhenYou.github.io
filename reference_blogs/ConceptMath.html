@@ -90,18 +90,20 @@
 
 
 
-  <meta name="description" content="虚怀若谷，大智若愚">
+  <meta name="description" content="Transformer位置编码的理解。">
+<meta name="keywords" content="&#39;Transformer&#39;">
 <meta property="og:type" content="website">
-<meta property="og:title" content="九万里">
-<meta property="og:url" content="https://huzhenyou.github.io/categories/hexo/index.html">
+<meta property="og:title" content="位置编码">
+<meta property="og:url" content="https://huzhenyou.github.io/reference_blogs/ConceptMath.html">
 <meta property="og:site_name" content="九万里">
-<meta property="og:description" content="虚怀若谷，大智若愚">
+<meta property="og:description" content="Transformer位置编码的理解。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2024-07-15T02:47:23.973Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="九万里">
-<meta name="twitter:description" content="虚怀若谷，大智若愚">
+<meta name="twitter:title" content="位置编码">
+<meta name="twitter:description" content="Transformer位置编码的理解。">
   <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
-  <link rel="canonical" href="https://huzhenyou.github.io/categories/hexo/">
+  <link rel="canonical" href="https://huzhenyou.github.io/reference_blogs/ConceptMath">
 
 
 <script id="page-configurations">
@@ -110,12 +112,12 @@
     sidebar: "",
     isHome: false,
     isPost: false,
-    isPage: false,
+    isPage: true,
     isArchive: false
   };
 </script>
 
-  <title>分类: hexo | 九万里</title>
+  <title>位置编码 | 九万里</title>
   <meta name="generator" content="Hexo 3.9.0">
   
 
@@ -281,151 +283,122 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+    
+    
+    <div class="post-block page">
+      <header class="post-header">
+
+<h2 class="post-title" itemprop="name headline">位置编码
+
+</h2>
+
+<div class="post-meta">
   
-  
-  
-  <div class="post-block category">
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">hexo<small>分类</small>
-        </h2>
-      </div>
+
+</div>
+
+</header>
 
       
+      
+      
+      <div class="post-body">
+        
+          <p>Transformer位置编码的理解。</p>
+<a id="more"></a>
+<hr>
+<h1 id="证明-sin-x-和-cos-x-在数学上是正交的"><a href="#证明-sin-x-和-cos-x-在数学上是正交的" class="headerlink" title="证明 $\sin(x)$ 和 $\cos(x)$ 在数学上是正交的"></a>证明 $\sin(x)$ 和 $\cos(x)$ 在数学上是正交的</h1><p>要证明 $\sin(x)$ 和 $\cos(x)$ 函数在数学上是正交的，我们需要计算它们在一个周期内的内积，并证明这个内积为零。</p>
+<h4 id="正交性的定义"><a href="#正交性的定义" class="headerlink" title="正交性的定义"></a>正交性的定义</h4><p>两个函数 $f(x)$ 和 $g(x)$ 在区间 $[a, b]$ 上是正交的，如果它们的内积为零：</p>
+<script type="math/tex; mode=display">
+\langle f, g \rangle = \int_a^b f(x) g(x) \, dx = 0</script><h4 id="证明-sin-x-和-cos-x-的正交性"><a href="#证明-sin-x-和-cos-x-的正交性" class="headerlink" title="证明 $\sin(x)$ 和 $\cos(x)$ 的正交性"></a>证明 $\sin(x)$ 和 $\cos(x)$ 的正交性</h4><p>我们选择一个完整的周期 $[0, 2\pi]$ 来计算 $\sin(x)$ 和 $\cos(x)$ 的内积：</p>
+<script type="math/tex; mode=display">
+\langle \sin(x), \cos(x) \rangle = \int_0^{2\pi} \sin(x) \cos(x) \, dx</script><p>使用三角函数的积化和差公式：</p>
+<script type="math/tex; mode=display">
+\sin(A) \cos(B) = \frac{1}{2} [\sin(A+B) + \sin(A-B)]</script><p>因此，对于 $\sin(x) \cos(x)$ 我们有：</p>
+<script type="math/tex; mode=display">
+\sin(x) \cos(x) = \frac{1}{2} [\sin(2x)]</script><p>将其代入内积的表达式：</p>
+<script type="math/tex; mode=display">
+\langle \sin(x), \cos(x) \rangle = \int_0^{2\pi} \frac{1}{2} \sin(2x) \, dx</script><p>现在我们计算这个积分：</p>
+<script type="math/tex; mode=display">
+\int_0^{2\pi} \frac{1}{2} \sin(2x) \, dx = \frac{1}{2} \int_0^{2\pi} \sin(2x) \, dx</script><p>我们知道 $\sin(2x)$ 在 $[0, 2\pi]$ 的积分为零，因为 $\sin(2x)$ 是一个周期函数，在一个完整的周期内其正负部分相互抵消：</p>
+<script type="math/tex; mode=display">
+\int_0^{2\pi} \sin(2x) \, dx = 0</script><p>因此，</p>
+<script type="math/tex; mode=display">
+\frac{1}{2} \int_0^{2\pi} \sin(2x) \, dx = \frac{1}{2} \times 0 = 0</script><h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>由于 $\langle \sin(x), \cos(x) \rangle = 0$，这证明了在区间 $[0, 2\pi]$ 内 $\sin(x)$ 和 $\cos(x)$ 是正交的。</p>
+<h4 id="在更一般的情形下"><a href="#在更一般的情形下" class="headerlink" title="在更一般的情形下"></a>在更一般的情形下</h4><p>更一般地，对于任意整数 $m$ 和 $n$，可以证明 $\sin(mx)$ 和 $\cos(nx)$ 在区间 $[0, 2\pi]$ 上也是正交的。类似的积分计算表明，如果 $m \neq n$，则它们的内积为零：</p>
+<script type="math/tex; mode=display">
+\int_0^{2\pi} \sin(mx) \cos(nx) \, dx = 0</script><p>这种正交性在傅里叶级数展开和频域分析中是非常重要的性质，它确保了不同频率的正弦和余弦函数在数学上的独立性。</p>
+<h1 id="和差公式"><a href="#和差公式" class="headerlink" title="和差公式"></a>和差公式</h1><ol>
+<li><p><strong>$\sin(A + B)$</strong>：</p>
+<script type="math/tex; mode=display">
+\sin(A + B) = \sin(A)\cos(B) + \cos(A)\sin(B)</script></li>
+<li><p><strong>$\sin(A - B)$</strong>：</p>
+<script type="math/tex; mode=display">
+\sin(A - B) = \sin(A)\cos(B) - \cos(A)\sin(B)</script></li>
+<li><p><strong>$\cos(A + B)$</strong>：</p>
+<script type="math/tex; mode=display">
+\cos(A + B) = \cos(A)\cos(B) - \sin(A)\sin(B)</script></li>
+<li><p><strong>$\cos(A - B)$</strong>：</p>
+<script type="math/tex; mode=display">
+\cos(A - B) = \cos(A)\cos(B) + \sin(A)\sin(B)</script></li>
+<li><p><strong>$\tan(A + B)$</strong>：</p>
+<script type="math/tex; mode=display">
+\tan(A + B) = \frac{\tan(A) + \tan(B)}{1 - \tan(A)\tan(B)}</script></li>
+<li><p><strong>$\tan(A - B)$</strong>：</p>
+<script type="math/tex; mode=display">
+\tan(A - B) = \frac{\tan(A) - \tan(B)}{1 + \tan(A)\tan(B)}</script></li>
+</ol>
+<h1 id="独立同分布的条件下，随机变量之和的方差等于各个随机变量方差的和"><a href="#独立同分布的条件下，随机变量之和的方差等于各个随机变量方差的和" class="headerlink" title="独立同分布的条件下，随机变量之和的方差等于各个随机变量方差的和"></a>独立同分布的条件下，随机变量之和的方差等于各个随机变量方差的和</h1><p>要证明在独立同分布的条件下，随机变量之和的方差等于各个随机变量方差的和，我们可以采用以下步骤：</p>
+<p>设 $X_1, X_2, \ldots, X_n$ 是独立同分布的随机变量，均具有相同的期望 $E(X_i) = \mu$ 和方差 $\text{Var}(X_i) = \sigma^2$。</p>
+<p>我们需要计算随机变量之和 $S_n = X_1 + X_2 + \ldots + X_n$ 的方差。根据方差的定义和性质，我们有：</p>
+<ol>
+<li><p><strong>方差的定义</strong>：</p>
+<script type="math/tex; mode=display">
+\text{Var}(S_n) = E[(S_n - E(S_n))^2]</script></li>
+<li><p><strong>和的期望的线性性</strong>：</p>
+<script type="math/tex; mode=display">
+E(S_n) = E(X_1 + X_2 + \ldots + X_n) = E(X_1) + E(X_2) + \ldots + E(X_n) = n\mu</script></li>
+<li><p><strong>计算 $S_n$ 的方差</strong>：</p>
+<script type="math/tex; mode=display">
+\text{Var}(S_n) = E[(S_n - n\mu)^2]</script><script type="math/tex; mode=display">
+\text{Var}(S_n) = E[((X_1 - \mu) + (X_2 - \mu) + \ldots + (X_n - \mu))^2]</script></li>
+<li><p><strong>展开平方</strong>：</p>
+<script type="math/tex; mode=display">
+\text{Var}(S_n) = E[(X_1 - \mu)^2 + (X_2 - \mu)^2 + \ldots + (X_n - \mu)^2 + 2 \sum_{i < j} (X_i - \mu)(X_j - \mu)]</script></li>
+<li><p><strong>由于独立性</strong>，对于 $i \neq j$，$E[(X_i - \mu)(X_j - \mu)] = E[X_i - \mu]E[X_j - \mu] = 0$，因为 $E[X_i - \mu] = 0$。</p>
+</li>
+<li><p><strong>因此</strong>：</p>
+<script type="math/tex; mode=display">
+\text{Var}(S_n) = E[(X_1 - \mu)^2] + E[(X_2 - \mu)^2] + \ldots + E[(X_n - \mu)^2] = \sigma^2 + \sigma^2 + \ldots + \sigma^2 = n\sigma^2</script></li>
+</ol>
+<p>这就完成了证明：当随机变量 $X_1, X_2, \ldots, X_n$ 独立且同分布时，它们的和 $S_n$ 的方差等于方差的和，即 $\text{Var}(S_n) = n\sigma^2$。这是独立性和同分布性在统计学中的一个重要应用，说明在这种条件下，随机变量之和的不确定性（方差）是各个随机变量不确定性的简单累加。</p>
+<h1 id="轴角式表达"><a href="#轴角式表达" class="headerlink" title="轴角式表达"></a>轴角式表达</h1><ol>
+<li>axis-angle representation.</li>
+<li>在3维中，用（x, y, z）定义一个旋转轴，一个标量 弧度 表示 选择方向。</li>
+<li></li>
+</ol>
 
-  
-  
-
-  
+        
+      </div>
+      
+      
+      
+    </div>
     
-    <div class="collection-year">
-      <h2 class="collection-header">2024</h2>
-    </div>
-  
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/blog/2024/07/hexo食用指南.html" itemprop="url">
-            <span itemprop="name">hexo食用指南</span>
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-07-06T00:58:21+08:00"
-              content="2024-07-06">
-          07-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-  
-  
-
-  
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/blog/2024/07/obsidian一键转hexo脚本.html" itemprop="url">
-            <span itemprop="name">obsidian一键转hexo脚本</span>
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-07-05T01:02:03+08:00"
-              content="2024-07-05">
-          07-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-  
-  
-
-  
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/blog/2024/07/hexo中引用其他文档片段的设置.html" itemprop="url">
-            <span itemprop="name">hexo中引用其他文档片段的设置</span>
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-07-05T00:48:57+08:00"
-              content="2024-07-05">
-          07-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-  
-  
-
-  
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/blog/2024/07/hexo中公式无法正常显示.html" itemprop="url">
-            <span itemprop="name">hexo中公式无法正常显示问题的解决方案</span>
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-07-05T00:42:48+08:00"
-              content="2024-07-05">
-          07-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    </div>
+    
+    
+    
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
           
+    
+    <div class="comments" id="gitalk-container"></div>
+  
 
         </div>
           
@@ -440,6 +413,11 @@
 
   <aside class="sidebar">
     <div class="sidebar-inner">
+        
+        
+        
+        
+      
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
@@ -452,6 +430,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#证明-sin-x-和-cos-x-在数学上是正交的"><span class="nav-number">1.</span> <span class="nav-text">证明 $\sin(x)$ 和 $\cos(x)$ 在数学上是正交的</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正交性的定义"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">正交性的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#证明-sin-x-和-cos-x-的正交性"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">证明 $\sin(x)$ 和 $\cos(x)$ 的正交性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结论"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在更一般的情形下"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">在更一般的情形下</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#和差公式"><span class="nav-number">2.</span> <span class="nav-text">和差公式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#独立同分布的条件下，随机变量之和的方差等于各个随机变量方差的和"><span class="nav-number">3.</span> <span class="nav-text">独立同分布的条件下，随机变量之和的方差等于各个随机变量方差的和</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#轴角式表达"><span class="nav-number">4.</span> <span class="nav-text">轴角式表达</span></a></li></ol></div>
+        
       </div>
       <!--/noindex-->
 
@@ -721,10 +701,82 @@
   
 
   
+    
+      
+<script type="text/x-mathjax-config">
 
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
   
 
   
+
+  
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '140d0161c7c4631e2764',
+          clientSecret: '90d536de668c0e5a417f895d3af6a037d1528253',
+          repo: 'HuzhenYou.github.io',
+          owner: 'HuzhenYou',
+          admin: ['HuzhenYou'],
+          id:'gitalk_20240715104723',
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: false,
+          distractionFreeMode: false
+        })
+
+        gitalk.render('gitalk-container')           
+       </script>
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

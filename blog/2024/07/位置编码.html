@@ -90,29 +90,23 @@
 
 
 
-  <meta name="description" content="对MarketSenseAI利用大模型进行投资进行解读。">
-<meta name="keywords" content="DeepLearning,LLM+投资,GPT-4,LLM">
+  <meta name="description" content="Transformer位置编码的理解。">
+<meta name="keywords" content="&#39;Transformer&#39;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MarketSenseAI：利用大模型进行投资">
-<meta property="og:url" content="https://huzhenyou.github.io/blog/2024/06/MarketSenseA-GPT-4-选股收益超-40.html">
+<meta property="og:title" content="位置编码">
+<meta property="og:url" content="https://huzhenyou.github.io/blog/2024/07/位置编码.html">
 <meta property="og:site_name" content="九万里">
-<meta property="og:description" content="对MarketSenseAI利用大模型进行投资进行解读。">
+<meta property="og:description" content="Transformer位置编码的理解。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240122213415.png">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240122213721.png">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240123102224.png">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240123110808.png">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240123111659.png">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240123113136.png">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240123115306.png">
-<meta property="og:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240123115405.png">
-<meta property="og:updated_time" content="2024-07-05T05:38:49.628Z">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/sin_cos.png">
+<meta property="og:image" content="https://huzhenyou.github.io/imgs/Figure_1.png">
+<meta property="og:updated_time" content="2024-07-15T02:47:24.058Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MarketSenseAI：利用大模型进行投资">
-<meta name="twitter:description" content="对MarketSenseAI利用大模型进行投资进行解读。">
-<meta name="twitter:image" content="https://huzhenyou.github.io/imgs/Pasted%20image%2020240122213415.png">
+<meta name="twitter:title" content="位置编码">
+<meta name="twitter:description" content="Transformer位置编码的理解。">
+<meta name="twitter:image" content="https://huzhenyou.github.io/imgs/sin_cos.png">
   <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
-  <link rel="canonical" href="https://huzhenyou.github.io/blog/2024/06/MarketSenseA-GPT-4-选股收益超-40">
+  <link rel="canonical" href="https://huzhenyou.github.io/blog/2024/07/位置编码">
 
 
 <script id="page-configurations">
@@ -126,7 +120,7 @@
   };
 </script>
 
-  <title>MarketSenseAI：利用大模型进行投资 | 九万里</title>
+  <title>位置编码 | 九万里</title>
   <meta name="generator" content="Hexo 3.9.0">
   
 
@@ -277,7 +271,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="https://huzhenyou.github.io/blog/2024/06/MarketSenseA-GPT-4-选股收益超-40.html">
+    <link itemprop="mainEntityOfPage" href="https://huzhenyou.github.io/blog/2024/07/位置编码.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="HuzhenYou">
@@ -289,7 +283,7 @@
       <meta itemprop="name" content="九万里">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">MarketSenseAI：利用大模型进行投资
+        <h2 class="post-title" itemprop="name headline">位置编码
 
           
         </h2>
@@ -305,19 +299,11 @@
                 
               
 
-              <time title="创建时间：2024-06-13 16:18:14" itemprop="dateCreated datePublished" datetime="2024-06-13T16:18:14+08:00">2024-06-13</time>
+              <time title="创建时间：2024-07-15 10:47:23 / 修改时间：10:47:24" itemprop="dateCreated datePublished" datetime="2024-07-15T10:47:23+08:00">2024-07-15</time>
             </span>
           
             
 
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-05 13:38:49" itemprop="dateModified" datetime="2024-07-05T13:38:49+08:00">2024-07-05</time>
-              </span>
             
           
             <span class="post-meta-item">
@@ -326,7 +312,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/LLM-投资/" itemprop="url" rel="index"><span itemprop="name">LLM+投资</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Transformer/" itemprop="url" rel="index"><span itemprop="name">Transformer</span></a></span>
 
                 
                 
@@ -351,7 +337,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>1.1k</span>
+              <span>3k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -361,7 +347,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span>2 分钟</span>
+              <span>5 分钟</span>
             </span>
           
 
@@ -374,70 +360,50 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>对MarketSenseAI利用大模型进行投资进行解读。</p>
+        <p>Transformer位置编码的理解。</p>
 <a id="more"></a>
 <hr>
-<h1 id="MarketSenseAI"><a href="#MarketSenseAI" class="headerlink" title="MarketSenseAI."></a>MarketSenseAI.</h1><h1 id="生成最终决定的四个组件"><a href="#生成最终决定的四个组件" class="headerlink" title="生成最终决定的四个组件"></a>生成最终决定的四个组件</h1><ol>
-<li>新闻分析：评估与目标公司相关的最新新闻摘要，以评估它们对股票绩效的潜在影响。</li>
-<li>价格动态分析：将股票的价格动态与相关股票和整体市场进行比较，提供相对绩效的视角。</li>
-<li>宏观经济环境分析：评估更广泛的宏观经济格局及其对目标公司的影响，考虑全球经济趋势和事件。</li>
-<li>基本面分析：对公司基本的财务数据进行审查，分析其当前的财务状况和未来前景。<br><img src="/imgs/Pasted image 20240122213415.png" alt width="1325px"></li>
-</ol>
-<h1 id="新闻分析"><a href="#新闻分析" class="headerlink" title="新闻分析"></a>新闻分析</h1><ul>
-<li>采用 渐进式新闻摘要器<br><img src="/imgs/Pasted image 20240122213721.png" alt width="875px"><ul>
-<li>步骤：<ol>
-<li>去除与公司无关的文本。</li>
-<li>将最新的新闻摘要和之前的渐进摘要集成。</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="基本面摘要器"><a href="#基本面摘要器" class="headerlink" title="基本面摘要器"></a>基本面摘要器</h1><p><img src="/imgs/Pasted image 20240123102224.png" alt width="600px"></p>
+<h1 id="transformer原始位置编码"><a href="#transformer原始位置编码" class="headerlink" title="transformer原始位置编码"></a>transformer原始位置编码</h1><h2 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h2><script type="math/tex; mode=display">
+\text{PE}(pos, 2i) = \sin\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right)</script><script type="math/tex; mode=display">
+\text{PE}(pos, 2i+1) = \cos\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right)</script><h2 id="更好的捕捉短距离和长距离的依赖关系"><a href="#更好的捕捉短距离和长距离的依赖关系" class="headerlink" title="更好的捕捉短距离和长距离的依赖关系"></a>更好的捕捉短距离和长距离的依赖关系</h2><p>该控制通过改变$\frac{pos}{10000^{2i/d_{\text{model}}}}$ 来控制正弦或余弦函数的频率，可以很好捕捉短距离和长距离的依赖关系，位置编码可视图见下图：</p>
 <ul>
-<li>Object: 提供 公司财务状况的 摘要。</li>
-<li>作者使用EODHD的API获取关键 季度信息。</li>
-<li>将两个季度的财务报表输入到GPT-4进行比较，深入研究 企业利润能力、收入轨迹、债务指标、现金流动态。</li>
+<li>短距离依赖关系（序列中相邻元素或位置之间的关系）：低维频率较高，能够很好地捕捉到相邻位置之间的细微变化，可以区别短距离的位置。</li>
+<li>长距离依赖关系（序列中相隔较远的元素或位置之间的关系）：高维频率较低，能够很好地捕捉到较远维度之间的细微变化，可以区别长距离的位置。<br>当 2i 接近 $d_{model}$ 时，分母接近 10000，此时周期为 $10000*2π$</li>
 </ul>
-<h1 id="股价动态摘要器"><a href="#股价动态摘要器" class="headerlink" title="股价动态摘要器"></a>股价动态摘要器</h1><ul>
-<li>对股票的价格趋势 和 财务指标 进行深入分析和上下文处理。</li>
-<li><p>不仅关注股票本身，还通过 与其他相似股票进行比较，以及整个市场的背景，提供了更全面的分析，从而更好地理解当前股票在行业和市场整体中的表现。<br><img src="/imgs/Pasted image 20240123110808.png" alt width="550px"></p>
-</li>
-<li><p>识别相似算法：用MPNet对股票描述 (like financial metrics, market performance, news analysis, etc.)进行embedding, 然后用余弦距离计算目标股票和其他股票的相似度，取topN, 具体地：<br>  <img src="/imgs/Pasted image 20240123111659.png" alt width="800px"></p>
-</li>
-</ul>
-<h1 id="宏观经济环境摘要器"><a href="#宏观经济环境摘要器" class="headerlink" title="宏观经济环境摘要器"></a>宏观经济环境摘要器</h1><ul>
-<li>Object: 宏观经济 可帮助更好理解当前经济环境 并 做出明智的投资决策。</li>
-<li>该组件名：MarketDigest。</li>
-<li>方法：<ul>
-<li>确保多个权威信息源：收集各大银行、投资机构等公开报告。</li>
-<li>每两周 综合一次，获得 简明摘要。</li>
-<li>具体地：<ul>
-<li>将报告等 转化为文本，让GPT-4对每个报告生成一个摘要。</li>
-<li>将 所有单独的摘要 给GPT-4, 生成全面的概述。<br><img src="/imgs/Pasted image 20240123113136.png" alt width="1000px"></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="生成最终决定（信号生成：买入、卖出、持有）"><a href="#生成最终决定（信号生成：买入、卖出、持有）" class="headerlink" title="生成最终决定（信号生成：买入、卖出、持有）"></a>生成最终决定（信号生成：买入、卖出、持有）</h1><ul>
-<li>融合上面对所有信息：<ul>
-<li><a href="#新闻分析">新闻分析</a></li>
-<li><a href="#基本面摘要器">基本面摘要器</a></li>
-<li><a href="#股价动态摘要器">股价动态摘要器</a></li>
-<li><a href="#宏观经济环境摘要器">宏观经济环境摘要器</a></li>
-</ul>
-</li>
-<li>Object: 生成决策信号，并 对这个选择 背后的推理进行 清晰、逐步的解释。</li>
-<li>各文本相似性分析：<img src="/imgs/Pasted image 20240123115306.png" alt width="850px"><img src="/imgs/Pasted image 20240123115405.png" alt width="500px"><ul>
-<li>新闻和价格动态摘要有高相似性分数.</li>
-<li>基本面和宏观组件的平均相似性分数较低，对模型每月决策的直接影响较小。</li>
-</ul>
-</li>
-</ul>
-<h2 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h2><blockquote>
-<p><a href="https://mp.weixin.qq.com/s/A0aAVxCCv_VNOVkQlnGDbg" target="_blank" rel="noopener">碾压华尔街，GPT-4 选股收益超 40%</a><br>论文题目: Can Large Language Models Beat Wall Street? Unveiling the Potential of AI in Stock Selection<br>   论文链接: <a href="https://arxiv.org/abs/2401.03737" target="_blank" rel="noopener">https://arxiv.org/abs/2401.03737</a><br>   博客地址: <a href="https://www.marketsense-ai.com/" target="_blank" rel="noopener">https://www.marketsense-ai.com/</a></p>
-</blockquote>
+<p>类别二进制中低维数值和高维数值的变化情况：<br>让我们打印出0, 1, 2, …, 7 的二进制表示形式。 正如所看到的，每个数字、每两个数字和每四个数字上的比特值 在第一个最低位、第二个最低位和第三个最低位上分别交替。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">    print(<span class="string">f'<span class="subst">&#123;i&#125;</span>的二进制是：<span class="subst">&#123;i:&gt;<span class="number">03</span>b&#125;</span>'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Output:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 0的二进制是：000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1的二进制是：001</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2的二进制是：010</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3的二进制是：011</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4的二进制是：100</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5的二进制是：101</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 6的二进制是：110</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 7的二进制是：111</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="每个位置-pos-都是唯一的"><a href="#每个位置-pos-都是唯一的" class="headerlink" title="每个位置(pos)都是唯一的"></a>每个位置(pos)都是唯一的</h2><p>因为维度很高时，周期很大，所以，每个位置的 pos必定是唯一的。<br>再加上低维不同频率的复杂组合，使位置编码包含丰富的位置信息。</p>
+<h2 id="为什么交错使用sin-和cos，而不能直接用其中有一个"><a href="#为什么交错使用sin-和cos，而不能直接用其中有一个" class="headerlink" title="为什么交错使用sin 和cos，而不能直接用其中有一个"></a>为什么交错使用sin 和cos，而不能直接用其中有一个</h2><p>对于原始交错情况：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">pos = np.arange(<span class="number">0</span>, <span class="number">100</span>)</span><br><span class="line">d_model = <span class="number">20</span></span><br><span class="line">PE_sin = np.sin(pos[:, np.newaxis] / <span class="number">10000</span>**(<span class="number">2</span> * np.arange(d_model // <span class="number">2</span>) / d_model))</span><br><span class="line">PE_cos = np.cos(pos[:, np.newaxis] / <span class="number">10000</span>**(<span class="number">2</span> * np.arange(d_model // <span class="number">2</span>) / d_model))</span><br><span class="line"></span><br><span class="line">PE = np.empty((pos.size, d_model))</span><br><span class="line">PE[:, <span class="number">0</span>::<span class="number">2</span>] = PE_sin</span><br><span class="line">PE[:, <span class="number">1</span>::<span class="number">2</span>] = PE_cos</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">plt.imshow(PE, aspect=<span class="string">'auto'</span>, cmap=<span class="string">'viridis'</span>)</span><br><span class="line">plt.colorbar()</span><br><span class="line">plt.title(<span class="string">'Positional Encoding (Sin and Cos)'</span>)</span><br><span class="line">plt.xlabel(<span class="string">'Encoding Dimension'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Position'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/imgs/sin_cos.png"><br>可以看到，对于某一行（某一个位置）来说，相邻维度的区别会非常明显，有利于模型区别各个维度，这是因为 sin与 cos相差一个$𝜋/2$ 个相位，在同一个位置会生成不同的值。<br>若只用 sin的话，如下图所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">pos = np.arange(<span class="number">0</span>, <span class="number">100</span>)</span><br><span class="line">d_model = <span class="number">20</span></span><br><span class="line">PE_sin = np.sin(pos[:, np.newaxis] / <span class="number">10000</span>**(np.arange(d_model) / d_model))</span><br><span class="line"></span><br><span class="line">PE = np.empty((pos.size, d_model))</span><br><span class="line">PE[:, :] = PE_sin</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">plt.imshow(PE, aspect=<span class="string">'auto'</span>, cmap=<span class="string">'viridis'</span>)</span><br><span class="line">plt.colorbar()</span><br><span class="line">plt.title(<span class="string">'Positional Encoding (Sin and Cos)'</span>)</span><br><span class="line">plt.xlabel(<span class="string">'Encoding Dimension'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Position'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/imgs/Figure_1.png"><br>对于高维，相邻位置区分较差。<br>另外的好处是：sin 和 cos函数在数学上是正交的，即它们在一个周期内的内积为零。这种正交性确保了它们在不同维度上的表示是独立的，可以更好地捕捉到不同位置的特征。<br>证明sin 和 cos函数在数学上是正交的：<br>No match found for heading: #证明 $ sin(x)$ 和 $ cos(x)$ 在数学上是正交的</p>
+<h2 id="相对位置编码"><a href="#相对位置编码" class="headerlink" title="相对位置编码"></a>相对位置编码</h2><p>除了捕获绝对位置信息之外，上述的位置编码还允许模型学习得到输入序列中相对位置信息。这是因为对于任何确定的位置偏移 $\delta$，位置 $i + \delta$ 处的位置编码可以线性投影位置 $i$ 处的位置编码来表示。</p>
+<p>这种投影的数学解释是，令 $\omega_j = \frac{1}{10000^{2j/d}}$，对于任何确定的位置偏移 $\delta$，任何一对 $(p_{i,2j}, p_{i,2j+1})$ 都可以线性投影到 $(p_{i+\delta,2j}, p_{i+\delta,2j+1})$：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\begin{bmatrix}
+\cos(\delta \omega_j) & \sin(\delta \omega_j) \\
+-\sin(\delta \omega_j) & \cos(\delta \omega_j)
+\end{bmatrix}
+\begin{bmatrix}
+p_{i,2j} \\
+p_{i,2j+1}
+\end{bmatrix} \\
+&= 
+\begin{bmatrix}
+\cos(\delta \omega_j) \sin(i \omega_j) + \sin(\delta \omega_j) \cos(i \omega_j) \\
+-\sin(\delta \omega_j) \sin(i \omega_j) + \cos(\delta \omega_j) \cos(i \omega_j)
+\end{bmatrix} \\
+&= 
+\begin{bmatrix}
+\sin((i + \delta) \omega_j) \\
+\cos((i + \delta) \omega_j)
+\end{bmatrix} \\
+&= 
+\begin{bmatrix}
+p_{i+\delta,2j} \\
+p_{i+\delta,2j+1}
+\end{bmatrix},
+\end{aligned}</script><p>上面， $(p_{i,2j}, p_{i,2j+1})$ 其实可看作是坐标系中圆上的一点，而$(p_{i+\delta,2j}, p_{i+\delta,2j+1})$ 是相位相差$\delta$ 的圆上的另一点，在相同列 (同一维度)上，$(p_{i,2j}, p_{i,2j+1})$ 这些点在同一圆上，只是相位不同。<br>上面的矩阵，为<strong>旋转矩阵</strong>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>正余弦位置编码的设计 很可能来源于 傅里叶变换。</p>
 
     </div>
 
@@ -454,7 +420,7 @@
     <strong>本文作者： </strong>HuzhenYou</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://huzhenyou.github.io/blog/2024/06/MarketSenseA-GPT-4-选股收益超-40.html" title="MarketSenseAI：利用大模型进行投资">https://huzhenyou.github.io/blog/2024/06/MarketSenseA-GPT-4-选股收益超-40.html</a>
+    <a href="https://huzhenyou.github.io/blog/2024/07/位置编码.html" title="位置编码">https://huzhenyou.github.io/blog/2024/07/位置编码.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -469,13 +435,7 @@
           
           <div class="post-tags">
             
-              <a href="/tags/DeepLearning/" rel="tag"># DeepLearning</a>
-            
-              <a href="/tags/LLM-投资/" rel="tag"># LLM+投资</a>
-            
-              <a href="/tags/GPT-4/" rel="tag"># GPT-4</a>
-            
-              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/Transformer/" rel="tag"># 'Transformer'</a>
             
           </div>
         
@@ -485,8 +445,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/blog/2024/06/Sora.html" rel="next" title="Sora解读">
-                  <i class="fa fa-chevron-left"></i> Sora解读
+                <a href="/blog/2024/07/automaticallyFeedTheElderlyChair.html" rel="next" title="老年人自动喂饭轮椅">
+                  <i class="fa fa-chevron-left"></i> 老年人自动喂饭轮椅
                 </a>
               
             </div>
@@ -494,10 +454,6 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/blog/2024/07/hexo中公式无法正常显示.html" rel="prev" title="hexo中公式无法正常显示问题的解决方案">
-                  hexo中公式无法正常显示问题的解决方案 <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -549,7 +505,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MarketSenseAI"><span class="nav-number">1.</span> <span class="nav-text">MarketSenseAI.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成最终决定的四个组件"><span class="nav-number">2.</span> <span class="nav-text">生成最终决定的四个组件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新闻分析"><span class="nav-number">3.</span> <span class="nav-text">新闻分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本面摘要器"><span class="nav-number">4.</span> <span class="nav-text">基本面摘要器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#股价动态摘要器"><span class="nav-number">5.</span> <span class="nav-text">股价动态摘要器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#宏观经济环境摘要器"><span class="nav-number">6.</span> <span class="nav-text">宏观经济环境摘要器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成最终决定（信号生成：买入、卖出、持有）"><span class="nav-number">7.</span> <span class="nav-text">生成最终决定（信号生成：买入、卖出、持有）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Refs"><span class="nav-number">7.1.</span> <span class="nav-text">Refs</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#transformer原始位置编码"><span class="nav-number">1.</span> <span class="nav-text">transformer原始位置编码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#公式"><span class="nav-number">1.1.</span> <span class="nav-text">公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更好的捕捉短距离和长距离的依赖关系"><span class="nav-number">1.2.</span> <span class="nav-text">更好的捕捉短距离和长距离的依赖关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#每个位置-pos-都是唯一的"><span class="nav-number">1.3.</span> <span class="nav-text">每个位置(pos)都是唯一的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么交错使用sin-和cos，而不能直接用其中有一个"><span class="nav-number">1.4.</span> <span class="nav-text">为什么交错使用sin 和cos，而不能直接用其中有一个</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相对位置编码"><span class="nav-number">1.5.</span> <span class="nav-text">相对位置编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.6.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -886,7 +842,7 @@
           repo: 'HuzhenYou.github.io',
           owner: 'HuzhenYou',
           admin: ['HuzhenYou'],
-          id:'gitalk_20240613161814',
+          id:'gitalk_20240715104723',
           labels: 'gitalk'.split(',').filter(l => l),
           perPage: 10,
           pagerDirection: 'last',

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://huzhenyou.github.io/"/>
-  <updated>2024-07-09T15:33:40.966Z</updated>
+  <updated>2024-07-15T02:47:24.058Z</updated>
   <id>https://huzhenyou.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>位置编码</title>
+    <link href="https://huzhenyou.github.io//blog/2024/07/%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81.html"/>
+    <id>https://huzhenyou.github.io//blog/2024/07/位置编码.html</id>
+    <published>2024-07-15T02:47:23.000Z</published>
+    <updated>2024-07-15T02:47:24.058Z</updated>
+    
+    <content type="html"><![CDATA[<p>Transformer位置编码的理解。</p><a id="more"></a><hr><h1 id="transformer原始位置编码"><a href="#transformer原始位置编码" class="headerlink" title="transformer原始位置编码"></a>transformer原始位置编码</h1><h2 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h2><script type="math/tex; mode=display">\text{PE}(pos, 2i) = \sin\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right)</script><script type="math/tex; mode=display">\text{PE}(pos, 2i+1) = \cos\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right)</script><h2 id="更好的捕捉短距离和长距离的依赖关系"><a href="#更好的捕捉短距离和长距离的依赖关系" class="headerlink" title="更好的捕捉短距离和长距离的依赖关系"></a>更好的捕捉短距离和长距离的依赖关系</h2><p>该控制通过改变$\frac{pos}{10000^{2i/d_{\text{model}}}}$ 来控制正弦或余弦函数的频率，可以很好捕捉短距离和长距离的依赖关系，位置编码可视图见下图：</p><ul><li>短距离依赖关系（序列中相邻元素或位置之间的关系）：低维频率较高，能够很好地捕捉到相邻位置之间的细微变化，可以区别短距离的位置。</li><li>长距离依赖关系（序列中相隔较远的元素或位置之间的关系）：高维频率较低，能够很好地捕捉到较远维度之间的细微变化，可以区别长距离的位置。<br>当 2i 接近 $d_{model}$ 时，分母接近 10000，此时周期为 $10000*2π$</li></ul><p>类别二进制中低维数值和高维数值的变化情况：<br>让我们打印出0, 1, 2, …, 7 的二进制表示形式。 正如所看到的，每个数字、每两个数字和每四个数字上的比特值 在第一个最低位、第二个最低位和第三个最低位上分别交替。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">    print(<span class="string">f'<span class="subst">&#123;i&#125;</span>的二进制是：<span class="subst">&#123;i:&gt;<span class="number">03</span>b&#125;</span>'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Output:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 0的二进制是：000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1的二进制是：001</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2的二进制是：010</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3的二进制是：011</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4的二进制是：100</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5的二进制是：101</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 6的二进制是：110</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 7的二进制是：111</span></span><br></pre></td></tr></table></figure></p><h2 id="每个位置-pos-都是唯一的"><a href="#每个位置-pos-都是唯一的" class="headerlink" title="每个位置(pos)都是唯一的"></a>每个位置(pos)都是唯一的</h2><p>因为维度很高时，周期很大，所以，每个位置的 pos必定是唯一的。<br>再加上低维不同频率的复杂组合，使位置编码包含丰富的位置信息。</p><h2 id="为什么交错使用sin-和cos，而不能直接用其中有一个"><a href="#为什么交错使用sin-和cos，而不能直接用其中有一个" class="headerlink" title="为什么交错使用sin 和cos，而不能直接用其中有一个"></a>为什么交错使用sin 和cos，而不能直接用其中有一个</h2><p>对于原始交错情况：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">pos = np.arange(<span class="number">0</span>, <span class="number">100</span>)</span><br><span class="line">d_model = <span class="number">20</span></span><br><span class="line">PE_sin = np.sin(pos[:, np.newaxis] / <span class="number">10000</span>**(<span class="number">2</span> * np.arange(d_model // <span class="number">2</span>) / d_model))</span><br><span class="line">PE_cos = np.cos(pos[:, np.newaxis] / <span class="number">10000</span>**(<span class="number">2</span> * np.arange(d_model // <span class="number">2</span>) / d_model))</span><br><span class="line"></span><br><span class="line">PE = np.empty((pos.size, d_model))</span><br><span class="line">PE[:, <span class="number">0</span>::<span class="number">2</span>] = PE_sin</span><br><span class="line">PE[:, <span class="number">1</span>::<span class="number">2</span>] = PE_cos</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">plt.imshow(PE, aspect=<span class="string">'auto'</span>, cmap=<span class="string">'viridis'</span>)</span><br><span class="line">plt.colorbar()</span><br><span class="line">plt.title(<span class="string">'Positional Encoding (Sin and Cos)'</span>)</span><br><span class="line">plt.xlabel(<span class="string">'Encoding Dimension'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Position'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p><p><img src="/imgs/sin_cos.png"><br>可以看到，对于某一行（某一个位置）来说，相邻维度的区别会非常明显，有利于模型区别各个维度，这是因为 sin与 cos相差一个$𝜋/2$ 个相位，在同一个位置会生成不同的值。<br>若只用 sin的话，如下图所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">pos = np.arange(<span class="number">0</span>, <span class="number">100</span>)</span><br><span class="line">d_model = <span class="number">20</span></span><br><span class="line">PE_sin = np.sin(pos[:, np.newaxis] / <span class="number">10000</span>**(np.arange(d_model) / d_model))</span><br><span class="line"></span><br><span class="line">PE = np.empty((pos.size, d_model))</span><br><span class="line">PE[:, :] = PE_sin</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">plt.imshow(PE, aspect=<span class="string">'auto'</span>, cmap=<span class="string">'viridis'</span>)</span><br><span class="line">plt.colorbar()</span><br><span class="line">plt.title(<span class="string">'Positional Encoding (Sin and Cos)'</span>)</span><br><span class="line">plt.xlabel(<span class="string">'Encoding Dimension'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Position'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p><p><img src="/imgs/Figure_1.png"><br>对于高维，相邻位置区分较差。<br>另外的好处是：sin 和 cos函数在数学上是正交的，即它们在一个周期内的内积为零。这种正交性确保了它们在不同维度上的表示是独立的，可以更好地捕捉到不同位置的特征。<br>证明sin 和 cos函数在数学上是正交的：<br>No match found for heading: #证明 $ sin(x)$ 和 $ cos(x)$ 在数学上是正交的</p><h2 id="相对位置编码"><a href="#相对位置编码" class="headerlink" title="相对位置编码"></a>相对位置编码</h2><p>除了捕获绝对位置信息之外，上述的位置编码还允许模型学习得到输入序列中相对位置信息。这是因为对于任何确定的位置偏移 $\delta$，位置 $i + \delta$ 处的位置编码可以线性投影位置 $i$ 处的位置编码来表示。</p><p>这种投影的数学解释是，令 $\omega_j = \frac{1}{10000^{2j/d}}$，对于任何确定的位置偏移 $\delta$，任何一对 $(p_{i,2j}, p_{i,2j+1})$ 都可以线性投影到 $(p_{i+\delta,2j}, p_{i+\delta,2j+1})$：</p><script type="math/tex; mode=display">\begin{aligned}&\begin{bmatrix}\cos(\delta \omega_j) & \sin(\delta \omega_j) \\-\sin(\delta \omega_j) & \cos(\delta \omega_j)\end{bmatrix}\begin{bmatrix}p_{i,2j} \\p_{i,2j+1}\end{bmatrix} \\&= \begin{bmatrix}\cos(\delta \omega_j) \sin(i \omega_j) + \sin(\delta \omega_j) \cos(i \omega_j) \\-\sin(\delta \omega_j) \sin(i \omega_j) + \cos(\delta \omega_j) \cos(i \omega_j)\end{bmatrix} \\&= \begin{bmatrix}\sin((i + \delta) \omega_j) \\\cos((i + \delta) \omega_j)\end{bmatrix} \\&= \begin{bmatrix}p_{i+\delta,2j} \\p_{i+\delta,2j+1}\end{bmatrix},\end{aligned}</script><p>上面， $(p_{i,2j}, p_{i,2j+1})$ 其实可看作是坐标系中圆上的一点，而$(p_{i+\delta,2j}, p_{i+\delta,2j+1})$ 是相位相差$\delta$ 的圆上的另一点，在相同列 (同一维度)上，$(p_{i,2j}, p_{i,2j+1})$ 这些点在同一圆上，只是相位不同。<br>上面的矩阵，为<strong>旋转矩阵</strong>。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>正余弦位置编码的设计 很可能来源于 傅里叶变换。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Transformer位置编码的理解。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Transformer" scheme="https://huzhenyou.github.io/categories/Transformer/"/>
+    
+    
+      <category term="&#39;Transformer&#39;" scheme="https://huzhenyou.github.io/tags/Transformer/"/>
+    
+  </entry>
   
   <entry>
     <title>老年人自动喂饭轮椅</title>
@@ -144,13 +166,13 @@
       <category term="LLM+投资" scheme="https://huzhenyou.github.io/categories/LLM-%E6%8A%95%E8%B5%84/"/>
     
     
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
       <category term="LLM+投资" scheme="https://huzhenyou.github.io/tags/LLM-%E6%8A%95%E8%B5%84/"/>
     
       <category term="GPT-4" scheme="https://huzhenyou.github.io/tags/GPT-4/"/>
     
       <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
-    
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -220,9 +242,9 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
-    
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -304,13 +326,13 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
-    
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
       <category term="ProposalGeneration" scheme="https://huzhenyou.github.io/tags/ProposalGeneration/"/>
     
       <category term="ActivityNetChallenge2019" scheme="https://huzhenyou.github.io/tags/ActivityNetChallenge2019/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -332,9 +354,9 @@
       <category term="backbone" scheme="https://huzhenyou.github.io/categories/backbone/"/>
     
     
-      <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
-    
       <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
+      <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
     
       <category term="backbone" scheme="https://huzhenyou.github.io/tags/backbone/"/>
     
