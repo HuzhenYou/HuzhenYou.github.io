@@ -188,13 +188,13 @@
       <category term="LLM+投资" scheme="https://huzhenyou.github.io/categories/LLM-%E6%8A%95%E8%B5%84/"/>
     
     
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
       <category term="LLM+投资" scheme="https://huzhenyou.github.io/tags/LLM-%E6%8A%95%E8%B5%84/"/>
     
       <category term="GPT-4" scheme="https://huzhenyou.github.io/tags/GPT-4/"/>
     
       <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
-    
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -264,9 +264,9 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
-    
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -288,6 +288,8 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
+      <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
+    
       <category term="&#39;ActionDetection&#39;" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
       <category term="&#39;TemporalActionDetection&#39;" scheme="https://huzhenyou.github.io/tags/TemporalActionDetection/"/>
@@ -297,8 +299,6 @@
       <category term="&#39;极市直播&#39;" scheme="https://huzhenyou.github.io/tags/%E6%9E%81%E5%B8%82%E7%9B%B4%E6%92%AD/"/>
     
       <category term="TemporalActionDetection" scheme="https://huzhenyou.github.io/tags/TemporalActionDetection/"/>
-    
-      <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
       <category term="CVPR2023" scheme="https://huzhenyou.github.io/tags/CVPR2023/"/>
     
@@ -348,13 +348,13 @@
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/categories/ActionDetection/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
-    
       <category term="ActionDetection" scheme="https://huzhenyou.github.io/tags/ActionDetection/"/>
     
       <category term="ProposalGeneration" scheme="https://huzhenyou.github.io/tags/ProposalGeneration/"/>
     
       <category term="ActivityNetChallenge2019" scheme="https://huzhenyou.github.io/tags/ActivityNetChallenge2019/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
     
   </entry>
   
@@ -376,9 +376,9 @@
       <category term="backbone" scheme="https://huzhenyou.github.io/categories/backbone/"/>
     
     
-      <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
-    
       <category term="DeepLearning" scheme="https://huzhenyou.github.io/tags/DeepLearning/"/>
+    
+      <category term="LLM" scheme="https://huzhenyou.github.io/tags/LLM/"/>
     
       <category term="backbone" scheme="https://huzhenyou.github.io/tags/backbone/"/>
     
