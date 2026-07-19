@@ -1,0 +1,1 @@
+self.__BUILD_MANIFEST={__rewrites:{afterFiles:[],beforeFiles:[],fallback:[]},"/_error":["static/chunks/pages/_error-7a92967bea80186d.js"],"/resume-hz":["static/chunks/pages/resume-hz-9e49252c45db890a.js"],sortedPages:["/_app","/_error","/resume-hz"]},self.__BUILD_MANIFEST_CB&&self.__BUILD_MANIFEST_CB();
