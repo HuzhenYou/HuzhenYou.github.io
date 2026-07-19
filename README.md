@@ -1,10 +1,12 @@
 ## huzhenyou.com
 
-**当前首页**：求职简历（Next.js 静态导出，源码在 NEXUS monorepo `frontend/web/huzhenyou-resume/`）
+**当前首页**：Hexo 博客「九万里」（2026-07-19 从 `blog-archive/` 恢复回根目录）
 
-**博客**（暂时隐藏，内容完整保留未删除）：位于 `blog-archive/` 目录
+**求职简历**：`/resume-hz/`（Next.js 静态导出，源码在 NEXUS monorepo `frontend/web/huzhenyou-resume/`；页面带 `noindex,nofollow`——链接可定向分享，搜索引擎不收录）
 
-* [hexo框架](https://hexo.io/zh-cn/)（源码在 `/Users/jc/Documents/CodeFlying/DockerSpace/notebook/hexo-blog/`）
-* [NexT主题](https://github.com/huzhenyou/hexo-theme-next)
+* 博客 [hexo框架](https://hexo.io/zh-cn/)（源码在 `/Users/jc/Documents/CodeFlying/notebook/hexo-blog/`，注意不在 DockerSpace 下）+ [NexT主题](https://github.com/huzhenyou/hexo-theme-next)
+* 简历构建产物：`resume-hz/` + `_next/` + `images/resume/`；每次重建注意清理 `_next/static/` 旧 hash 目录
 
-2026-07-06：把简历页设为首页，博客整体挪进 `blog-archive/` 子目录暂存，未删除任何内容。以后想恢复博客访问，可在 `/opt/blog/blog-archive/index.html` 建软链或加导航链接。
+历史：
+- 2026-07-06 简历设为首页，博客挪入 `blog-archive/` 暂存
+- 2026-07-19 反转：博客恢复回根（豆包等已收录根路径，恢复后搜到的人看到博客而非简历）；简历迁至 `/resume-hz` 并 noindex；删除《AutoDL科学上网》一文（备案域名合规）及其全部索引残留；《hexo博客增加评论系统》留在 Hexo 源码 `_drafts/`（date 占位符未填的半成品）

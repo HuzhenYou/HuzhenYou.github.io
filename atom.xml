@@ -82,27 +82,7 @@
     
   </entry>
   
-  <entry>
-    <title>AutoDL科学上网</title>
-    <link href="https://huzhenyou.github.io//blog/2024/07/AutoDL%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91.html"/>
-    <id>https://huzhenyou.github.io//blog/2024/07/AutoDL科学上网.html</id>
-    <published>2024-07-15T19:18:53.000Z</published>
-    <updated>2024-07-16T08:24:38.620Z</updated>
-    
-    <content type="html"><![CDATA[<p>AutoDL科学上网解决方案记录。</p><a id="more"></a><hr><h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><p>一共两种方法，一直直接用clash-for-AutoDL，一种也是用的 clash，但更偏向于底层。<br>当你配置完成，显示成功后，如果 ping google.com不通的话，一定要再试下wget google.com，有的服务器不支持 ping🤦‍♂️。<br>注意，有的订阅网址是有次数限制的，如果你一直实验，一直不成功，看下是不是订阅网址已经更新。</p><h1 id="clash-for-AutoDL"><a href="#clash-for-AutoDL" class="headerlink" title="clash-for-AutoDL"></a>clash-for-AutoDL</h1><p>不知道对其他平台的服务器是否适用。<br><a href="https://github.com/VocabVictor/clash-for-AutoDL" target="_blank" rel="noopener">GitHub - VocabVictor/clash-for-AutoDL: AutoDL平台服务器适配梯子， 使用 Clash 作为代理工具</a></p><h1 id="利用clash-偏向于底层"><a href="#利用clash-偏向于底层" class="headerlink" title="利用clash 偏向于底层"></a>利用clash 偏向于底层</h1><p>这个方法应该对所有服务器都适用。<br><a href="https://zhuanlan.zhihu.com/p/685018159" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/685018159</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;AutoDL科学上网解决方案记录。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="科学上网" scheme="https://huzhenyou.github.io/categories/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"/>
-    
-    
-      <category term="&#39;科学上网&#39;" scheme="https://huzhenyou.github.io/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"/>
-    
-  </entry>
+  
   
   <entry>
     <title>位置编码</title>
