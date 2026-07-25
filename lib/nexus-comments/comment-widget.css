@@ -1,0 +1,408 @@
+/**
+ * NexusComments 默认样式
+ *
+ * 约定：
+ *  1. 所有可视属性走 CSS 变量 --nxc-*，产品覆盖变量即可换肤，不必改这里
+ *  2. 类名全部 nxc- 前缀，选择器只从 .nxc-root 往下写，不污染宿主页面
+ *  3. 强调色用中性蓝（项目规矩：K 线图之外的 UI 不用绿色）
+ */
+
+.nxc-root {
+  /* 颜色 */
+  --nxc-bg: #ffffff;
+  --nxc-bg-subtle: #f7f8fa;
+  --nxc-text: #1f2328;
+  --nxc-text-secondary: #6b7280;
+  --nxc-text-muted: #9ca3af;
+  --nxc-border: #e5e7eb;
+  --nxc-accent: #3b6fd4;
+  --nxc-accent-hover: #2f5cb3;
+  --nxc-accent-text: #ffffff;
+  --nxc-link: #3b6fd4;
+  --nxc-danger: #d14343;
+  --nxc-notice: #3b6fd4;
+
+  /* 形状 / 字体 / 间距 */
+  --nxc-radius: 8px;
+  --nxc-radius-sm: 6px;
+  --nxc-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --nxc-font-size: 14px;
+  --nxc-font-size-sm: 12.5px;
+  --nxc-font-size-lg: 16px;
+  --nxc-line-height: 1.7;
+  --nxc-gap: 12px;
+  --nxc-gap-lg: 20px;
+  --nxc-avatar-size: 36px;
+  --nxc-avatar-size-sm: 28px;
+
+  box-sizing: border-box;
+  color: var(--nxc-text);
+  background: var(--nxc-bg);
+  font-family: var(--nxc-font);
+  font-size: var(--nxc-font-size);
+  line-height: var(--nxc-line-height);
+}
+
+.nxc-root *,
+.nxc-root *::before,
+.nxc-root *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- 标题行 ---------- */
+
+.nxc-root .nxc-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--nxc-gap-lg);
+}
+
+.nxc-root .nxc-count {
+  font-size: var(--nxc-font-size-lg);
+  font-weight: 600;
+  color: var(--nxc-text);
+}
+
+/* ---------- 表单 ---------- */
+
+.nxc-root .nxc-form {
+  margin-bottom: var(--nxc-gap-lg);
+}
+
+.nxc-root .nxc-meta-row {
+  display: flex;
+  gap: var(--nxc-gap);
+  margin-bottom: 10px;
+}
+
+.nxc-root .nxc-input {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: var(--nxc-font-size);
+  color: var(--nxc-text);
+  background: var(--nxc-bg-subtle);
+  border: 1px solid transparent;
+  border-radius: var(--nxc-radius-sm);
+  outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.nxc-root .nxc-input:focus {
+  background: var(--nxc-bg);
+  border-color: var(--nxc-accent);
+}
+
+.nxc-root .nxc-input::placeholder,
+.nxc-root .nxc-textarea::placeholder {
+  color: var(--nxc-text-muted);
+}
+
+.nxc-root .nxc-textarea {
+  display: block;
+  width: 100%;
+  min-height: 96px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: var(--nxc-font-size);
+  line-height: var(--nxc-line-height);
+  color: var(--nxc-text);
+  background: var(--nxc-bg-subtle);
+  border: 1px solid transparent;
+  border-radius: var(--nxc-radius);
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.nxc-root .nxc-textarea:focus {
+  background: var(--nxc-bg);
+  border-color: var(--nxc-accent);
+}
+
+/* 蜜罐：移出可视区域，但不用 display:none —— 部分蜜罐检测型 bot 会跳过 display:none 字段 */
+.nxc-root .nxc-hp {
+  position: absolute !important;
+  left: -9999px !important;
+  top: auto !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nxc-root .nxc-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.nxc-root .nxc-submit {
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: var(--nxc-font-size);
+  font-weight: 500;
+  color: var(--nxc-accent-text);
+  background: var(--nxc-accent);
+  border: none;
+  border-radius: var(--nxc-radius-sm);
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.nxc-root .nxc-submit:hover:not(:disabled) {
+  background: var(--nxc-accent-hover);
+}
+
+.nxc-root .nxc-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.nxc-root .nxc-cancel {
+  padding: 8px 14px;
+  font-family: inherit;
+  font-size: var(--nxc-font-size);
+  color: var(--nxc-text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--nxc-radius-sm);
+  cursor: pointer;
+}
+
+.nxc-root .nxc-cancel:hover {
+  color: var(--nxc-text);
+}
+
+.nxc-root .nxc-msg {
+  margin-top: 8px;
+  font-size: var(--nxc-font-size-sm);
+}
+
+.nxc-root .nxc-msg-error {
+  color: var(--nxc-danger);
+}
+
+.nxc-root .nxc-msg-notice {
+  color: var(--nxc-notice);
+}
+
+/* ---------- 列表 ---------- */
+
+.nxc-root .nxc-list {
+  display: block;
+}
+
+.nxc-root .nxc-item {
+  display: flex;
+  gap: var(--nxc-gap);
+  padding: var(--nxc-gap) 0;
+  border-top: 1px solid var(--nxc-border);
+}
+
+.nxc-root .nxc-item:first-child {
+  border-top: none;
+}
+
+.nxc-root .nxc-avatar {
+  flex: 0 0 auto;
+  width: var(--nxc-avatar-size);
+  height: var(--nxc-avatar-size);
+  border-radius: 50%;
+  background: var(--nxc-bg-subtle);
+  object-fit: cover;
+}
+
+.nxc-root .nxc-avatar-sm {
+  width: var(--nxc-avatar-size-sm);
+  height: var(--nxc-avatar-size-sm);
+}
+
+.nxc-root .nxc-item-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nxc-root .nxc-item-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.nxc-root .nxc-author {
+  font-weight: 600;
+  color: var(--nxc-text);
+  text-decoration: none;
+}
+
+.nxc-root .nxc-author-link {
+  color: var(--nxc-link);
+}
+
+.nxc-root .nxc-author-link:hover {
+  text-decoration: underline;
+}
+
+.nxc-root .nxc-reply-to {
+  font-size: var(--nxc-font-size-sm);
+  color: var(--nxc-text-secondary);
+}
+
+.nxc-root .nxc-time {
+  font-size: var(--nxc-font-size-sm);
+  color: var(--nxc-text-muted);
+}
+
+.nxc-root .nxc-content {
+  /* 换行由 CSS 呈现，JS 侧不做 \n -> <br> 转换（XSS 铁律） */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: var(--nxc-text);
+}
+
+.nxc-root .nxc-reply-btn {
+  margin-top: 4px;
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--nxc-font-size-sm);
+  color: var(--nxc-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nxc-root .nxc-reply-btn:hover {
+  color: var(--nxc-accent);
+}
+
+.nxc-root .nxc-reply-slot:not(:empty) {
+  margin-top: 10px;
+}
+
+.nxc-root .nxc-form-reply {
+  padding: var(--nxc-gap);
+  background: var(--nxc-bg-subtle);
+  border-radius: var(--nxc-radius);
+}
+
+.nxc-root .nxc-form-reply .nxc-input,
+.nxc-root .nxc-form-reply .nxc-textarea {
+  background: var(--nxc-bg);
+}
+
+.nxc-root .nxc-form-reply .nxc-textarea {
+  min-height: 72px;
+}
+
+/* ---------- 二级回复 ---------- */
+
+.nxc-root .nxc-replies:not(:empty) {
+  margin-top: var(--nxc-gap);
+  padding-left: var(--nxc-gap);
+  border-left: 2px solid var(--nxc-border);
+}
+
+.nxc-root .nxc-reply-item {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+/* ---------- 状态 ---------- */
+
+.nxc-root .nxc-empty,
+.nxc-root .nxc-loading {
+  padding: var(--nxc-gap-lg) 0;
+  color: var(--nxc-text-muted);
+  text-align: center;
+}
+
+.nxc-root .nxc-list-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: var(--nxc-gap-lg) 0;
+  color: var(--nxc-text-secondary);
+}
+
+.nxc-root .nxc-retry {
+  padding: 4px 12px;
+  font-family: inherit;
+  font-size: var(--nxc-font-size-sm);
+  color: var(--nxc-accent);
+  background: transparent;
+  border: 1px solid var(--nxc-border);
+  border-radius: var(--nxc-radius-sm);
+  cursor: pointer;
+}
+
+.nxc-root .nxc-retry:hover {
+  border-color: var(--nxc-accent);
+}
+
+.nxc-root .nxc-load-more {
+  display: block;
+  width: 100%;
+  margin-top: var(--nxc-gap);
+  padding: 9px 0;
+  font-family: inherit;
+  font-size: var(--nxc-font-size);
+  color: var(--nxc-text-secondary);
+  background: transparent;
+  border: 1px solid var(--nxc-border);
+  border-radius: var(--nxc-radius-sm);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.nxc-root .nxc-load-more:hover:not(:disabled) {
+  color: var(--nxc-accent);
+  border-color: var(--nxc-accent);
+}
+
+.nxc-root .nxc-load-more:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- 响应式：窄屏 meta 输入堆叠 ---------- */
+
+@media (max-width: 560px) {
+  .nxc-root .nxc-meta-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nxc-root {
+    --nxc-avatar-size: 32px;
+    --nxc-avatar-size-sm: 26px;
+    --nxc-gap-lg: 16px;
+  }
+}
+
+/* ---------- 暗色模式 ---------- */
+
+@media (prefers-color-scheme: dark) {
+  .nxc-root {
+    --nxc-bg: #16181c;
+    --nxc-bg-subtle: #202329;
+    --nxc-text: #e6e8eb;
+    --nxc-text-secondary: #9aa3ad;
+    --nxc-text-muted: #6f7883;
+    --nxc-border: #2b2f36;
+    --nxc-accent: #5b8ce8;
+    --nxc-accent-hover: #7aa3ef;
+    --nxc-accent-text: #0f1115;
+    --nxc-link: #7aa3ef;
+    --nxc-danger: #e06c6c;
+    --nxc-notice: #7aa3ef;
+  }
+}
