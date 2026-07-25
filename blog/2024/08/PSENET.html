@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/angry_bird_16.ico?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+  <meta name="google-site-verification" content="3dBwV8OlVnNtYzxCLCFp2w8WMpuSecV7vBmA_zrf9j4">
+  <meta name="baidu-site-verification" content="eoUZD1BDx6">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":"default"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+<link rel="stylesheet" href="/css/custom.css">
+
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      "HTML-CSS": { availableFonts: ["TeX"] },
+      SVG: { font: "TeX" }
+    });
+  </script>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-python.min.js"></script> <!-- Python支持 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      Prism.highlightAll();
+    });
+  </script>
+
+
+
+
+  <meta name="description" content="PSENet实现细节的详细解读。">
+<meta name="keywords" content="&#39;文字定位&#39;,&#39;FPN&#39;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PSENet详解">
+<meta property="og:url" content="https://huzhenyou.com/blog/2024/08/PSENET.html">
+<meta property="og:site_name" content="九万里">
+<meta property="og:description" content="PSENet实现细节的详细解读。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240820145847.png">
+<meta property="og:image" content="https://huzhenyou.com/imgs/lw65.png">
+<meta property="og:image" content="https://huzhenyou.com/imgs/lw107.png">
+<meta property="og:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240812164532.png">
+<meta property="og:updated_time" content="2024-08-20T07:32:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PSENet详解">
+<meta name="twitter:description" content="PSENet实现细节的详细解读。">
+<meta name="twitter:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240820145847.png">
+  <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
+  <link rel="canonical" href="https://huzhenyou.com/blog/2024/08/PSENET">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>PSENet详解 | 九万里</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  <meta name="google-site-verification" content="WRvG1tIE8Ae2e_jnlkkVO8Yt-CFtzc_lei8TGPXGML8" />
+  <meta name="google-site-verification" content="OstEGiE3ESciB7IL56VbUytOmP13jX5PDo65XcI4v8k" />
+  <meta name="msvalidate.01" content="8F93DB9D93C13B852661088455093440" />
+  <meta name="baidu-site-verification" content="codeva-gbOLxIULmM" />
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">九万里</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">虚怀若谷，大智若愚</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+    
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="https://huzhenyou.com/blog/2024/08/PSENET.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HuzhenYou">
+      <meta itemprop="description" content="虚怀若谷，大智若愚">
+      <meta itemprop="image" content="/images/angry_bird_128.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="九万里">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">PSENet详解
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2024-08-20 15:32:40 / 修改时间：15:32:41" itemprop="dateCreated datePublished" datetime="2024-08-20T15:32:40+08:00">2024-08-20</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/文字定位/" itemprop="url" rel="index"><span itemprop="name">文字定位</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/blog/2024/08/PSENET.html#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/blog/2024/08/PSENET.html" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>15k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>25 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>PSENet实现细节的详细解读。</p>
+<a id="more"></a>
+<hr>
+<h1 id="主要想法"><a href="#主要想法" class="headerlink" title="主要想法"></a>主要想法</h1><ol>
+<li>主要是解决 距离较近的 文字之间的定位问题。</li>
+<li>耗时主要用在后处理上： 渐进放大。而DB就是为了解决该问题，设计了一个端到端的架构。这和现在DETR去替代Faster Rnn这类需要生成anchor,NMS,RoI Align等处理的网络类似。现在都 朝着 端到端的网络 演变。</li>
+<li>每个文字区域，生成7个kernel,然后从里往外放大。</li>
+<li>文本贡献：PSENET是可以检测任意形状的文字、可分离 距离很近的文字、且效果很好的 文字检测算法。</li>
+<li>缺点：  <ol>
+<li>慢。</li>
+</ol>
+</li>
+<li>时效：对于生产图片，文字越多越慢：{‘平均值’: 1.258, ‘50%百分位’: 1.167, ‘90%百分位’: 1.98, ‘95%百分位’: 2.314, ‘99%百分位’: 3.181, ‘最小值’: 0.264, ‘最大值’: 7.922}</li>
+</ol>
+<h1 id="渐进放大算法"><a href="#渐进放大算法" class="headerlink" title="渐进放大算法"></a>渐进放大算法</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>广度优先搜索（要看源码）<br>代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> queue <span class="keyword">as</span> Queue</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pse</span><span class="params">(kernals, min_area)</span>:</span></span><br><span class="line">    kernal_num = len(kernals) <span class="comment"># 7，渐进放大的层数</span></span><br><span class="line">    pred = np.zeros(kernals[<span class="number">0</span>].shape, dtype=<span class="string">'int32'</span>) <span class="comment"># shape:(1440, 1920)</span></span><br><span class="line">    </span><br><span class="line">    label_num, label = cv2.connectedComponents(kernals[kernal_num - <span class="number">1</span>], connectivity=<span class="number">4</span>) <span class="comment"># 这里的lable对应最小的 kernel</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    kernals[kernal_num - 1]为最小的核。</span></span><br><span class="line"><span class="string">    connectivity=4表示“上下左右”取联通域，connectivity=8表示“上下左右及对角线”取联通域。</span></span><br><span class="line"><span class="string">    这里label_num: 216 为联通区域数量，包括背景。</span></span><br><span class="line"><span class="string">    label: 与图像尺寸相同，背景像素为0，其他联通区域的标签值为1，2，3，...</span></span><br><span class="line"><span class="string">        array([[ 1,  1,  1, ...,  0,  0,  0],</span></span><br><span class="line"><span class="string">        [ 1,  1,  1, ...,  0,  0,  0],</span></span><br><span class="line"><span class="string">        [ 1,  1,  1, ...,  0,  0,  0],</span></span><br><span class="line"><span class="string">        ...,</span></span><br><span class="line"><span class="string">        [ 0,  0,  0, ..., 39, 39, 39],</span></span><br><span class="line"><span class="string">        [ 0,  0,  0, ..., 39, 39, 39],</span></span><br><span class="line"><span class="string">        [ 0,  0,  0, ..., 39, 39, 39]], dtype=int32)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        torch.max(torch.Tensor(label)): tensor(215.)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># 联通域面积小于min_area，则设为背景</span></span><br><span class="line">    <span class="keyword">for</span> label_idx <span class="keyword">in</span> range(<span class="number">1</span>, label_num):</span><br><span class="line">        <span class="keyword">if</span> np.sum(label == label_idx) &lt; min_area:</span><br><span class="line">            label[label == label_idx] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建了一个先进先出（FIFO）的队列, maxsize 表示可以容纳的最大元素数量。maxsize = 0表示可以无限制地添加元素</span></span><br><span class="line">    queue = Queue.Queue(maxsize = <span class="number">0</span>)</span><br><span class="line">    next_queue = Queue.Queue(maxsize = <span class="number">0</span>)</span><br><span class="line">    points = np.array(np.where(label &gt; <span class="number">0</span>)).transpose((<span class="number">1</span>, <span class="number">0</span>)) <span class="comment"># shape: (391452, 2), 对应最小的 kernerl</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 最小kernel内的像素级操作，耗时严重</span></span><br><span class="line">    <span class="keyword">for</span> point_idx <span class="keyword">in</span> range(points.shape[<span class="number">0</span>]):</span><br><span class="line">        x, y = points[point_idx, <span class="number">0</span>], points[point_idx, <span class="number">1</span>]</span><br><span class="line">        l = label[x, y]</span><br><span class="line">        queue.put((x, y, l)) <span class="comment"># 对应最小的 kernerl</span></span><br><span class="line">        pred[x, y] = l <span class="comment"># 与label一样，应该直接深拷贝</span></span><br><span class="line"></span><br><span class="line">    dx = [<span class="number">-1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line">    dy = [<span class="number">0</span>, <span class="number">0</span>, <span class="number">-1</span>, <span class="number">1</span>]</span><br><span class="line">    <span class="keyword">for</span> kernal_idx <span class="keyword">in</span> range(kernal_num - <span class="number">2</span>, <span class="number">-1</span>, <span class="number">-1</span>):</span><br><span class="line">        kernal = kernals[kernal_idx].copy() <span class="comment"># 外层的 kernel, 对于 kernel，是二值化矩阵，即非 0 即 1</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> queue.empty():</span><br><span class="line">            (x, y, l) = queue.get()</span><br><span class="line">            is_edge = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">                tmpx = x + dx[j]</span><br><span class="line">                tmpy = y + dy[j]</span><br><span class="line">                <span class="keyword">if</span> tmpx &lt; <span class="number">0</span> <span class="keyword">or</span> tmpx &gt;= kernal.shape[<span class="number">0</span>] <span class="keyword">or</span> tmpy &lt; <span class="number">0</span> <span class="keyword">or</span> tmpy &gt;= kernal.shape[<span class="number">1</span>]:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">if</span> kernal[tmpx, tmpy] == <span class="number">0</span> <span class="keyword">or</span> pred[tmpx, tmpy] &gt; <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">                queue.put((tmpx, tmpy, l)) <span class="comment">#  kernal[tmpx, tmpy] == 1 and pred[tmpx, tmpy] == 0</span></span><br><span class="line">                pred[tmpx, tmpy] = l</span><br><span class="line">                is_edge = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">if</span> is_edge:</span><br><span class="line">                next_queue.put((x, y, l))</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># kernal[pred &gt; 0] = 0</span></span><br><span class="line">        queue, next_queue = next_queue, queue</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> pred</span><br></pre></td></tr></table></figure></p>
+<p>求连通域：    <code>label_num, label = cv2.connectedComponents(kernals[kernal_num - 1], connectivity=4)</code></p>
+<p>流程图：<br><img src="/imgs/Pasted image 20240820145847.png"></p>
+<h1 id="基网络：FPN"><a href="#基网络：FPN" class="headerlink" title="基网络：FPN"></a>基网络：FPN</h1><p><img src="/imgs/lw65.png"><br>网络结构图(其中的fpn网络重点体会)：    </p>
+<p><img src="/imgs/lw107.png"></p>
+<h1 id="标签生成"><a href="#标签生成" class="headerlink" title="标签生成"></a>标签生成</h1><ol>
+<li>利用Vatti裁剪算法(Vatti clipping algorithm)获得训练时的不同 kernels.</li>
+<li><p>kernel $p_n$和$p_i$ 间的 mergin $d_i$ 计算规则(Area(·) ：计算面积的函数； Perimeter(·)：计算周长的函数)：      <script type="math/tex">d_i = \frac{\text{Area}(p_n) \times (1 - r_i^2)}{\text{Perimeter}(p_n)}</script></p>
+<p> 其中：</p>
+<ul>
+<li>$d_i$  表示为了获得缩小的多边形  $p_i$，需要从原始多边形  $p_n$  的边界向内缩小的距离。</li>
+<li>$Area(p_n)$  是计算多边形  $p_n$  面积的函数。</li>
+<li>$r_i$  是缩小多边形  $p_i$  的缩放比例。 </li>
+<li><p>$Perimeter(p_n)$  是计算多边形  $p_n$  周长的函数。</p>
+<p><strong>公式 (1) 本身不是从其他公式推导出来的，而是根据面积和周长的几何关系定义的。</strong>  </p>
+</li>
+</ul>
+</li>
+<li><p>获得 线性 等差 缩放比例（m是最小的缩放比例，n是kernel个数， 其实就是在m到1之间等差求各个缩放比例， ）：      <script type="math/tex">r_i = 1 - (1 - m) \times \frac{n - i}{n - 1}</script><br>这里是过两点的直线，即(1, m) 与 (n, 1), 分别表示最小 kernel缩放比例为 m (0&lt;m&lt;1)，最大kernel缩放比例为 1.<br>对于这个函数，自变量为$i$.<br>(源码中m=0.4)</p>
+</li>
+</ol>
+<h2 id="理论基础"><a href="#理论基础" class="headerlink" title="理论基础"></a>理论基础</h2><h3 id="r-i-公式为什么是这个样子？"><a href="#r-i-公式为什么是这个样子？" class="headerlink" title="$r_i$ 公式为什么是这个样子？"></a>$r_i$ 公式为什么是这个样子？</h3><h4 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h4><ol>
+<li><p><strong>尺度比率 $r_i$</strong>：</p>
+<ul>
+<li>$r_i$ 表示第 $i$ 个真值掩码的尺度比率。</li>
+</ul>
+</li>
+<li><p><strong>参数</strong>：</p>
+<ul>
+<li>$n$：总的尺度数。</li>
+<li>$i$：当前尺度的索引（从 1 到 $n$）。</li>
+<li>$m$：最小尺度比率，取值在 (0, 1]。</li>
+</ul>
+</li>
+</ol>
+<h4 id="详细说明"><a href="#详细说明" class="headerlink" title="详细说明"></a>详细说明</h4><ol>
+<li><p><strong>$r_i$ 的计算</strong>：</p>
+<ul>
+<li>公式的目的是生成从最小尺度（例如核的核心部分）到最大尺度（完整的文本实例）的不同尺度的真值掩码。</li>
+<li>通过调整 $n$ 和 $m$ 的值，可以控制生成的掩码数量和每个掩码的缩小程度。</li>
+</ul>
+</li>
+<li><p><strong>公式推导</strong>：</p>
+<ul>
+<li>当 $i = 1$ 时，$r_1$ 对应最小尺度，即 $r_1 = m$。</li>
+<li>当 $i = n$ 时，$r_n$ 对应最大尺度，即 $r_n = 1$。</li>
+<li>中间的尺度按照线性插值计算，从最小的 $r_1$ 到最大的 $r_n$ 逐渐增加。</li>
+</ul>
+</li>
+</ol>
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><ul>
+<li>在生成不同尺度的真值掩码时，通过使用 Vatti clipping algorithm 逐步缩小多边形，得到不同尺度的多边形 $p_i$。</li>
+<li>这些多边形被转换成0/1二进制掩码，作为训练中的分割标签。</li>
+</ul>
+<p>公式 $r_i$ 确保了生成的每个掩码都能够准确地表示文本实例的不同尺度，从而在训练过程中逐步学习和扩展这些实例。</p>
+<h3 id="r-i-在公式-d-i-中的作用"><a href="#r-i-在公式-d-i-中的作用" class="headerlink" title="$r_i$ 在公式 $d_i$ 中的作用"></a>$r_i$ 在公式 $d_i$ 中的作用</h3><p>在公式 $d_i$ 中，尺度比率 $r_i$ 的作用是用于计算从原始多边形 $p_n$ 缩小得到的多边形 $p_i$ 的缩小边距 $d_i$。具体公式如下：</p>
+<h4 id="公式-d-i"><a href="#公式-d-i" class="headerlink" title="公式 $d_i$"></a>公式 $d_i$</h4><script type="math/tex; mode=display">
+d_i = \frac{\text{Area}(p_n) \times (1 - r_i^2)}{\text{Perimeter}(p_n)}</script><h4 id="解释-1"><a href="#解释-1" class="headerlink" title="解释"></a>解释</h4><ol>
+<li><p><strong>缩小边距 $d_i$</strong>：</p>
+<ul>
+<li>$d_i$ 表示原始多边形 $p_n$ 缩小到多边形 $p_i$ 所需的边距。</li>
+</ul>
+</li>
+<li><p><strong>参数</strong>：</p>
+<ul>
+<li>$\text{Area}(p_n)$：原始多边形 $p_n$ 的面积。</li>
+<li>$\text{Perimeter}(p_n)$：原始多边形 $p_n$ 的周长。</li>
+<li>$r_i$：尺度比率，计算公式为 $r_i = 1 - (1 - m) \times \frac{n - i}{n - 1}$。</li>
+</ul>
+</li>
+</ol>
+<h4 id="详细说明-1"><a href="#详细说明-1" class="headerlink" title="详细说明"></a>详细说明</h4><ol>
+<li><p><strong>$r_i$ 的计算</strong>：</p>
+<ul>
+<li>公式的目的是生成从最小尺度（例如核的核心部分）到最大尺度（完整的文本实例）的不同尺度的真值掩码。</li>
+<li>通过调整 $n$ 和 $m$ 的值，可以控制生成的掩码数量和每个掩码的缩小程度。</li>
+</ul>
+</li>
+<li><p><strong>公式推导</strong>：</p>
+<ul>
+<li>当 $i = 1$ 时，$r_1$ 对应最小尺度，即 $r_1 = m$。</li>
+<li>当 $i = n$ 时，$r_n$ 对应最大尺度，即 $r_n = 1$。</li>
+<li>中间的尺度按照线性插值计算，从最小的 $r_1$ 到最大的 $r_n$ 逐渐增加。</li>
+</ul>
+</li>
+</ol>
+<h4 id="应用-1"><a href="#应用-1" class="headerlink" title="应用"></a>应用</h4><ul>
+<li>在生成不同尺度的真值掩码时，通过使用 Vatti clipping algorithm 逐步缩小多边形，得到不同尺度的多边形 $p_i$。</li>
+<li>这些多边形被转换成0/1二进制掩码，作为训练中的分割标签。</li>
+</ul>
+<p>公式 $r_i$ 确保了生成的每个掩码都能够准确地表示文本实例的不同尺度，从而在训练过程中逐步学习和扩展这些实例。</p>
+<h3 id="为什么最后要除以-text-Perimeter-p-n-呢"><a href="#为什么最后要除以-text-Perimeter-p-n-呢" class="headerlink" title="为什么最后要除以$\text{Perimeter}(p_n)$呢"></a>为什么最后要除以$\text{Perimeter}(p_n)$呢</h3><p>将缩小边距 $d_i$ 除以多边形 $p_n$ 的周长（Perimeter）是为了使缩小过程中的面积变化与多边形的大小成比例，确保缩小边距与多边形的形状和大小相适应。这一步的目的是规范缩小的程度，使得计算出的缩小边距在不同多边形形状和大小下都能合理应用。以下是更详细的解释：</p>
+<h4 id="公式-d-i-1"><a href="#公式-d-i-1" class="headerlink" title="公式 $d_i$"></a>公式 $d_i$</h4><script type="math/tex; mode=display">
+d_i = \frac{\text{Area}(p_n) \times (1 - r_i^2)}{\text{Perimeter}(p_n)}</script><h4 id="详细解释"><a href="#详细解释" class="headerlink" title="详细解释"></a>详细解释</h4><ol>
+<li><p><strong>面积变化</strong>：</p>
+<ul>
+<li>$\text{Area}(p_n) \times (1 - r_i^2)$ 表示从原始多边形 $p_n$ 到缩小多边形 $p_i$ 的面积变化量。</li>
+<li>$(1 - r_i^2)$ 是一个比例因子，表示缩小后的多边形面积相对于原始多边形面积的减少比例。</li>
+</ul>
+</li>
+<li><p><strong>规范缩小程度</strong>：</p>
+<ul>
+<li>多边形的周长（Perimeter）表示了多边形的边界长度，它反映了多边形的形状和大小。</li>
+<li>将面积变化量除以周长可以将面积变化转换为边界上的距离变化，使得缩小的边距 $d_i$ 能够合理地应用于多边形的每个边。</li>
+<li>这种做法确保了无论多边形的形状和大小如何，缩小边距 $d_i$ 都能保持合理的缩小比例，不会因为多边形的大小或形状不同而导致不合理的缩小结果。</li>
+</ul>
+</li>
+</ol>
+<h4 id="举例说明"><a href="#举例说明" class="headerlink" title="举例说明"></a>举例说明</h4><p>假设有两个不同大小的矩形，虽然它们的面积变化比例相同，但如果直接使用面积变化来计算缩小边距，较大的矩形会缩小得更多，而较小的矩形会缩小得较少。通过将面积变化量除以周长，可以规范化这个缩小过程，使得不同大小和形状的多边形都能合理地缩小。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>将缩小边距 $d_i$ 除以多边形的周长是为了将面积变化合理地转换为边界上的距离变化，确保缩小边距在不同形状和大小的多边形上都能得到合理应用，从而保证缩小过程的一致性和合理性。</p>
+<h3 id="面积变化除以边界距离，这个有由来吗？有理论支撑吗"><a href="#面积变化除以边界距离，这个有由来吗？有理论支撑吗" class="headerlink" title="面积变化除以边界距离，这个有由来吗？有理论支撑吗"></a>面积变化除以边界距离，这个有由来吗？有理论支撑吗</h3><p>将面积变化除以边界长度来确定缩小边距在计算几何中是有理论支撑的，尤其是在涉及到形状缩放和多边形裁剪的算法中。这个方法主要基于以下几点考虑：</p>
+<h4 id="理论基础-1"><a href="#理论基础-1" class="headerlink" title="理论基础"></a>理论基础</h4><ol>
+<li><p><strong>等比例缩小</strong>：</p>
+<ul>
+<li>对于一个多边形，如果希望其在缩小过程中保持形状不变，那么每个边的缩小应该是等比例的。</li>
+<li>将面积变化除以周长，能够计算出每个单位长度边的缩小量，从而使整个多边形均匀地缩小。</li>
+</ul>
+</li>
+<li><p><strong>几何变换的均匀性</strong>：</p>
+<ul>
+<li>在几何变换中，特别是多边形的缩放或缩小操作中，保持边界的均匀性和比例关系是关键。</li>
+<li>面积变化量反映了整体的缩小程度，而周长则提供了边界的总长度，将两者结合可以确保缩小边距与多边形的大小成正比。</li>
+</ul>
+</li>
+</ol>
+<h4 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h4><ol>
+<li><p><strong>Vatti裁剪算法</strong>：</p>
+<ul>
+<li>Vatti裁剪算法是处理复杂多边形（包括凹多边形和自相交多边形）的常用算法。它通过迭代地缩小多边形来生成不同尺度的形状。</li>
+<li>在该算法中，通过将面积变化量除以周长来计算缩小边距，确保缩小过程中的每一步都是均匀且成比例的。</li>
+</ul>
+</li>
+<li><p><strong>图像处理和计算机视觉中的分割</strong>：</p>
+<ul>
+<li>在图像分割中，特别是处理文本检测和实例分割时，需要对目标区域进行逐步缩小和扩展。</li>
+<li>使用面积变化和周长的关系来计算缩小边距，有助于保持目标区域的几何特性，从而提高分割的精度和鲁棒性。</li>
+</ul>
+</li>
+</ol>
+<h4 id="数学解释"><a href="#数学解释" class="headerlink" title="数学解释"></a>数学解释</h4><p>设原始多边形的面积为 $A_n$，周长为 $P_n$。缩小后的多边形面积为 $A_i = r_i^2 \times A_n$，其中 $r_i$ 是尺度比率。面积的减少量为 $A_n - A_i = A_n \times (1 - r_i^2)$。</p>
+<p>将这个面积变化量均匀分布到多边形的每个边上，即除以周长 $P_n$，得到缩小边距：</p>
+<script type="math/tex; mode=display">
+d_i = \frac{A_n \times (1 - r_i^2)}{P_n}</script><h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>这种计算方法通过结合面积变化和周长，确保了缩小过程中的均匀性和比例一致性，具有实际应用中的理论支撑和数学基础。这种方法广泛应用于计算几何和图像处理领域，特别是在需要保持形状一致性的缩放操作中。</p>
+<h1 id="Train"><a href="#Train" class="headerlink" title="Train"></a>Train</h1><h2 id="Dataloader"><a href="#Dataloader" class="headerlink" title="Dataloader"></a>Dataloader</h2><h3 id="random-scale"><a href="#random-scale" class="headerlink" title="random_scale"></a>random_scale</h3><ul>
+<li>训练时 最长边为 1280.</li>
+<li>然后随机缩放至[0.5, 1.0, 2.0, 3.0]</li>
+<li>如果缩放后最小边小于 640，这以(640+10)作为 最小边的缩放比例。</li>
+</ul>
+<h3 id="填充文字区域"><a href="#填充文字区域" class="headerlink" title="填充文字区域"></a>填充文字区域</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cv2.drawContours(gt_text, [bboxes[i]], <span class="number">-1</span>, i + <span class="number">1</span>, <span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># gt_text：目标图像，函数将在此图像上绘制轮廓。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># [bboxes[i]]：轮廓列表，这里是一个包含单个轮廓的列表。bboxes[i] 是一个轮廓，通常是一个点的数组。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -1：轮廓索引。如果为负值（如 -1），则绘制所有轮廓。这里因为列表中只有一个轮廓，所以绘制该轮廓。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># i + 1：颜色或灰度值。这里使用 i + 1 作为颜色值。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -1：轮廓厚度。如果为负值（如 -1），则填充轮廓内部。</span></span><br></pre></td></tr></table></figure>
+<h3 id="生成-kernels"><a href="#生成-kernels" class="headerlink" title="生成 kernels"></a>生成 kernels</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dist</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> np.sqrt(np.sum((a - b) ** <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">perimeter</span><span class="params">(bbox)</span>:</span></span><br><span class="line">    <span class="string">"""get the sum of the distance of points.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    peri = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(bbox.shape[<span class="number">0</span>]):</span><br><span class="line">        peri += dist(bbox[i], bbox[(i + <span class="number">1</span>) % bbox.shape[<span class="number">0</span>]])</span><br><span class="line">    <span class="keyword">return</span> peri</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">shrink</span><span class="params">(bboxes, rate, max_shr=<span class="number">20</span>)</span>:</span></span><br><span class="line">    rate = rate * rate</span><br><span class="line">    shrinked_bboxes = []</span><br><span class="line">    <span class="keyword">for</span> bbox <span class="keyword">in</span> bboxes:</span><br><span class="line">        area = plg.Polygon(bbox).area() <span class="comment"># get the area of the polygon</span></span><br><span class="line">        peri = perimeter(bbox) <span class="comment"># get the perimeter of the polygon</span></span><br><span class="line"></span><br><span class="line">        pco = pyclipper.PyclipperOffset() <span class="comment"># create a PyclipperOffset object</span></span><br><span class="line">        pco.AddPath(bbox, pyclipper.JT_ROUND, pyclipper.ET_CLOSEDPOLYGON) <span class="comment"># add the polygon to the object</span></span><br><span class="line">        offset = min((int)(area * (<span class="number">1</span> - rate) / (peri + <span class="number">0.001</span>) + <span class="number">0.5</span>), max_shr)</span><br><span class="line">        </span><br><span class="line">        shrinked_bbox = pco.Execute(-offset)</span><br><span class="line">        <span class="keyword">if</span> len(shrinked_bbox) == <span class="number">0</span>:</span><br><span class="line">            shrinked_bboxes.append(bbox)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        </span><br><span class="line">        shrinked_bbox = np.array(shrinked_bbox)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> shrinked_bbox.shape[<span class="number">0</span>] &lt;= <span class="number">2</span>:</span><br><span class="line">            shrinked_bboxes.append(bbox)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        </span><br><span class="line">        shrinked_bboxes.append(shrinked_bbox)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> np.array(shrinked_bboxes)</span><br></pre></td></tr></table></figure>
+<h3 id="transform"><a href="#transform" class="headerlink" title="transform"></a>transform</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> self.is_transform:</span><br><span class="line">	imgs = [img, gt_text, training_mask]</span><br><span class="line">	imgs.extend(gt_kernels)</span><br><span class="line"></span><br><span class="line">	imgs = random_horizontal_flip(imgs)</span><br><span class="line">	<span class="comment">#imgs = random_vertical_flip(imgs)</span></span><br><span class="line">	imgs = random_rotate(imgs)</span><br><span class="line">	imgs = random_crop(imgs, self.img_size)</span><br><span class="line"></span><br><span class="line">	img, gt_text, training_mask, gt_kernels = imgs[<span class="number">0</span>], imgs[<span class="number">1</span>], imgs[<span class="number">2</span>], imgs[<span class="number">3</span>:]</span><br></pre></td></tr></table></figure>
+<h4 id="random-crop"><a href="#random-crop" class="headerlink" title="random_crop"></a>random_crop</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_crop</span><span class="params">(imgs, img_size)</span>:</span></span><br><span class="line">    <span class="comment"># Get the height and width of the first image</span></span><br><span class="line">    h, w = imgs[<span class="number">0</span>].shape[<span class="number">0</span>:<span class="number">2</span>]</span><br><span class="line">    <span class="comment"># Set target height and width</span></span><br><span class="line">    th, tw = img_size</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># If the target size is equal to the current size, return images as is</span></span><br><span class="line">    <span class="keyword">if</span> w == tw <span class="keyword">and</span> h == th:</span><br><span class="line">        <span class="keyword">return</span> imgs</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># If the random condition is met and the max value in the second image is greater than 0</span></span><br><span class="line">    <span class="comment"># imgs built:</span></span><br><span class="line">    <span class="comment">#     imgs = [img, gt_text, training_mask]</span></span><br><span class="line">    <span class="comment">#     imgs.extend(gt_kernels)</span></span><br><span class="line">    <span class="keyword">if</span> random.random() &gt; <span class="number">3.0</span> / <span class="number">8.0</span> <span class="keyword">and</span> np.max(imgs[<span class="number">1</span>]) &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># Calculate top-left corner of the bounding box with non-zero values, minus the target size</span></span><br><span class="line">        tl = np.min(np.where(imgs[<span class="number">1</span>] &gt; <span class="number">0</span>), axis=<span class="number">1</span>) - img_size <span class="comment"># img_size: (640, 640)</span></span><br><span class="line">        <span class="comment"># Ensure no negative indices</span></span><br><span class="line">        tl[tl &lt; <span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Calculate bottom-right corner of the bounding box with non-zero values, minus the target size</span></span><br><span class="line">        br = np.max(np.where(imgs[<span class="number">1</span>] &gt; <span class="number">0</span>), axis=<span class="number">1</span>) - img_size</span><br><span class="line">        <span class="comment"># Ensure no negative indicess</span></span><br><span class="line">        br[br &lt; <span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Ensure the bottom-right corner does not exceed the image dimensions</span></span><br><span class="line">        br[<span class="number">0</span>] = min(br[<span class="number">0</span>], h - th)</span><br><span class="line">        br[<span class="number">1</span>] = min(br[<span class="number">1</span>], w - tw)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Randomly select a starting point within the bounding box</span></span><br><span class="line">        i = random.randint(tl[<span class="number">0</span>], br[<span class="number">0</span>])</span><br><span class="line">        j = random.randint(tl[<span class="number">1</span>], br[<span class="number">1</span>])</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># Randomly select a starting point anywhere in the image</span></span><br><span class="line">        i = random.randint(<span class="number">0</span>, h - th)</span><br><span class="line">        j = random.randint(<span class="number">0</span>, w - tw)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Crop each image in the list</span></span><br><span class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> range(len(imgs)):</span><br><span class="line">        <span class="comment"># If the image has 3 channels (e.g., RGB), keep the channel dimension intact</span></span><br><span class="line">        <span class="keyword">if</span> len(imgs[idx].shape) == <span class="number">3</span>:</span><br><span class="line">            imgs[idx] = imgs[idx][i:i + th, j:j + tw, :]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># For single-channel images, crop directly</span></span><br><span class="line">            imgs[idx] = imgs[idx][i:i + th, j:j + tw]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Return the cropped images</span></span><br><span class="line">    <span class="keyword">return</span> imgs</span><br></pre></td></tr></table></figure>
+<h2 id="Loss"><a href="#Loss" class="headerlink" title="Loss"></a>Loss</h2><h2 id="在线难样本挖掘"><a href="#在线难样本挖掘" class="headerlink" title="在线难样本挖掘"></a>在线难样本挖掘</h2><h3 id="函数处理流程解释"><a href="#函数处理流程解释" class="headerlink" title="函数处理流程解释"></a>函数处理流程解释</h3><p>ohem_single 函数的主要目的是在训练过程中选择困难样本，以提高模型的泛化能力。具体处理流程如下：</p>
+<ol>
+<li><p><strong>计算正样本数量</strong>：</p>
+<ul>
+<li>函数首先计算正样本的数量，即 $gt_text$ 中大于 $0.5$ 的元素数量。</li>
+<li>然后减去被训练掩码屏蔽的正样本数量。</li>
+</ul>
+</li>
+<li><p><strong>处理没有正样本的情况</strong>：</p>
+<ul>
+<li>如果正样本数量为 $0$，函数直接返回训练掩码 $training_mask$，并将其形状调整为 $(1, height, width)$。</li>
+</ul>
+</li>
+<li><p><strong>计算负样本数量</strong>：</p>
+<ul>
+<li>函数计算负样本的数量，即 $gt_text$ 中小于等于 $0.5$ 的元素数量。</li>
+<li>然后将负样本数量限制为正样本数量的三倍。</li>
+</ul>
+</li>
+<li><p><strong>处理没有负样本的情况</strong>：</p>
+<ul>
+<li>如果负样本数量为 $0$，函数直接返回训练掩码 $training_mask$，并将其形状调整为 $(1, height, width)$。</li>
+</ul>
+</li>
+<li><p><strong>选择负样本</strong>：</p>
+<ul>
+<li>函数获取负样本的得分，并按降序排序。</li>
+<li>选择负样本的阈值，即排序后第 $neg_num$ 个负样本的得分。</li>
+</ul>
+</li>
+<li><p><strong>选择最终样本</strong>：</p>
+<ul>
+<li>函数选择得分大于等于阈值的负样本和所有正样本，并且这些样本没有被训练掩码屏蔽。</li>
+<li>最终选择的样本掩码 $selected_mask$ 被调整为 $(1, height, width)$ 的形状，并返回。</li>
+</ul>
+</li>
+</ol>
+<p>通过上述步骤，ohem_single 函数实现了在线困难样本挖掘（OHEM），从而选择出对模型训练最有帮助的样本。</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ohem_single</span><span class="params">(score, gt_text, training_mask)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 计算正样本数量，排除掉被训练掩码屏蔽的部分</span></span><br><span class="line">    pos_num = (int)(np.sum(gt_text &gt; <span class="number">0.5</span>)) - (int)(np.sum((gt_text &gt; <span class="number">0.5</span>) &amp; (training_mask &lt;= <span class="number">0.5</span>)))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 如果没有正样本，直接返回训练掩码</span></span><br><span class="line">    <span class="keyword">if</span> pos_num == <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># selected_mask = gt_text.copy() * 0 # 可能不太好</span></span><br><span class="line">        selected_mask = training_mask</span><br><span class="line">        selected_mask = selected_mask.reshape(<span class="number">1</span>, selected_mask.shape[<span class="number">0</span>], selected_mask.shape[<span class="number">1</span>]).astype(<span class="string">'float32'</span>)</span><br><span class="line">        <span class="keyword">return</span> selected_mask</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 计算负样本数量，并限制其数量为正样本数量的三倍</span></span><br><span class="line">    neg_num = (int)(np.sum(gt_text &lt;= <span class="number">0.5</span>))</span><br><span class="line">    neg_num = (int)(min(pos_num * <span class="number">3</span>, neg_num))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 如果没有负样本，直接返回训练掩码</span></span><br><span class="line">    <span class="keyword">if</span> neg_num == <span class="number">0</span>:</span><br><span class="line">        selected_mask = training_mask</span><br><span class="line">        selected_mask = selected_mask.reshape(<span class="number">1</span>, selected_mask.shape[<span class="number">0</span>], selected_mask.shape[<span class="number">1</span>]).astype(<span class="string">'float32'</span>)</span><br><span class="line">        <span class="keyword">return</span> selected_mask</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取负样本的得分，并按降序排序</span></span><br><span class="line">    neg_score = score[gt_text &lt;= <span class="number">0.5</span>]</span><br><span class="line">    neg_score_sorted = np.sort(-neg_score)</span><br><span class="line">    <span class="comment"># 选择负样本的阈值</span></span><br><span class="line">    threshold = -neg_score_sorted[neg_num - <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 选择得分大于等于阈值的负样本和所有正样本，并且这些样本没有被训练掩码屏蔽</span></span><br><span class="line">    selected_mask = ((score &gt;= threshold) | (gt_text &gt; <span class="number">0.5</span>)) &amp; (training_mask &gt; <span class="number">0.5</span>)</span><br><span class="line">    selected_mask = selected_mask.reshape(<span class="number">1</span>, selected_mask.shape[<span class="number">0</span>], selected_mask.shape[<span class="number">1</span>]).astype(<span class="string">'float32'</span>)</span><br><span class="line">    <span class="keyword">return</span> selected_mask</span><br></pre></td></tr></table></figure>
+<h2 id="Dice-loss"><a href="#Dice-loss" class="headerlink" title="Dice loss"></a>Dice loss</h2><p>Dice 损失（Dice Loss）是一种常用于图像分割任务的损失函数，旨在衡量两个样本之间的相似性。它源自 Dice 系数（Dice Coefficient），这是一个用于评估两个集合相似性的统计工具。</p>
+<h3 id="在代码中的应用"><a href="#在代码中的应用" class="headerlink" title="在代码中的应用"></a>在代码中的应用</h3><p>在你提供的代码中：</p>
+<ul>
+<li><p>输入的张量通过 <code>sigmoid</code> 函数进行了归一化，以便输出值介于 0 和 1 之间。</p>
+</li>
+<li><p>输入、目标和掩码都被展平为二维张量，以便于计算。</p>
+</li>
+<li><p>掩码用于只计算感兴趣区域的损失。</p>
+</li>
+<li><p>通过计算预测和真实目标的交集以及各自平方和来计算 Dice 系数。</p>
+</li>
+<li><p>最终通过 <code>1 - dice_coefficient</code> 得到 Dice 损失。这个损失值越小，说明模型的预测越接近真实值。</p>
+</li>
+</ul>
+<p>这种方法在医学图像分割等领域尤其常用，因为它能够有效处理数据不平衡问题，并对模型的分割性能进行合理的评估。</p>
+<p>代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dice_loss</span><span class="params">(input, target, mask)</span>:</span></span><br><span class="line">    <span class="comment"># 对输入应用 sigmoid 函数</span></span><br><span class="line">    input = torch.sigmoid(input)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将输入、目标和掩码展平为二维张量</span></span><br><span class="line">    input = input.contiguous().view(input.size()[<span class="number">0</span>], <span class="number">-1</span>)</span><br><span class="line">    target = target.contiguous().view(target.size()[<span class="number">0</span>], <span class="number">-1</span>)</span><br><span class="line">    mask = mask.contiguous().view(mask.size()[<span class="number">0</span>], <span class="number">-1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 应用掩码</span></span><br><span class="line">    input = input * mask</span><br><span class="line">    target = target * mask</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算 Dice 系数的分子</span></span><br><span class="line">    a = torch.sum(input * target, <span class="number">1</span>)</span><br><span class="line">    <span class="comment"># 计算 Dice 系数的分母的一部分，并添加一个小常数以避免除零错误</span></span><br><span class="line">    b = torch.sum(input * input, <span class="number">1</span>) + <span class="number">0.001</span></span><br><span class="line">    c = torch.sum(target * target, <span class="number">1</span>) + <span class="number">0.001</span></span><br><span class="line">    <span class="comment"># 计算 Dice 系数</span></span><br><span class="line">    d = (<span class="number">2</span> * a) / (b + c)</span><br><span class="line">    <span class="comment"># 计算平均 Dice 系数</span></span><br><span class="line">    dice_loss = torch.mean(d)</span><br><span class="line">    <span class="comment"># 返回 Dice 损失</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> - dice_loss</span><br></pre></td></tr></table></figure>
+<h3 id="Dice-系数"><a href="#Dice-系数" class="headerlink" title="Dice 系数"></a>Dice 系数</h3><p>Dice 系数（也称为 Sørensen–Dice 指数）的计算公式是：</p>
+<script type="math/tex; mode=display">
+\text{Dice} = \frac{2 \times |X \cap Y|}{|X| + |Y|}</script><p>其中，$X$ 和 $Y$ 是两个集合。在图像分割的背景下，$X$ 表示预测的分割结果，$Y$ 表示真实的分割结果。</p>
+<p>对于两个二进制向量（例如，二值分割掩码），Dice 系数可以表示为：</p>
+<script type="math/tex; mode=display">
+\text{Dice} = \frac{2 \times \sum (X_i \times Y_i)}{\sum X_i^2 + \sum Y_i^2}</script><p>Dice 系数的取值范围是 0 到 1，其中 1 表示完全重合，0 表示没有重合。</p>
+<h3 id="Dice-损失"><a href="#Dice-损失" class="headerlink" title="Dice 损失"></a>Dice 损失</h3><p>Dice 损失是从 Dice 系数导出的，其定义为：</p>
+<script type="math/tex; mode=display">
+\text{Dice Loss} = 1 - \text{Dice Coefficient}</script><p>使用 Dice 损失的目的是最大化 Dice 系数，从而最小化损失。</p>
+<h3 id="为什么使用-Dice-损失"><a href="#为什么使用-Dice-损失" class="headerlink" title="为什么使用 Dice 损失"></a>为什么使用 Dice 损失</h3><p><strong>处理类别不平衡：</strong></p>
+<ul>
+<li><p>在许多分割任务中，尤其是医学图像分割中，目标（如病灶）通常只占很小的一部分，而背景占据了图像的大部分。这种不平衡会导致传统的损失函数（如交叉熵）在优化过程中偏向于背景，因为大部分像素属于背景类别。</p>
+</li>
+<li><p>Dice Loss 的计算方式：</p>
+<script type="math/tex; mode=display">
+\text{Dice Coefficient} = \frac{2 \times \sum (X_i \times Y_i)}{\sum X_i^2 + \sum Y_i^2}</script><ul>
+<li><p>这里，Dice 系数直接衡量了预测结果和真实结果之间的重叠程度。它关注的是两个集合（预测和真实）的交集与各自规模的和。</p>
+</li>
+<li><p>Dice Loss 优化的是重叠区域的比例，而不是绝对数量。它计算的是正样本（即目标区域）的精确覆盖程度，因此即使正样本较少，它也能够给予足够的关注。</p>
+</li>
+</ul>
+</li>
+<li><p>关注目标区域：由于 Dice Loss 关注的是预测和真实目标之间的重叠部分，即使正样本很小，它仍然在计算中起到重要作用，从而在训练过程中推动模型更好地学习少数类。</p>
+</li>
+</ul>
+<p><strong>对小结构敏感：</strong></p>
+<ul>
+<li><p>在图像分割任务中，小结构（如病灶、微小物体等）可能在整体图像中占比很小，但通常具有重要的意义。传统的损失函数可能忽视这些小结构，因为它们在整体像素中占比过低。</p>
+</li>
+<li><p>Dice Loss 的优势：</p>
+<ul>
+<li><p><strong>增强小目标的影响：</strong> Dice Loss 中的交集计算通过平方和的分母抵消了小目标的绝对数量不足的问题，因此即便是微小的预测区域也能够显著影响损失值。</p>
+</li>
+<li><p><strong>重视每个像素：</strong> 由于 Dice Loss 是基于重叠率的计算，任何漏检或错误预测的小目标都会影响损失值，使得模型在更新过程中更关注这些小结构的检测。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="总loss"><a href="#总loss" class="headerlink" title="总loss"></a>总loss</h2><ul>
+<li>对原始文字区域，使用 Dice Loss，得到 loss_text</li>
+<li>对剩余的 6 个 kernel，分别使用 Dice Loss，然后求平均，得到 loss_kernel.</li>
+<li>计算总 <code>loss = 0.7 * loss_text + 0.3 * loss_kernel</code> . </li>
+</ul>
+<h2 id="求精度"><a href="#求精度" class="headerlink" title="求精度"></a>求精度</h2><h3 id="原始代码"><a href="#原始代码" class="headerlink" title="原始代码"></a>原始代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">runningScore</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    计算多分类任务中的评价指标，包括总体精度、平均精度、平均交并比（IoU），</span></span><br><span class="line"><span class="string">    和频率加权交并比（fwavacc）。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_classes)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        初始化runningScore对象。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        参数：</span></span><br><span class="line"><span class="string">        n_classes (int): 分类的类别数。</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.n_classes = n_classes</span><br><span class="line">        <span class="comment"># 初始化一个空的混淆矩阵，大小为(n_classes, n_classes)</span></span><br><span class="line">        self.confusion_matrix = np.zeros((n_classes, n_classes))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_fast_hist</span><span class="params">(self, label_true, label_pred, n_class)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        计算单一图像的混淆矩阵。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        参数：</span></span><br><span class="line"><span class="string">        label_true (array-like): 真实的标签。</span></span><br><span class="line"><span class="string">        label_pred (array-like): 预测的标签。</span></span><br><span class="line"><span class="string">        n_class (int): 分类的类别数。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        返回：</span></span><br><span class="line"><span class="string">        np.array: 当前图像的混淆矩阵。</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="comment"># 创建一个mask，仅选择有效标签的像素（标签值在[0, n_class)之间）</span></span><br><span class="line">        mask = (label_true &gt;= <span class="number">0</span>) &amp; (label_true &lt; n_class)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 检查预测标签中是否有无效值</span></span><br><span class="line">        <span class="keyword">if</span> np.sum((label_pred[mask] &lt; <span class="number">0</span>)) &gt; <span class="number">0</span>:</span><br><span class="line">            print(label_pred[label_pred &lt; <span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算混淆矩阵，使用bincount统计像素的类别对（真实 vs 预测）</span></span><br><span class="line">        hist = np.bincount(</span><br><span class="line">            n_class * label_true[mask].astype(int) +</span><br><span class="line">            label_pred[mask], minlength=n_class**<span class="number">2</span>).reshape(n_class, n_class)</span><br><span class="line">        <span class="keyword">return</span> hist</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self, label_trues, label_preds)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        更新混淆矩阵。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        参数：</span></span><br><span class="line"><span class="string">        label_trues (list of arrays): 一组真实标签。</span></span><br><span class="line"><span class="string">        label_preds (list of arrays): 一组预测标签。</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="comment"># 遍历所有的真实和预测标签对</span></span><br><span class="line">        <span class="keyword">for</span> lt, lp <span class="keyword">in</span> zip(label_trues, label_preds):</span><br><span class="line">            <span class="comment"># 更新总的混淆矩阵</span></span><br><span class="line">            self.confusion_matrix += self._fast_hist(lt.flatten(), lp.flatten(), self.n_classes)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_scores</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        计算并返回精度评估结果。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        返回：</span></span><br><span class="line"><span class="string">        dict: 字典，包含  总体精度、平均精度、频率加权IoU精度、平均IoU</span></span><br><span class="line"><span class="string">        dict: 每个类别的IoU值。</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        hist = self.confusion_matrix</span><br><span class="line">        <span class="comment"># 计算总体精度</span></span><br><span class="line">        acc = np.diag(hist).sum() / (hist.sum() + <span class="number">0.0001</span>)</span><br><span class="line">        <span class="comment"># 计算每个类别的精度，并取平均</span></span><br><span class="line">        acc_cls = np.diag(hist) / (hist.sum(axis=<span class="number">1</span>) + <span class="number">0.0001</span>)</span><br><span class="line">        acc_cls = np.nanmean(acc_cls)</span><br><span class="line">        <span class="comment"># 计算交并比（IoU）并取平均</span></span><br><span class="line">        iu = np.diag(hist) / (hist.sum(axis=<span class="number">1</span>) + hist.sum(axis=<span class="number">0</span>) - np.diag(hist) + <span class="number">0.0001</span>)</span><br><span class="line">        mean_iu = np.nanmean(iu)</span><br><span class="line">        <span class="comment"># 计算每个类别的频率</span></span><br><span class="line">        freq = hist.sum(axis=<span class="number">1</span>) / (hist.sum() + <span class="number">0.0001</span>)</span><br><span class="line">        <span class="comment"># 计算频率加权的交并比</span></span><br><span class="line">        fwavacc = (freq[freq &gt; <span class="number">0</span>] * iu[freq &gt; <span class="number">0</span>]).sum()</span><br><span class="line">        <span class="comment"># 生成类别到IoU的映射</span></span><br><span class="line">        cls_iu = dict(zip(range(self.n_classes), iu))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">'Overall Acc'</span>: acc,</span><br><span class="line">                <span class="string">'Mean Acc'</span>: acc_cls,</span><br><span class="line">                <span class="string">'FreqW Acc'</span>: fwavacc,</span><br><span class="line">                <span class="string">'Mean IoU'</span>: mean_iu,&#125;, cls_iu</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reset</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        重置混淆矩阵，将其清零。</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.confusion_matrix = np.zeros((self.n_classes, self.n_classes))</span><br></pre></td></tr></table></figure>
+<h3 id="hist矩阵"><a href="#hist矩阵" class="headerlink" title="hist矩阵"></a>hist矩阵</h3><p>其中 得到hist的代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 计算混淆矩阵，使用bincount统计像素的类别对（真实 vs 预测）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 源码中n_class=2</span></span><br><span class="line">hist = np.bincount(</span><br><span class="line">	n_class * label_true[mask].astype(int) +</span><br><span class="line">	label_pred[mask], minlength=n_class**<span class="number">2</span>).reshape(n_class, n_class)</span><br></pre></td></tr></table></figure></p>
+<p>结果为：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[<span class="number">341029</span>,  <span class="number">17725</span>],</span><br><span class="line">       [ <span class="number">42211</span>,   <span class="number">8635</span>]])</span><br></pre></td></tr></table></figure></p>
+<p>代表含义：<br>(0, 0): 341029, label为 0，predict 为 0.<br>(0, 1): 17725， label为 0，predict 为 1.<br>(1, 0): 42211，label为 1，predict 为 0.<br>(1, 1): 8635，label为 1，predict 为 1.</p>
+<h3 id="分类中的-IoU"><a href="#分类中的-IoU" class="headerlink" title="分类中的 IoU"></a>分类中的 IoU</h3><p>IoU: Intersection over Union<br>某类别 IoU = 该类别分类正确数量 / (该类别真实数量 + 错误预测为该类别数量)<br>该概念与目标检测中的 IoU类似：</p>
+<p><img src="/imgs/Pasted image 20240812164532.png"></p>
+<h3 id="分类中的加权-IoU"><a href="#分类中的加权-IoU" class="headerlink" title="分类中的加权 IoU"></a>分类中的加权 IoU</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 计算每个类别的频率</span></span><br><span class="line">freq = hist.sum(axis=<span class="number">1</span>) / (hist.sum() + <span class="number">0.0001</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算频率加权的交并比</span></span><br><span class="line">fwavacc = (freq[freq &gt; <span class="number">0</span>] * iu[freq &gt; <span class="number">0</span>]).sum()</span><br></pre></td></tr></table></figure>
+<p>fwavacc 即为 FWIoU。<br> FWIoU: Frequency Weighted Intersection over Union</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>HuzhenYou</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://huzhenyou.com/blog/2024/08/PSENET.html" title="PSENet详解">https://huzhenyou.com/blog/2024/08/PSENET.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/文字定位/" rel="tag"># '文字定位'</a>
+            
+              <a href="/tags/FPN/" rel="tag"># 'FPN'</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/blog/2024/07/添加网络检索.html" rel="next" title="把个人博客录入到各大搜索引擎">
+                  <i class="fa fa-chevron-left"></i> 把个人博客录入到各大搜索引擎
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/blog/2024/08/DBNet.html" rel="prev" title="DBNet详解">
+                  DBNet详解 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#主要想法"><span class="nav-number">1.</span> <span class="nav-text">主要想法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#渐进放大算法"><span class="nav-number">2.</span> <span class="nav-text">渐进放大算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">2.1.</span> <span class="nav-text">原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基网络：FPN"><span class="nav-number">3.</span> <span class="nav-text">基网络：FPN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#标签生成"><span class="nav-number">4.</span> <span class="nav-text">标签生成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#理论基础"><span class="nav-number">4.1.</span> <span class="nav-text">理论基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#r-i-公式为什么是这个样子？"><span class="nav-number">4.1.1.</span> <span class="nav-text">$r_i$ 公式为什么是这个样子？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解释"><span class="nav-number">4.1.1.1.</span> <span class="nav-text">解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#详细说明"><span class="nav-number">4.1.1.2.</span> <span class="nav-text">详细说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用"><span class="nav-number">4.1.1.3.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#r-i-在公式-d-i-中的作用"><span class="nav-number">4.1.2.</span> <span class="nav-text">$r_i$ 在公式 $d_i$ 中的作用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#公式-d-i"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">公式 $d_i$</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解释-1"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#详细说明-1"><span class="nav-number">4.1.2.3.</span> <span class="nav-text">详细说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用-1"><span class="nav-number">4.1.2.4.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么最后要除以-text-Perimeter-p-n-呢"><span class="nav-number">4.1.3.</span> <span class="nav-text">为什么最后要除以$\text{Perimeter}(p_n)$呢</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#公式-d-i-1"><span class="nav-number">4.1.3.1.</span> <span class="nav-text">公式 $d_i$</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#详细解释"><span class="nav-number">4.1.3.2.</span> <span class="nav-text">详细解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#举例说明"><span class="nav-number">4.1.3.3.</span> <span class="nav-text">举例说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">4.1.3.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面积变化除以边界距离，这个有由来吗？有理论支撑吗"><span class="nav-number">4.1.4.</span> <span class="nav-text">面积变化除以边界距离，这个有由来吗？有理论支撑吗</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#理论基础-1"><span class="nav-number">4.1.4.1.</span> <span class="nav-text">理论基础</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实际应用"><span class="nav-number">4.1.4.2.</span> <span class="nav-text">实际应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数学解释"><span class="nav-number">4.1.4.3.</span> <span class="nav-text">数学解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结论"><span class="nav-number">4.1.4.4.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Train"><span class="nav-number">5.</span> <span class="nav-text">Train</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dataloader"><span class="nav-number">5.1.</span> <span class="nav-text">Dataloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#random-scale"><span class="nav-number">5.1.1.</span> <span class="nav-text">random_scale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#填充文字区域"><span class="nav-number">5.1.2.</span> <span class="nav-text">填充文字区域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成-kernels"><span class="nav-number">5.1.3.</span> <span class="nav-text">生成 kernels</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transform"><span class="nav-number">5.1.4.</span> <span class="nav-text">transform</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#random-crop"><span class="nav-number">5.1.4.1.</span> <span class="nav-text">random_crop</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Loss"><span class="nav-number">5.2.</span> <span class="nav-text">Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在线难样本挖掘"><span class="nav-number">5.3.</span> <span class="nav-text">在线难样本挖掘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数处理流程解释"><span class="nav-number">5.3.1.</span> <span class="nav-text">函数处理流程解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">5.3.2.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dice-loss"><span class="nav-number">5.4.</span> <span class="nav-text">Dice loss</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在代码中的应用"><span class="nav-number">5.4.1.</span> <span class="nav-text">在代码中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dice-系数"><span class="nav-number">5.4.2.</span> <span class="nav-text">Dice 系数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dice-损失"><span class="nav-number">5.4.3.</span> <span class="nav-text">Dice 损失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么使用-Dice-损失"><span class="nav-number">5.4.4.</span> <span class="nav-text">为什么使用 Dice 损失</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总loss"><span class="nav-number">5.5.</span> <span class="nav-text">总loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求精度"><span class="nav-number">5.6.</span> <span class="nav-text">求精度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原始代码"><span class="nav-number">5.6.1.</span> <span class="nav-text">原始代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hist矩阵"><span class="nav-number">5.6.2.</span> <span class="nav-text">hist矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类中的-IoU"><span class="nav-number">5.6.3.</span> <span class="nav-text">分类中的 IoU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类中的加权-IoU"><span class="nav-number">5.6.4.</span> <span class="nav-text">分类中的加权 IoU</span></a></li></ol></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/angry_bird_128.ico"
+      alt="HuzhenYou">
+  <p class="site-author-name" itemprop="name">HuzhenYou</p>
+  <div class="site-description" itemprop="description">虚怀若谷，大智若愚</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/HuzhenYou" title="GitHub &rarr; https://github.com/HuzhenYou" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:youhuzhen@gmail.com" title="E-Mail &rarr; mailto:youhuzhen@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/you-jin-cheng/activities" title="https://www.zhihu.com/people/you-jin-cheng/activities" rel="noopener" target="_blank">知乎</a>
+        </li>
+      
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">沪ICP备2024084445号 </a>
+  <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" rel="noopener" target="_blank"> </a>&copy; <span itemprop="copyrightYear">2026</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HuzhenYou</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">93k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:35</span>
+</div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/muse.js?v=7.3.0"></script>
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.2/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(item => {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'xxYV7WqH5ZoRhrwNzfVqfB8w-gzGzoHsz',
+    appKey: 'GYwbjnqqCz4gmExrUFAxxKBK',
+    placeholder: '说点什么～ 上栏的 “昵称”、“邮箱” 可不填',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+
+</script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"live2d-widget-model-haru/01"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>

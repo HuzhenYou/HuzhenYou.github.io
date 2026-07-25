@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/angry_bird_32.ico?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/angry_bird_16.ico?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+  <meta name="google-site-verification" content="3dBwV8OlVnNtYzxCLCFp2w8WMpuSecV7vBmA_zrf9j4">
+  <meta name="baidu-site-verification" content="eoUZD1BDx6">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":"default"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+<link rel="stylesheet" href="/css/custom.css">
+
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      },
+      "HTML-CSS": { availableFonts: ["TeX"] },
+      SVG: { font: "TeX" }
+    });
+  </script>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-python.min.js"></script> <!-- Python支持 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      Prism.highlightAll();
+    });
+  </script>
+
+
+
+
+  <meta name="description" content="DBNet论文解读。">
+<meta name="keywords" content="&#39;文字定位&#39;,&#39;FPN&#39;,&#39;Deformable convolution&#39;,&#39;de-convolutional&#39;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DBNet详解">
+<meta property="og:url" content="https://huzhenyou.com/blog/2024/08/DBNet.html">
+<meta property="og:site_name" content="九万里">
+<meta property="og:description" content="DBNet论文解读。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240814203630.png">
+<meta property="og:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240816140244.png">
+<meta property="og:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240816141209.png">
+<meta property="og:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240816140536.png">
+<meta property="og:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240816151835.png">
+<meta property="og:updated_time" content="2024-08-20T08:14:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DBNet详解">
+<meta name="twitter:description" content="DBNet论文解读。">
+<meta name="twitter:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240814203630.png">
+  <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
+  <link rel="canonical" href="https://huzhenyou.com/blog/2024/08/DBNet">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>DBNet详解 | 九万里</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  <meta name="google-site-verification" content="WRvG1tIE8Ae2e_jnlkkVO8Yt-CFtzc_lei8TGPXGML8" />
+  <meta name="google-site-verification" content="OstEGiE3ESciB7IL56VbUytOmP13jX5PDo65XcI4v8k" />
+  <meta name="msvalidate.01" content="8F93DB9D93C13B852661088455093440" />
+  <meta name="baidu-site-verification" content="codeva-gbOLxIULmM" />
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">九万里</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">虚怀若谷，大智若愚</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+  </ul>
+
+    
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="https://huzhenyou.com/blog/2024/08/DBNet.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HuzhenYou">
+      <meta itemprop="description" content="虚怀若谷，大智若愚">
+      <meta itemprop="image" content="/images/angry_bird_128.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="九万里">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">DBNet详解
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2024-08-20 16:14:42" itemprop="dateCreated datePublished" datetime="2024-08-20T16:14:42+08:00">2024-08-20</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/文字定位/" itemprop="url" rel="index"><span itemprop="name">文字定位</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/blog/2024/08/DBNet.html#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/blog/2024/08/DBNet.html" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>6.3k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>10 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>DBNet论文解读。</p>
+<a id="more"></a>
+<hr>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>全称：Differentiable Binarization<br>主要贡献：提出了 可微的、使二值化过程可训练的 DB模块。<br><strong>key idea</strong>: 用 $Softmax$ 代替 简单粗暴 二极值化 $\Rightarrow$ 可导<br>DB模块联合一个简单的分割网络，得到了一个鲁棒的、快速的文字检测器。<br>优点：</p>
+<ol>
+<li>精度高：水平、多向、弯曲文字。</li>
+<li>更快：简化了后处理。</li>
+<li>在轻量网络（resnet-18）上表现很好。</li>
+<li>DB模块在推理中可以去掉。</li>
+</ol>
+<h1 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h1><p><img src="/imgs/Pasted image 20240814203630.png"><br><strong>box formulation module？</strong><br>应该就是求连通域的计算。</p>
+<p>概率图、阈值图、二值图 的shape与原图一样，因为在图中的pred阶段，进行了两次转置矩阵操作，每次都上采样 2 倍（stride=2）</p>
+<h1 id="负标签的loss为什么长这个样子，为什么与正标签的-loss不同？"><a href="#负标签的loss为什么长这个样子，为什么与正标签的-loss不同？" class="headerlink" title="负标签的loss为什么长这个样子，为什么与正标签的 loss不同？"></a>负标签的loss为什么长这个样子，为什么与正标签的 loss不同？</h1><script type="math/tex; mode=display">
+l_{+} = -\log\left(\frac{1}{1 + e^{-kx}}\right)</script><script type="math/tex; mode=display">l_{-} = -\log\left(1 - \frac{1}{1 + e^{-kx}}\right)</script><p>精度变高的原因：<br>   二值化：$\frac{1}{1 + e^{-t}}$，$K = 50$ $\Rightarrow$ 增强 $loss$ 效果</p>
+<div class="custom-quote"><p><div class="custom-quote-h2">经典的二分类的交叉熵损失</div><br><strong>经典的二分类的交叉熵损失中，一般不是负样本因为 label为 0，都被省略了吗？</strong></p>
+<p>你提到的情况是部分正确的，但省略负样本的说法可能有些误解。我们来详细解释一下二分类问题中的交叉熵损失是如何计算的。</p>
+<p>在二分类问题中，对于每个样本，我们有一个标签 $y$，其值为 0 或 1。模型输出的预测概率为 $\hat{y}$，表示预测为正类的概率。交叉熵损失通常定义为：</p>
+<script type="math/tex; mode=display">
+\text{Loss} = -[y \cdot \log(\hat{y}) + (1-y) \cdot \log(1-\hat{y})]</script><p>这个公式包含了两个部分：</p>
+<ol>
+<li><p><strong>正样本 ($y = 1$)：</strong></p>
+<ul>
+<li>当 $y = 1$ 时，损失为：<script type="math/tex; mode=display">
+-\log(\hat{y})</script>这个部分是我们希望最大化的，表示模型正确预测正样本的概率。</li>
+</ul>
+</li>
+<li><p><strong>负样本 ($y = 0$)：</strong></p>
+<ul>
+<li>当 $y = 0$ 时，损失为：<script type="math/tex; mode=display">
+-\log(1-\hat{y})</script>这个部分是我们希望最小化的，表示模型正确预测负样本的概率（即输出接近0）。</li>
+</ul>
+</li>
+</ol>
+<p>因此，负样本的损失是不会被省略的，只是因为当 $y = 0$ 时，第一个项 $y \cdot \log(\hat{y})$ 为 0，被省略的是正样本的损失项（因为它不贡献于此）。</p>
+<p>在实际实现时，如果我们专注于正样本（例如在一些特定应用场景下），有时候我们会只计算正样本的损失。但是在标准的二分类交叉熵损失计算中，负样本的损失也是被明确计算的，用来确保模型能够正确识别负样本。这与前面讨论的公式一致，只不过两者的表达形式稍有不同。</p>
+</div>
+<h1 id="正样本和负样本损失函数的求导过程详细说明"><a href="#正样本和负样本损失函数的求导过程详细说明" class="headerlink" title="正样本和负样本损失函数的求导过程详细说明"></a>正样本和负样本损失函数的求导过程详细说明</h1><p>正样本导数：</p>
+<script type="math/tex; mode=display">
+\frac{\partial l^+}{\partial x} = -k \cdot f(x) \cdot e^{-kx}</script><p>负样本导数：</p>
+<script type="math/tex; mode=display">
+  \frac{\partial l^-}{\partial x} = k \cdot f(x)</script><p>在这部分中，我们会推导正样本和负样本损失函数的导数。</p>
+<h2 id="1-正样本损失函数-l"><a href="#1-正样本损失函数-l" class="headerlink" title="1. 正样本损失函数 $l^+$"></a>1. 正样本损失函数 $l^+$</h2><p>首先，正样本的损失函数 $l^+$ 被定义为：</p>
+<script type="math/tex; mode=display">
+l^+ = -\log \left( \frac{1}{1 + e^{-kx}} \right)</script><p>这里的 $x = P<em>{i,j} - T</em>{i,j}$，其中 $P<em>{i,j}$ 是预测的概率值，$T</em>{i,j}$ 是阈值。首先，我们需要对这个函数进行化简。</p>
+<p>可以将这个损失函数进一步简化为：</p>
+<script type="math/tex; mode=display">
+l^+ = \log(1 + e^{-kx})</script><p>然后，我们对 $l^+$ 对 $x$ 求导：</p>
+<script type="math/tex; mode=display">
+\frac{\partial l^+}{\partial x} = \frac{d}{dx} \log(1 + e^{-kx})</script><p>使用链式法则来求导：</p>
+<script type="math/tex; mode=display">
+\frac{\partial l^+}{\partial x} = \frac{1}{1 + e^{-kx}} \cdot \frac{d}{dx}(1 + e^{-kx})</script><p>进一步对 $e^{-kx}$ 求导：</p>
+<script type="math/tex; mode=display">
+\frac{d}{dx}e^{-kx} = -k \cdot e^{-kx}</script><p>因此，最终的导数为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial l^+}{\partial x} = \frac{1}{1 + e^{-kx}} \cdot (-k \cdot e^{-kx})</script><p>我们注意到 $ \frac{1}{1 + e^{-kx}}$ 实际上就是函数 $f(x)$ 的定义：</p>
+<script type="math/tex; mode=display">
+f(x) = \frac{1}{1 + e^{-kx}}</script><p>因此，正样本损失函数的导数可以表示为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial l^+}{\partial x} = -k \cdot f(x) \cdot e^{-kx}</script><h2 id="2-负样本损失函数-l"><a href="#2-负样本损失函数-l" class="headerlink" title="2. 负样本损失函数 $l^-$"></a>2. 负样本损失函数 $l^-$</h2><p>接下来，我们考虑负样本的损失函数 $l^-$，它被定义为：</p>
+<script type="math/tex; mode=display">
+l^- = -\log \left(1 - \frac{1}{1 + e^{-kx}} \right)</script><p>首先，我们对括号中的表达式进行化简：</p>
+<script type="math/tex; mode=display">
+l^- = -\log \left(\frac{e^{-kx}}{1 + e^{-kx}} \right)</script><p>化简后，负样本的损失函数可以写成：</p>
+<script type="math/tex; mode=display">
+l^- = \log(1 + e^{-kx}) - \log(e^{-kx})</script><script type="math/tex; mode=display">
+l^- = \log(1 + e^{-kx}) + kx</script><p>现在对 $l^-$ 对 $x$ 求导：</p>
+<script type="math/tex; mode=display">
+\frac{\partial l^-}{\partial x} = \frac{1}{1 + e^{-kx}} \cdot (-k \cdot e^{-kx}) + k</script><p>注意到 $f(x)$ 是 $\frac{1}{1 + e^{-kx}}$，所以可以进一步简化为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial l^-}{\partial x} = k \cdot \left(1 - \frac{e^{-kx}}{1 + e^{-kx}}\right)</script><script type="math/tex; mode=display">
+\frac{\partial l^-}{\partial x} = k \cdot f(x)</script><p>所以，负样本损失函数的导数为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial l^-}{\partial x} = k \cdot f(x)</script><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p>对于正样本损失函数 $l^+$，导数为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial l^+}{\partial x} = -k \cdot f(x) \cdot e^{-kx}</script></li>
+<li><p>对于负样本损失函数 $l^-$，导数为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial l^-}{\partial x} = k \cdot f(x)</script></li>
+</ul>
+<p>这两个导数公式帮助我们理解在可微分二值化中的梯度更新方式。正样本和负样本的梯度更新通过放大因子 $k$ 进行调节，优化时对错误预测的区域进行更显著的调整。</p>
+<h1 id="Deformable-convolution"><a href="#Deformable-convolution" class="headerlink" title="Deformable convolution"></a>Deformable convolution</h1><ul>
+<li>可变形卷积 对 文字这种极端的长宽比有益</li>
+</ul>
+<p><img src="/imgs/Pasted image 20240816140244.png" alt width="700px"><br><img src="/imgs/Pasted image 20240816141209.png" alt width="700px"></p>
+<p><img src="/imgs/Pasted image 20240816140536.png" alt width="700px"></p>
+<h2 id="优势与应用"><a href="#优势与应用" class="headerlink" title="优势与应用"></a><strong>优势与应用</strong></h2><ul>
+<li><strong>适应性</strong>: 可变形卷积能够根据输入内容调整卷积核的位置，因此在处理具有较大变形的对象时，表现更好。</li>
+<li><strong>提高检测精度</strong>: 在目标检测、语义分割等任务中引入可变形卷积，可以显著提高模型的检测精度，尤其是在处理形变多样的对象时。</li>
+<li><strong>广泛应用</strong>: 可变形卷积在各种计算机视觉任务中得到了广泛应用，如目标检测（Deformable R-CNN）、语义分割（Deeplab系列）等。</li>
+</ul>
+<h2 id="实际效果"><a href="#实际效果" class="headerlink" title="实际效果"></a><strong>实际效果</strong></h2><p>在实际应用中，可变形卷积能够有效提升模型对目标形变的适应能力，使得网络在面对更复杂的视觉场景时，能够保持更高的准确性和鲁棒性。</p>
+<p>这种技术的引入，极大地扩展了卷积神经网络在处理非刚性对象时的能力，为许多计算机视觉任务的改进提供了新的思路。</p>
+<h2 id="可变形卷积中的-Delta-p-是通过什么网络得到的？"><a href="#可变形卷积中的-Delta-p-是通过什么网络得到的？" class="headerlink" title="可变形卷积中的 $\Delta p$ 是通过什么网络得到的？"></a>可变形卷积中的 $\Delta p$ 是通过什么网络得到的？</h2><p>是的，在可变形卷积（Deformable Convolution）中，生成偏移量 $\Delta p$ 的网络通常是通过一个<strong>传统的卷积神经网络</strong>得到的。</p>
+<h3 id="具体过程如下："><a href="#具体过程如下：" class="headerlink" title="具体过程如下："></a>具体过程如下：</h3><ol>
+<li><p><strong>卷积操作生成偏移量</strong>:</p>
+<ul>
+<li>在可变形卷积中，首先会对输入特征图（与主要可变形卷积层相同）进行一次标准的卷积操作，这个卷积层专门用于生成偏移量 $\Delta p$。</li>
+<li>这个卷积层的卷积核大小通常与后续实际执行可变形卷积的卷积核大小相同。例如，如果可变形卷积的核大小为 $3 \times 3$，那么生成偏移量的卷积层的核大小也是 $3 \times 3$。</li>
+</ul>
+</li>
+<li><p><strong>通道数计算</strong>:</p>
+<ul>
+<li>偏移量 $\Delta p$ 的通道数为 $2 \times \text{kernel size} \times \text{kernel size}$。这是因为每个卷积核位置都需要两个偏移值（一个在 x 方向，一个在 y 方向），而卷积核有 $k \times k$ 个位置。</li>
+<li>以 $3 \times 3$ 的卷积核为例，$\Delta p$ 的通道数为 $2 \times 3 \times 3 = 18$。</li>
+</ul>
+</li>
+<li><p><strong>使用传统卷积层</strong>:</p>
+<ul>
+<li>生成 $\Delta p$ 的卷积层是一个传统的卷积层，这意味着它的参数是通过标准的反向传播算法进行训练和优化的。</li>
+<li>输入这个卷积层的特征图经过标准卷积操作后，输出的通道数即为上述的 $2 \times k \times k$。</li>
+</ul>
+</li>
+<li><p><strong>卷积层的具体作用</strong>:</p>
+<ul>
+<li>这个卷积层的目的是生成每个位置的偏移量 $\Delta p$，这些偏移量在后续的可变形卷积中用于调整卷积核的位置，使得卷积核能够更好地适应输入图像的几何变形。</li>
+</ul>
+</li>
+</ol>
+<h3 id="例子说明："><a href="#例子说明：" class="headerlink" title="例子说明："></a>例子说明：</h3><p>假设有一个输入特征图，其通道数为 $C$（例如 64），卷积核大小为 $3 \times 3$。生成偏移量的卷积层接受这个输入特征图，并输出通道数为 18（即 $2 \times 3 \times 3$）的特征图，其中每个像素点包含 18 个值，这 18 个值表示在该位置上 $3 \times 3$ 卷积核的 9 个点的 x 和 y 方向的偏移量。</p>
+<p>总结来说，生成 $\Delta p$ 的卷积层确实是一个传统的卷积层，其参数通过训练数据进行学习，并在整个网络中与其他层一起优化。这个卷积层可以看作是一个辅助模块，用于为可变形卷积提供灵活的采样位置。</p>
+<p>Refs: <a href="https://www.bilibili.com/video/BV1Sh4y1y75i/?spm_id_from=333.337.search-card.all.click" target="_blank" rel="noopener">Deformable Convolution ｜可变形卷积_哔哩哔哩_bilibili</a></p>
+<h1 id="Label-生成"><a href="#Label-生成" class="headerlink" title="Label 生成"></a>Label 生成</h1><p><img src="/imgs/Pasted image 20240816151835.png"><br>蓝色区域用 Vatti clipping 算法缩放，公式如下，r以经验设为 0.4.</p>
+<script type="math/tex; mode=display">
+D = \frac{A(1 - r^2)}{L}</script><h1 id="Loss"><a href="#Loss" class="headerlink" title="Loss"></a>Loss</h1><h2 id="总损失函数公式及说明"><a href="#总损失函数公式及说明" class="headerlink" title="总损失函数公式及说明"></a>总损失函数公式及说明</h2><p>根据您提供的文档中的信息，损失函数 $L$ 可以表示为概率图的损失 $L_s$、二值图的损失 $L_b$、以及阈值图的损失 $L_t$ 的加权和：</p>
+<script type="math/tex; mode=display">
+L = L_s + \alpha \times L_b + \beta \times L_t</script><p>其中：</p>
+<ul>
+<li>$L_s$ 是概率图的损失，通常使用二值交叉熵损失（Binary Cross-Entropy Loss, BCE）。</li>
+<li>$L_b$ 是二值图的损失，使用的也是二值交叉熵损失。</li>
+<li>$L_t$ 是阈值图的损失，使用的是 L1 距离（即预测值和标签值之间的绝对差值）的和。</li>
+</ul>
+<p>公式中的 $\alpha$ 和 $\beta$ 是两个权重参数，用于调整这三个损失项对总损失的影响。文中建议将 $\alpha$ 设置为 1.0，$\beta$ 设置为 10.0。</p>
+<h2 id="损失项的具体公式"><a href="#损失项的具体公式" class="headerlink" title="损失项的具体公式"></a>损失项的具体公式</h2><ol>
+<li><p><strong>概率图和二值图的损失：</strong></p>
+<script type="math/tex; mode=display">
+L_s = L_b = \sum_{i \in S_l} \left[ y_i \log x_i + (1 - y_i) \log (1 - x_i) \right]</script><p>其中，$y_i$ 是第 $i$ 个像素的标签，$x_i$ 是第 $i$ 个像素的预测值，$S_l$ 是采样的像素集合，通常正负样本的比例为 1:3（难样本挖掘）。</p>
+</li>
+<li><p><strong>阈值图的损失：</strong></p>
+<script type="math/tex; mode=display">
+L_t = \sum_{i \in R_d} |y^*_i - x^*_i|</script><p>为L1  loss. 其中，$y^*_i$ 是第 $i$ 个像素在阈值图中的标签值，$x^*_i$ 是第 $i$ 个像素的预测值，$R_d$ 是扩展后的文本多边形 $G_d$ 内的像素索引集合。</p>
+</li>
+</ol>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>总损失函数 $L$ 由三个部分组成：概率图的损失 $L_s$、二值图的损失 $L_b$ 和阈值图的损失 $L_t$。其中，概率图和二值图的损失项使用的是二值交叉熵损失，这些损失衡量了模型在预测像素属于文本区域或背景时的准确性。而阈值图的损失使用的是 L1 损失，用来优化预测的阈值与真实标签之间的差距。最终的损失函数通过对这三部分损失进行加权求和来得到，总损失函数中的权重参数 $\alpha$ 和 $\beta$ 决定了每个部分在总损失中的影响程度。</p>
+<h2 id="交叉熵损失的数值不稳定性"><a href="#交叉熵损失的数值不稳定性" class="headerlink" title="交叉熵损失的数值不稳定性"></a>交叉熵损失的数值不稳定性</h2><div class="custom-quote"><p><div class="custom-quote-h1">交叉熵损失的数值不稳定性</div><br>为了处理数值不稳定的问题，通常会在计算过程中加入一个小的常数 $\epsilon$，使得 $x_i$ 和 $1 - x_i$ 永远不会完全为 0。这样可以避免对数函数的无穷大负值。常见的处理方法是：</p>
+<p> <strong>对概率值进行剪裁（Clipping）</strong>：在计算对数之前，将 $x_i$ 的值限制在一个很小的范围内，例如 $[\epsilon, 1 - \epsilon]$，其中 $\epsilon$ 是一个非常小的常数（如 $10^{-8}$）。这样可以防止对数操作中出现极端的负值。</p>
+<p>   修改后的交叉熵损失计算公式为：</p>
+<script type="math/tex; mode=display">
+   L = - \sum_{i} \left[ y_i \log (\max(x_i, \epsilon)) + (1 - y_i) \log (\max(1 - x_i, \epsilon)) \right]</script></div>
+<h2 id="为什么概率图和二值图不能用-L1-损失？"><a href="#为什么概率图和二值图不能用-L1-损失？" class="headerlink" title="为什么概率图和二值图不能用 L1 损失？"></a>为什么概率图和二值图不能用 L1 损失？</h2><div class="custom-quote"><div class="custom-quote-h1">交叉熵损失_VS_L1Loss</div>
+**以DBNet的概率图和二值图用交叉熵损失，阈值图用 L1 loss为例：**
+
+概率图和二值图涉及的是分类任务，因此需要损失函数能够有效地评估和优化模型的分类性能。L1 损失主要用于回归任务，其计算方法和目标不适合处理分类任务中的概率分布问题。
+
+<div class="custom-quote-h3">1. 任务性质的不同</div>
+
+<ul>
+<li><p><strong>概率图</strong>：概率图输出的是每个像素属于文本区域的概率值，通常在 [0, 1] 范围内。目标是估计概率分布，表示像素属于文本区域的置信度。这是一个分类任务的输出。</p>
+</li>
+<li><p><strong>二值图</strong>：二值图是概率图经过阈值化处理得到的二分类结果。其目标是将像素分类为文本区域（1）或背景区域（0）。尽管结果是二值的，但其生成过程中依赖于概率图的输出。</p>
+</li>
+<li><p><strong>L1 损失</strong>：L1 损失（绝对误差损失）用于回归任务，通过计算预测值与真实值之间的绝对差异来优化模型。在分类任务中，这种损失函数不适合处理概率分布。</p>
+</li>
+</ul>
+<div class="custom-quote-h3">2. 交叉熵损失的适用性</div>
+
+<ul>
+<li><p><strong>分类任务的适应性</strong>：交叉熵损失是一种专门用于分类任务的损失函数。它通过计算预测概率分布与真实标签之间的差异来衡量分类性能，适用于处理概率图和二值图。</p>
+</li>
+<li><p><strong>概率分布的匹配</strong>：交叉熵损失能够衡量概率分布之间的距离，它通过优化模型的预测概率分布来提高分类准确性。</p>
+</li>
+</ul>
+<div class="custom-quote-h3">3. L1 损失的局限性</div>
+
+<ul>
+<li><p><strong>不适合分类任务</strong>：L1 损失用于回归任务，计算预测值与真实值之间的绝对差异。在分类任务中，尤其是概率分布的处理上，L1 损失不能有效地捕捉概率分布与真实标签之间的差异。</p>
+</li>
+<li><p><strong>忽视分类错误</strong>：即使预测概率值接近真实值，L1 损失只关注预测值与真实值的绝对差异，不能充分反映最终分类决策的准确性。例如，真实标签为 1 时，预测概率为 0.49 的分类可能被误认为是背景区域 0，这种分类错误可能无法通过 L1 损失有效反映。</p>
+</li>
+</ul>
+<div class="custom-quote-h3">4. 交叉熵损失的优越性</div>
+
+<ul>
+<li><p><strong>分类错误的惩罚</strong>：交叉熵损失直接处理分类任务，能够显著反映分类错误的严重性。例如，对于真实标签 1 和预测概率值 0.49，交叉熵损失会计算 $-\log(0.49)$，值较大，能够更好地反映分类错误。</p>
+</li>
+<li><p><strong>优化概率分布</strong>：交叉熵损失优化预测概率分布，减少与真实标签之间的差异，适合处理分类任务中的细微差别，从而提高分类的准确性。</p>
+</li>
+</ul>
+<div class="custom-quote-h3">总结</div>
+
+<p>L1 损失关注的是预测值与真实值之间的绝对差异，不适合处理分类任务中的概率分布问题。交叉熵损失专门用于分类任务，能够有效地优化概率分布与真实标签之间的差异，从而更好地处理分类任务中的细微差别。</p>
+</div>
+<h1 id="推理阶段"><a href="#推理阶段" class="headerlink" title="推理阶段"></a>推理阶段</h1><p>最后的预测结果为概率图或近似二值图，以阈值 0.2进行二值化。<br>然后仍然以Vatti clipping 算法进行膨胀：</p>
+<script type="math/tex; mode=display">
+D' = \frac{A' \times r'}{L'}</script><p>这里 $r’$ 设为 1.5.</p>
+<h2 id="为什么推理阶段可以直接用概率图"><a href="#为什么推理阶段可以直接用概率图" class="headerlink" title="为什么推理阶段可以直接用概率图"></a>为什么推理阶段可以直接用概率图</h2><p><strong>提供丰富的监督信号：</strong><br>通过额外的监督信号，是模型学习到，在边界区域不应该预测为像素，模型也会对生成的概率图在边界区域预测为文字进行抑制。</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>HuzhenYou</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://huzhenyou.com/blog/2024/08/DBNet.html" title="DBNet详解">https://huzhenyou.com/blog/2024/08/DBNet.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/文字定位/" rel="tag"># '文字定位'</a>
+            
+              <a href="/tags/FPN/" rel="tag"># 'FPN'</a>
+            
+              <a href="/tags/Deformable-convolution/" rel="tag"># 'Deformable convolution'</a>
+            
+              <a href="/tags/de-convolutional/" rel="tag"># 'de-convolutional'</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/blog/2024/08/PSENET.html" rel="next" title="PSENet详解">
+                  <i class="fa fa-chevron-left"></i> PSENet详解
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/blog/2026/07/proactive-interference.html" rel="prev" title="AI 前沿难点之 proactive interference（前摄干扰）不因加长 context 解决">
+                  AI 前沿难点之 proactive interference（前摄干扰）不因加长 context 解决 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络结构"><span class="nav-number">2.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#负标签的loss为什么长这个样子，为什么与正标签的-loss不同？"><span class="nav-number">3.</span> <span class="nav-text">负标签的loss为什么长这个样子，为什么与正标签的 loss不同？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正样本和负样本损失函数的求导过程详细说明"><span class="nav-number">4.</span> <span class="nav-text">正样本和负样本损失函数的求导过程详细说明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-正样本损失函数-l"><span class="nav-number">4.1.</span> <span class="nav-text">1. 正样本损失函数 $l^+$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-负样本损失函数-l"><span class="nav-number">4.2.</span> <span class="nav-text">2. 负样本损失函数 $l^-$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Deformable-convolution"><span class="nav-number">5.</span> <span class="nav-text">Deformable convolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#优势与应用"><span class="nav-number">5.1.</span> <span class="nav-text">优势与应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际效果"><span class="nav-number">5.2.</span> <span class="nav-text">实际效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可变形卷积中的-Delta-p-是通过什么网络得到的？"><span class="nav-number">5.3.</span> <span class="nav-text">可变形卷积中的 $\Delta p$ 是通过什么网络得到的？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#具体过程如下："><span class="nav-number">5.3.1.</span> <span class="nav-text">具体过程如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子说明："><span class="nav-number">5.3.2.</span> <span class="nav-text">例子说明：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Label-生成"><span class="nav-number">6.</span> <span class="nav-text">Label 生成</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Loss"><span class="nav-number">7.</span> <span class="nav-text">Loss</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总损失函数公式及说明"><span class="nav-number">7.1.</span> <span class="nav-text">总损失函数公式及说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失项的具体公式"><span class="nav-number">7.2.</span> <span class="nav-text">损失项的具体公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-1"><span class="nav-number">7.3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵损失的数值不稳定性"><span class="nav-number">7.4.</span> <span class="nav-text">交叉熵损失的数值不稳定性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么概率图和二值图不能用-L1-损失？"><span class="nav-number">7.5.</span> <span class="nav-text">为什么概率图和二值图不能用 L1 损失？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#推理阶段"><span class="nav-number">8.</span> <span class="nav-text">推理阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么推理阶段可以直接用概率图"><span class="nav-number">8.1.</span> <span class="nav-text">为什么推理阶段可以直接用概率图</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/angry_bird_128.ico"
+      alt="HuzhenYou">
+  <p class="site-author-name" itemprop="name">HuzhenYou</p>
+  <div class="site-description" itemprop="description">虚怀若谷，大智若愚</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/HuzhenYou" title="GitHub &rarr; https://github.com/HuzhenYou" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:youhuzhen@gmail.com" title="E-Mail &rarr; mailto:youhuzhen@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/people/you-jin-cheng/activities" title="https://www.zhihu.com/people/you-jin-cheng/activities" rel="noopener" target="_blank">知乎</a>
+        </li>
+      
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">沪ICP备2024084445号 </a>
+  <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" rel="noopener" target="_blank"> </a>&copy; <span itemprop="copyrightYear">2026</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HuzhenYou</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">93k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:35</span>
+</div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/muse.js?v=7.3.0"></script>
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.2/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(item => {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'xxYV7WqH5ZoRhrwNzfVqfB8w-gzGzoHsz',
+    appKey: 'GYwbjnqqCz4gmExrUFAxxKBK',
+    placeholder: '说点什么～ 上栏的 “昵称”、“邮箱” 可不填',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+
+</script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"live2d-widget-model-haru/01"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>

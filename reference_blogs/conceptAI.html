@@ -90,18 +90,18 @@
 
 
 
-  <meta name="description" content="The detail of TriDet.">
-<meta name="keywords" content="&#39;ActionDetection&#39;,&#39;TemporalActionDetection&#39;,&#39;CVPR2023&#39;,&#39;极市直播&#39;,&#39;TemporalActionDetection&#39;,&#39;ActionDetection&#39;,&#39;CVPR2023&#39;,&#39;极市直播&#39;,TemporalActionDetection,ActionDetection,CVPR2023,极市直播">
+  <meta name="description" content="DBNet论文解读。">
+<meta name="keywords" content="&#39;文字定位&#39;,&#39;FPN&#39;,&#39;Deformable convolution&#39;,&#39;de-convolutional&#39;">
 <meta property="og:type" content="website">
-<meta property="og:title" content="TriDet">
+<meta property="og:title" content="DBNet详解">
 <meta property="og:url" content="https://huzhenyou.com/reference_blogs/conceptAI.html">
 <meta property="og:site_name" content="九万里">
-<meta property="og:description" content="The detail of TriDet.">
+<meta property="og:description" content="DBNet论文解读。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2024-07-16T08:24:39.208Z">
+<meta property="og:updated_time" content="2024-08-20T08:14:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TriDet">
-<meta name="twitter:description" content="The detail of TriDet.">
+<meta name="twitter:title" content="DBNet详解">
+<meta name="twitter:description" content="DBNet论文解读。">
   <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
   <link rel="canonical" href="https://huzhenyou.com/reference_blogs/conceptAI">
 
@@ -117,9 +117,12 @@
   };
 </script>
 
-  <title>TriDet | 九万里</title>
+  <title>DBNet详解 | 九万里</title>
   <meta name="generator" content="Hexo 3.9.0">
   <meta name="google-site-verification" content="WRvG1tIE8Ae2e_jnlkkVO8Yt-CFtzc_lei8TGPXGML8" />
+  <meta name="google-site-verification" content="OstEGiE3ESciB7IL56VbUytOmP13jX5PDo65XcI4v8k" />
+  <meta name="msvalidate.01" content="8F93DB9D93C13B852661088455093440" />
+  <meta name="baidu-site-verification" content="codeva-gbOLxIULmM" />
   
 
 
@@ -291,7 +294,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-<h2 class="post-title" itemprop="name headline">TriDet
+<h2 class="post-title" itemprop="name headline">DBNet详解
 
 </h2>
 
@@ -307,9 +310,139 @@
       
       <div class="post-body">
         
-          <p>The detail of TriDet.</p>
+          <p>DBNet论文解读。</p>
 <a id="more"></a>
 <hr>
+<h1 id="转置卷积"><a href="#转置卷积" class="headerlink" title="转置卷积"></a>转置卷积</h1><p>![[Pasted image 20240819151630.png|600]]<br>![[Pasted image 20240819152239.png|600]]</p>
+<p>stride = 1, 无 padding的实现：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">trans_conv</span><span class="params">(X, K)</span>:</span></span><br><span class="line">    h, w = K.shape</span><br><span class="line">    Y = torch.zeros((X.shape[<span class="number">0</span>] + h - <span class="number">1</span>, X.shape[<span class="number">1</span>] + w - <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(X.shape[<span class="number">0</span>]):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(X.shape[<span class="number">1</span>]):</span><br><span class="line">            Y[i: i + h, j: j + w] += X[i, j] * K</span><br><span class="line">    <span class="keyword">return</span> Y</span><br></pre></td></tr></table></figure></p>
+<p>验证：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">X = torch.tensor([[<span class="number">0.0</span>, <span class="number">1.0</span>], [<span class="number">2.0</span>, <span class="number">3.0</span>]])</span><br><span class="line">K = torch.tensor([[<span class="number">0.0</span>, <span class="number">1.0</span>], [<span class="number">2.0</span>, <span class="number">3.0</span>]])</span><br><span class="line">trans_conv(X, K)</span><br><span class="line"><span class="comment"># output</span></span><br><span class="line">%%  tensor([[ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">1.</span>],</span><br><span class="line">        [ <span class="number">0.</span>,  <span class="number">4.</span>,  <span class="number">6.</span>],</span><br><span class="line">        [ <span class="number">4.</span>, <span class="number">12.</span>,  <span class="number">9.</span>]]) %%</span><br></pre></td></tr></table></figure></p>
+<p>用 torch实现：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">X, K = X.reshape(<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>), K.reshape(<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">tconv = nn.ConvTranspose2d(<span class="number">1</span>, <span class="number">1</span>, kernel_size=<span class="number">2</span>, bias=<span class="literal">False</span>) <span class="comment"># 前两个参数分别是：输入通道数、输出通道数</span></span><br><span class="line">tconv.weight.data = K</span><br><span class="line">tconv(X)</span><br><span class="line"><span class="comment"># output:</span></span><br><span class="line">%% tensor([[[[ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">1.</span>],</span><br><span class="line">          [ <span class="number">0.</span>,  <span class="number">4.</span>,  <span class="number">6.</span>],</span><br><span class="line">          [ <span class="number">4.</span>, <span class="number">12.</span>,  <span class="number">9.</span>]]]], grad_fn=&lt;ConvolutionBackward0&gt;) %%</span><br></pre></td></tr></table></figure></p>
+<p>若 padding=1, 则输出的 shape变成 $1*1$<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tconv = nn.ConvTranspose2d(<span class="number">1</span>, <span class="number">1</span>, kernel_size=<span class="number">2</span>, padding=<span class="number">1</span>, bias=<span class="literal">False</span>)</span><br><span class="line">tconv.weight.data = K</span><br><span class="line">tconv(X)</span><br><span class="line"><span class="comment"># output</span></span><br><span class="line">%% tensor([[[[<span class="number">4.</span>]]]], grad_fn=&lt;ConvolutionBackward0&gt;) %%</span><br></pre></td></tr></table></figure></p>
+<p>若 stride = 2, 则输出增加尺寸：<br>![[Pasted image 20240819160859.png|600]]<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tconv = nn.ConvTranspose2d(<span class="number">1</span>, <span class="number">1</span>, kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>, bias=<span class="literal">False</span>)</span><br><span class="line">tconv.weight.data = K</span><br><span class="line">tconv(X)</span><br><span class="line">%% tensor([[[[<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>],</span><br><span class="line">          [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">2.</span>, <span class="number">3.</span>],</span><br><span class="line">          [<span class="number">0.</span>, <span class="number">2.</span>, <span class="number">0.</span>, <span class="number">3.</span>],</span><br><span class="line">          [<span class="number">4.</span>, <span class="number">6.</span>, <span class="number">6.</span>, <span class="number">9.</span>]]]], grad_fn=&lt;ConvolutionBackward0&gt;) %%</span><br></pre></td></tr></table></figure></p>
+<p>若卷积的超参数和转置卷积的超参数相同，则卷积输入的 shape与转置卷积输出的 shape相同：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">X = torch.rand(size=(<span class="number">1</span>, <span class="number">10</span>, <span class="number">16</span>, <span class="number">16</span>))</span><br><span class="line">conv = nn.Conv2d(<span class="number">10</span>, <span class="number">20</span>, kernel_size=<span class="number">5</span>, padding=<span class="number">2</span>, stride=<span class="number">3</span>)</span><br><span class="line">tconv = nn.ConvTranspose2d(<span class="number">20</span>, <span class="number">10</span>, kernel_size=<span class="number">5</span>, padding=<span class="number">2</span>, stride=<span class="number">3</span>)</span><br><span class="line">tconv(conv(X)).shape == X.shape</span><br><span class="line">%% <span class="literal">True</span> %%</span><br></pre></td></tr></table></figure></p>
+<p><strong>转置的由来：</strong><br>普通卷积：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">X = torch.arange(<span class="number">9.0</span>).reshape(<span class="number">3</span>, <span class="number">3</span>)</span><br><span class="line">K = torch.tensor([[<span class="number">1.0</span>, <span class="number">2.0</span>], [<span class="number">3.0</span>, <span class="number">4.0</span>]])</span><br><span class="line">Y = d2l.corr2d(X, K)</span><br><span class="line">Y</span><br><span class="line">%% tensor([[<span class="number">27.</span>, <span class="number">37.</span>],</span><br><span class="line">        [<span class="number">57.</span>, <span class="number">67.</span>]]) %%</span><br></pre></td></tr></table></figure></p>
+<p>把卷积变成矩阵相乘：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kernel2matrix</span><span class="params">(K)</span>:</span></span><br><span class="line">    k, W = torch.zeros(<span class="number">5</span>), torch.zeros((<span class="number">4</span>, <span class="number">9</span>))</span><br><span class="line">    k[:<span class="number">2</span>], k[<span class="number">3</span>:<span class="number">5</span>] = K[<span class="number">0</span>, :], K[<span class="number">1</span>, :]</span><br><span class="line">    W[<span class="number">0</span>, :<span class="number">5</span>], W[<span class="number">1</span>, <span class="number">1</span>:<span class="number">6</span>], W[<span class="number">2</span>, <span class="number">3</span>:<span class="number">8</span>], W[<span class="number">3</span>, <span class="number">4</span>:] = k, k, k, k</span><br><span class="line">    <span class="keyword">return</span> W</span><br><span class="line"></span><br><span class="line">W = kernel2matrix(K)</span><br><span class="line">W</span><br><span class="line">%% tensor([[<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">0.</span>, <span class="number">3.</span>, <span class="number">4.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">0.</span>, <span class="number">3.</span>, <span class="number">4.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">0.</span>, <span class="number">3.</span>, <span class="number">4.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">0.</span>, <span class="number">3.</span>, <span class="number">4.</span>]]) %%</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Y == torch.matmul(W, X.reshape(<span class="number">-1</span>)).reshape(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">%% tensor([[<span class="literal">True</span>, <span class="literal">True</span>],</span><br><span class="line">        [<span class="literal">True</span>, <span class="literal">True</span>]]) %%</span><br></pre></td></tr></table></figure>
+<p>实施转置矩阵：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Z = trans_conv(Y, K)</span><br><span class="line">Z == torch.matmul(W.T, Y.reshape(<span class="number">-1</span>)).reshape(<span class="number">3</span>, <span class="number">3</span>)</span><br><span class="line">%% tensor([[<span class="literal">True</span>, <span class="literal">True</span>, <span class="literal">True</span>],</span><br><span class="line">        [<span class="literal">True</span>, <span class="literal">True</span>, <span class="literal">True</span>],</span><br><span class="line">        [<span class="literal">True</span>, <span class="literal">True</span>, <span class="literal">True</span>]]) %%</span><br></pre></td></tr></table></figure></p>
+<p>Refs:</p>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV17o4y1X7Jn?p=1&amp;vd_source=2c23be48ba22c91130ce4868020ab598" target="_blank" rel="noopener">转置卷积_哔哩哔哩_bilibili</a></p>
+</blockquote>
+<h1 id="交叉熵损失-VS-L1Loss"><a href="#交叉熵损失-VS-L1Loss" class="headerlink" title="交叉熵损失_VS_L1Loss"></a>交叉熵损失_VS_L1Loss</h1><p><strong>以DBNet的概率图和二值图用交叉熵损失，阈值图用 L1 loss为例：</strong></p>
+<p>概率图和二值图涉及的是分类任务，因此需要损失函数能够有效地评估和优化模型的分类性能。L1 损失主要用于回归任务，其计算方法和目标不适合处理分类任务中的概率分布问题。</p>
+<h3 id="1-任务性质的不同"><a href="#1-任务性质的不同" class="headerlink" title="1. 任务性质的不同"></a>1. 任务性质的不同</h3><ul>
+<li><p><strong>概率图</strong>：概率图输出的是每个像素属于文本区域的概率值，通常在 [0, 1] 范围内。目标是估计概率分布，表示像素属于文本区域的置信度。这是一个分类任务的输出。</p>
+</li>
+<li><p><strong>二值图</strong>：二值图是概率图经过阈值化处理得到的二分类结果。其目标是将像素分类为文本区域（1）或背景区域（0）。尽管结果是二值的，但其生成过程中依赖于概率图的输出。</p>
+</li>
+<li><p><strong>L1 损失</strong>：L1 损失（绝对误差损失）用于回归任务，通过计算预测值与真实值之间的绝对差异来优化模型。在分类任务中，这种损失函数不适合处理概率分布。</p>
+</li>
+</ul>
+<h3 id="2-交叉熵损失的适用性"><a href="#2-交叉熵损失的适用性" class="headerlink" title="2. 交叉熵损失的适用性"></a>2. 交叉熵损失的适用性</h3><ul>
+<li><p><strong>分类任务的适应性</strong>：交叉熵损失是一种专门用于分类任务的损失函数。它通过计算预测概率分布与真实标签之间的差异来衡量分类性能，适用于处理概率图和二值图。</p>
+</li>
+<li><p><strong>概率分布的匹配</strong>：交叉熵损失能够衡量概率分布之间的距离，它通过优化模型的预测概率分布来提高分类准确性。</p>
+</li>
+</ul>
+<h3 id="3-L1-损失的局限性"><a href="#3-L1-损失的局限性" class="headerlink" title="3. L1 损失的局限性"></a>3. L1 损失的局限性</h3><ul>
+<li><p><strong>不适合分类任务</strong>：L1 损失用于回归任务，计算预测值与真实值之间的绝对差异。在分类任务中，尤其是概率分布的处理上，L1 损失不能有效地捕捉概率分布与真实标签之间的差异。</p>
+</li>
+<li><p><strong>忽视分类错误</strong>：即使预测概率值接近真实值，L1 损失只关注预测值与真实值的绝对差异，不能充分反映最终分类决策的准确性。例如，真实标签为 1 时，预测概率为 0.49 的分类可能被误认为是背景区域 0，这种分类错误可能无法通过 L1 损失有效反映。</p>
+</li>
+</ul>
+<h3 id="4-交叉熵损失的优越性"><a href="#4-交叉熵损失的优越性" class="headerlink" title="4. 交叉熵损失的优越性"></a>4. 交叉熵损失的优越性</h3><ul>
+<li><p><strong>分类错误的惩罚</strong>：交叉熵损失直接处理分类任务，能够显著反映分类错误的严重性。例如，对于真实标签 1 和预测概率值 0.49，交叉熵损失会计算 $-\log(0.49)$，值较大，能够更好地反映分类错误。</p>
+</li>
+<li><p><strong>优化概率分布</strong>：交叉熵损失优化预测概率分布，减少与真实标签之间的差异，适合处理分类任务中的细微差别，从而提高分类的准确性。</p>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>L1 损失关注的是预测值与真实值之间的绝对差异，不适合处理分类任务中的概率分布问题。交叉熵损失专门用于分类任务，能够有效地优化概率分布与真实标签之间的差异，从而更好地处理分类任务中的细微差别。</p>
+<h1 id="交叉熵损失的数值不稳定性"><a href="#交叉熵损失的数值不稳定性" class="headerlink" title="交叉熵损失的数值不稳定性"></a>交叉熵损失的数值不稳定性</h1><p>为了处理数值不稳定的问题，通常会在计算过程中加入一个小的常数 $\epsilon$，使得 $x_i$ 和 $1 - x_i$ 永远不会完全为 0。这样可以避免对数函数的无穷大负值。常见的处理方法是：</p>
+<p> <strong>对概率值进行剪裁（Clipping）</strong>：在计算对数之前，将 $x_i$ 的值限制在一个很小的范围内，例如 $[\epsilon, 1 - \epsilon]$，其中 $\epsilon$ 是一个非常小的常数（如 $10^{-8}$）。这样可以防止对数操作中出现极端的负值。</p>
+<p>   修改后的交叉熵损失计算公式为：</p>
+<script type="math/tex; mode=display">
+   L = - \sum_{i} \left[ y_i \log (\max(x_i, \epsilon)) + (1 - y_i) \log (\max(1 - x_i, \epsilon)) \right]</script><h1 id="各种卷积类型"><a href="#各种卷积类型" class="headerlink" title="各种卷积类型"></a>各种卷积类型</h1><h2 id="普通卷积"><a href="#普通卷积" class="headerlink" title="普通卷积"></a>普通卷积</h2><p>![[Pasted image 20240816114238.png|700]]</p>
+<h2 id="空洞卷积（Dilated-Convolution）"><a href="#空洞卷积（Dilated-Convolution）" class="headerlink" title="空洞卷积（Dilated Convolution）"></a>空洞卷积（Dilated Convolution）</h2><p>![[Pasted image 20240816134747.png|700]]<br><strong>空洞卷积（Dilated Convolution）</strong> 是一种扩展传统卷积操作的方法，旨在增加卷积核的感受野（receptive field），即卷积操作能够覆盖的输入图像的区域范围，同时不增加计算复杂度或引入额外的参数。空洞卷积主要在语义分割、物体检测等任务中用于捕获多尺度信息。</p>
+<h3 id="1-传统卷积的局限性"><a href="#1-传统卷积的局限性" class="headerlink" title="1. 传统卷积的局限性"></a>1. 传统卷积的局限性</h3><p>在传统卷积中，卷积核（filter）的感受野与卷积核的大小直接相关。例如，一个 $3 \times 3$ 的卷积核只能覆盖一个 $3 \times 3$ 的局部区域。如果需要覆盖更大的区域，通常的做法是增大卷积核的尺寸或通过多层卷积堆叠来逐步扩大感受野。</p>
+<p>然而，这样做会带来以下问题：</p>
+<ul>
+<li>增大卷积核尺寸会显著增加参数量，导致模型更容易过拟合。</li>
+<li>通过多层堆叠卷积层会增加计算量，同时也会导致特征图尺寸的急剧缩小（尤其是伴随着下采样操作时）。</li>
+</ul>
+<h3 id="2-空洞卷积的引入"><a href="#2-空洞卷积的引入" class="headerlink" title="2. 空洞卷积的引入"></a>2. 空洞卷积的引入</h3><p>空洞卷积通过在卷积核的元素之间引入<strong>空洞（dilation rate）</strong>，即在相邻卷积核元素之间插入一定数量的“空”元素，从而在不增加参数数量的情况下扩展卷积核的感受野。</p>
+<h3 id="3-原理细节"><a href="#3-原理细节" class="headerlink" title="3. 原理细节"></a>3. 原理细节</h3><ul>
+<li><p><strong>空洞率（dilation rate）</strong>: 空洞卷积的核心参数是空洞率 $d$（dilation rate）。当 $d = 1$ 时，空洞卷积退化为普通卷积；当 $d &gt; 1$ 时，卷积核的元素之间会插入 $d-1$ 个“空”的位置。</p>
+</li>
+<li><p><strong>扩展感受野</strong>: 通过设置较大的空洞率，卷积核可以在更大的输入图像区域上进行采样，而无需增加卷积核的大小。例如，一个 $3 \times 3$ 的卷积核在空洞率 $d = 2$ 时，其实际感受野变为 $5 \times 5$，而卷积核的参数量依然是 $3 \times 3$ 的。</p>
+</li>
+<li><p><strong>卷积操作</strong>: 在空洞卷积中，每个卷积核元素采样的位置是由空洞率决定的，而不再是连续的。例如，当 $d = 2$ 时，一个 $3 \times 3$ 的卷积核会跳过一个像素进行采样，即采样位置为原卷积核的 $(0, 0)$, $(0, 2)$, $(2, 0)$, $(2, 2)$ 等。</p>
+</li>
+</ul>
+<h3 id="4-数学表述"><a href="#4-数学表述" class="headerlink" title="4. 数学表述"></a>4. 数学表述</h3><p>给定输入特征图 $x$ 和卷积核 $w$，传统卷积可以表示为：</p>
+<script type="math/tex; mode=display">
+y(p) = \sum_{k} w(k) \cdot x(p + k)</script><p>其中 $p$ 是当前卷积的位置，$k$ 是卷积核的索引。</p>
+<p>在空洞卷积中，卷积公式变为：</p>
+<script type="math/tex; mode=display">
+y(p) = \sum_{k} w(k) \cdot x(p + d \cdot k)</script><p>其中 $d$ 是空洞率，$d \cdot k$ 表示在输入特征图中偏移的实际位置。</p>
+<h3 id="5-应用与优势"><a href="#5-应用与优势" class="headerlink" title="5. 应用与优势"></a>5. 应用与优势</h3><ul>
+<li><strong>增加感受野</strong>: 空洞卷积可以显著扩大感受野，适合需要捕获全局信息的任务，如语义分割中的场景理解。</li>
+<li><strong>减少计算量</strong>: 通过空洞卷积，可以在保持感受野扩大的同时，避免参数量和计算复杂度的显著增加。</li>
+<li><strong>多尺度特征融合</strong>: 空洞卷积常与多尺度特征融合技术结合使用，以同时捕获不同尺度的上下文信息。</li>
+</ul>
+<h3 id="6-实际效果"><a href="#6-实际效果" class="headerlink" title="6. 实际效果"></a>6. 实际效果</h3><p>空洞卷积在实际应用中，尤其是语义分割任务中，能够有效地提升模型对复杂场景的理解能力，同时保持计算资源的高效利用。这种技术已经被广泛应用于如DeepLab系列模型中。</p>
+<p>空洞卷积提供了一种优雅的方式，使得卷积神经网络在处理需要大范围上下文信息的任务时，能够在不增加太多计算负担的前提下，获得更大的感受野。</p>
+<h2 id="Deformable-Convolution"><a href="#Deformable-Convolution" class="headerlink" title="Deformable Convolution"></a>Deformable Convolution</h2><p>![[Pasted image 20240816140244.png|700]]<br>![[Pasted image 20240816141209.png|700]]</p>
+<p>![[Pasted image 20240816140536.png|700]]</p>
+<h3 id="优势与应用"><a href="#优势与应用" class="headerlink" title="优势与应用"></a><strong>优势与应用</strong></h3><ul>
+<li><strong>适应性</strong>: 可变形卷积能够根据输入内容调整卷积核的位置，因此在处理具有较大变形的对象时，表现更好。</li>
+<li><strong>提高检测精度</strong>: 在目标检测、语义分割等任务中引入可变形卷积，可以显著提高模型的检测精度，尤其是在处理形变多样的对象时。</li>
+<li><strong>广泛应用</strong>: 可变形卷积在各种计算机视觉任务中得到了广泛应用，如目标检测（Deformable R-CNN）、语义分割（Deeplab系列）等。</li>
+</ul>
+<h3 id="实际效果"><a href="#实际效果" class="headerlink" title="实际效果"></a><strong>实际效果</strong></h3><p>在实际应用中，可变形卷积能够有效提升模型对目标形变的适应能力，使得网络在面对更复杂的视觉场景时，能够保持更高的准确性和鲁棒性。</p>
+<p>这种技术的引入，极大地扩展了卷积神经网络在处理非刚性对象时的能力，为许多计算机视觉任务的改进提供了新的思路。</p>
+<h3 id="可变形卷积中的-Delta-p-是通过什么网络得到的？"><a href="#可变形卷积中的-Delta-p-是通过什么网络得到的？" class="headerlink" title="可变形卷积中的 $\Delta p$ 是通过什么网络得到的？"></a>可变形卷积中的 $\Delta p$ 是通过什么网络得到的？</h3><p>是的，在可变形卷积（Deformable Convolution）中，生成偏移量 $\Delta p$ 的网络通常是通过一个<strong>传统的卷积神经网络</strong>得到的。</p>
+<h4 id="具体过程如下："><a href="#具体过程如下：" class="headerlink" title="具体过程如下："></a>具体过程如下：</h4><ol>
+<li><p><strong>卷积操作生成偏移量</strong>:</p>
+<ul>
+<li>在可变形卷积中，首先会对输入特征图（与主要可变形卷积层相同）进行一次标准的卷积操作，这个卷积层专门用于生成偏移量 $\Delta p$。</li>
+<li>这个卷积层的卷积核大小通常与后续实际执行可变形卷积的卷积核大小相同。例如，如果可变形卷积的核大小为 $3 \times 3$，那么生成偏移量的卷积层的核大小也是 $3 \times 3$。</li>
+</ul>
+</li>
+<li><p><strong>通道数计算</strong>:</p>
+<ul>
+<li>偏移量 $\Delta p$ 的通道数为 $2 \times \text{kernel size} \times \text{kernel size}$。这是因为每个卷积核位置都需要两个偏移值（一个在 x 方向，一个在 y 方向），而卷积核有 $k \times k$ 个位置。</li>
+<li>以 $3 \times 3$ 的卷积核为例，$\Delta p$ 的通道数为 $2 \times 3 \times 3 = 18$。</li>
+</ul>
+</li>
+<li><p><strong>使用传统卷积层</strong>:</p>
+<ul>
+<li>生成 $\Delta p$ 的卷积层是一个传统的卷积层，这意味着它的参数是通过标准的反向传播算法进行训练和优化的。</li>
+<li>输入这个卷积层的特征图经过标准卷积操作后，输出的通道数即为上述的 $2 \times k \times k$。</li>
+</ul>
+</li>
+<li><p><strong>卷积层的具体作用</strong>:</p>
+<ul>
+<li>这个卷积层的目的是生成每个位置的偏移量 $\Delta p$，这些偏移量在后续的可变形卷积中用于调整卷积核的位置，使得卷积核能够更好地适应输入图像的几何变形。</li>
+</ul>
+</li>
+</ol>
+<h4 id="例子说明："><a href="#例子说明：" class="headerlink" title="例子说明："></a>例子说明：</h4><p>假设有一个输入特征图，其通道数为 $C$（例如 64），卷积核大小为 $3 \times 3$。生成偏移量的卷积层接受这个输入特征图，并输出通道数为 18（即 $2 \times 3 \times 3$）的特征图，其中每个像素点包含 18 个值，这 18 个值表示在该位置上 $3 \times 3$ 卷积核的 9 个点的 x 和 y 方向的偏移量。</p>
+<p>总结来说，生成 $\Delta p$ 的卷积层确实是一个传统的卷积层，其参数通过训练数据进行学习，并在整个网络中与其他层一起优化。这个卷积层可以看作是一个辅助模块，用于为可变形卷积提供灵活的采样位置。</p>
+<p>Refs: <a href="https://www.bilibili.com/video/BV1Sh4y1y75i/?spm_id_from=333.337.search-card.all.click" target="_blank" rel="noopener">Deformable Convolution ｜可变形卷积_哔哩哔哩_bilibili</a></p>
+<h1 id="Adam-AdamW"><a href="#Adam-AdamW" class="headerlink" title="Adam/AdamW"></a>Adam/AdamW</h1><p>全程：Adaptive Moment Estimation（自适应动量估计）</p>
+<h2 id="指数加权平均"><a href="#指数加权平均" class="headerlink" title="指数加权平均"></a>指数加权平均</h2><p>预测一个商店，第七天的营业额：</p>
+<p>![[Pasted image 20240814140739.png|500]]<br>![[Pasted image 20240814140916.png|500]]<br>在前几天，v与真实值$\theta$ 相差较大，所以用 $1-\beta ^{2}$ 进行修正。<br>由下图可知，经过修正后的$V^{correct}$ 更加准确 。 随着t的增大， $1-\beta ^{t}$ 趋近于 1。<br>![[Pasted image 20240814141149.png|500]]</p>
+<h2 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h2><p>问题：有的地方梯度很大，有的地方梯度很小，如下图，b的梯度大，所在 b出现了震荡。</p>
+<p>![[Pasted image 20240814141952.png|268]] ![[Pasted image 20240814142110.png|575]]</p>
+<h2 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h2><p>利用梯度的指数加权平均值来更新参数。<br>对于如上图 b的震荡，表示 b的梯度有正有负，所有进行加权平均后会趋向于变小，如下图所示。<br>![[Pasted image 20240814142633.png|400]]</p>
+<h2 id="RMSProp"><a href="#RMSProp" class="headerlink" title="RMSProp"></a>RMSProp</h2><p>全称：Root Mean Square Propagation<br>不使每个参数更新时差异过大。<br>$\varepsilon$ : 防止分母为 0.<br>![[Pasted image 20240814143415.png|400]]</p>
+<h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><p>是Momentum和RMSProp算法结合。<br>![[Pasted image 20240814144336.png|600]]</p>
+<h2 id="AdamW"><a href="#AdamW" class="headerlink" title="AdamW"></a>AdamW</h2><p>只在 Adam基础上加了一项：weight decay，即权重衰减。</p>
+<p>![[Pasted image 20240814144602.png|600]]</p>
+<p> weight decay并不完全L2正则 如下图所示，因为 L2 norm直接改变了Loss，而weight decay是再参数更新时加入了一个很小的项。<br> 两者在 SGD中效果一样，但再 Adam中，因为会 loss进行各种加权平均，所有和weight decay不同的。<br>![[Pasted image 20240814144838.png|600]]</p>
+<h2 id="Adam-AdamW参数量"><a href="#Adam-AdamW参数量" class="headerlink" title="Adam/AdamW参数量"></a>Adam/AdamW参数量</h2><p>因为梯度一般是个很小的值，所以需要用 float32来存储。<br>![[Pasted image 20240814145307.png|450]]</p>
+<h1 id="分类中的-IoU"><a href="#分类中的-IoU" class="headerlink" title="分类中的 IoU"></a>分类中的 IoU</h1><p>IoU: Intersection over Union<br>某类别 IoU = 该类别分类正确数量 / (该类别真实数量 + 错误预测为该类别数量)<br>该概念与目标检测中的 IoU类似：</p>
+<p>![[Pasted image 20240812164532.png]]</p>
 <h1 id="The-Rank-Loss-Problem-of-Self-Attention"><a href="#The-Rank-Loss-Problem-of-Self-Attention" class="headerlink" title="The Rank Loss Problem of Self Attention"></a>The Rank Loss Problem of Self Attention</h1><ol>
 <li>Self attention loses rank doubly exponentially with depth at initialization.(i.e. the more deep, the more same the outputs  are)</li>
 <li>The skip connections and MLPs mitigate this situation.</li>
@@ -329,7 +462,28 @@
 <li>I(x)是事件x的信息量<br>当概率越小，越不常见，信息量越大。</li>
 </ol>
 <h2 id="交叉熵（Cross-Entropy）"><a href="#交叉熵（Cross-Entropy）" class="headerlink" title="交叉熵（Cross Entropy）"></a>交叉熵（Cross Entropy）</h2><p>   交叉熵度量的是两个概率分布之间的平均编码长度。分布 ( P ) 的真实信息量为 ( -\log P(x) )，但使用 ( Q ) 进行编码时的平均信息量为 ( -\log Q(x) )。交叉熵定义为：</p>
-<script type="math/tex; mode=display">H(P, Q) = -\sum_x P(x) \log Q(x)</script><h2 id="分解KL散度"><a href="#分解KL散度" class="headerlink" title="分解KL散度"></a>分解KL散度</h2><p>   将KL散度公式进行分解，使用对数的性质 $\log \frac{a}{b} = \log a - \log b$：</p>
+<script type="math/tex; mode=display">H(P, Q) = -\sum_x P(x) \log Q(x)</script><h2 id="经典的二分类的交叉熵损失"><a href="#经典的二分类的交叉熵损失" class="headerlink" title="经典的二分类的交叉熵损失"></a>经典的二分类的交叉熵损失</h2><p><strong>经典的二分类的交叉熵损失中，一般不是负样本因为 label为 0，都被省略了吗？</strong></p>
+<p>你提到的情况是部分正确的，但省略负样本的说法可能有些误解。我们来详细解释一下二分类问题中的交叉熵损失是如何计算的。</p>
+<p>在二分类问题中，对于每个样本，我们有一个标签 $y$，其值为 0 或 1。模型输出的预测概率为 $\hat{y}$，表示预测为正类的概率。交叉熵损失通常定义为：</p>
+<script type="math/tex; mode=display">
+\text{Loss} = -[y \cdot \log(\hat{y}) + (1-y) \cdot \log(1-\hat{y})]</script><p>这个公式包含了两个部分：</p>
+<ol>
+<li><p><strong>正样本 ($y = 1$)：</strong></p>
+<ul>
+<li>当 $y = 1$ 时，损失为：<script type="math/tex; mode=display">
+-\log(\hat{y})</script>这个部分是我们希望最大化的，表示模型正确预测正样本的概率。</li>
+</ul>
+</li>
+<li><p><strong>负样本 ($y = 0$)：</strong></p>
+<ul>
+<li>当 $y = 0$ 时，损失为：<script type="math/tex; mode=display">
+-\log(1-\hat{y})</script>这个部分是我们希望最小化的，表示模型正确预测负样本的概率（即输出接近0）。</li>
+</ul>
+</li>
+</ol>
+<p>因此，负样本的损失是不会被省略的，只是因为当 $y = 0$ 时，第一个项 $y \cdot \log(\hat{y})$ 为 0，被省略的是正样本的损失项（因为它不贡献于此）。</p>
+<p>在实际实现时，如果我们专注于正样本（例如在一些特定应用场景下），有时候我们会只计算正样本的损失。但是在标准的二分类交叉熵损失计算中，负样本的损失也是被明确计算的，用来确保模型能够正确识别负样本。这与前面讨论的公式一致，只不过两者的表达形式稍有不同。</p>
+<h2 id="分解KL散度"><a href="#分解KL散度" class="headerlink" title="分解KL散度"></a>分解KL散度</h2><p>   将KL散度公式进行分解，使用对数的性质 $\log \frac{a}{b} = \log a - \log b$：</p>
 <script type="math/tex; mode=display">D_{KL}(P \| Q) = \sum_x P(x) \log P(x) - \sum_x P(x) \log Q(x)</script><p>   第一项 $\sum_x P(x) \log P(x)$是 P  分布的熵（Entropy），记为  $H(P)$：<br>   $H(P) = -\sum_x P(x) \log P(x)$</p>
 <p>   第二项$-\sum_x P(x) \log Q(x)$ 是 $P$ 和 $Q$分布的交叉熵$H(P, Q)$。</p>
 <p>KL散度可以用来表示在使用Q来近似P时所带来的  信息损失（编码效率下降，比如原本需要 6 个比特就能编码的信息，现在需要 8 个，这 2 个的差值就是信息损失）。<br>在 教师-学生 模型中，可以通过衡量学生经过 softmax后的分布和教师的KL散度来知道学生的学习。 ^f594ee</p>
@@ -377,7 +531,7 @@ Q(x) =
 <script type="math/tex; mode=display">H(P, Q) = -\sum_x P(x) \log Q(x)</script><p>计算如下：</p>
 <script type="math/tex; mode=display">H(P, Q) = -(0.5 \log 0.4 + 0.25 \log 0.3 + 0.125 \log 0.2 + 0.125 \log 0.1)</script><p>具体计算为：</p>
 <script type="math/tex; mode=display">H(P, Q) = -[0.5 \times (-0.916) + 0.25 \times (-1.737) + 0.125 \times (-2.322) + 0.125 \times (-3.322)]</script><script type="math/tex; mode=display">H(P, Q) = -( -0.458 - 0.43425 - 0.29025 - 0.41525 )</script><script type="math/tex; mode=display">H(P, Q) = 1.598</script><p>这表示在真实分布 $P$ 下，使用近似分布 $Q$ 进行编码时的平均编码长度为 1.598 比特。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>不匹配的概率分布 $Q(x)$ 会导致一些事件的编码长度变得更长，从而增加了整体的平均编码长度。这就是为什么 $Q(x)$ 比 $P(x)$ 需要更多比特来编码的原因。</p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>不匹配的概率分布 $Q(x)$ 会导致一些事件的编码长度变得更长，从而增加了整体的平均编码长度。这就是为什么 $Q(x)$ 比 $P(x)$ 需要更多比特来编码的原因。</p>
 <h2 id="交叉熵损失"><a href="#交叉熵损失" class="headerlink" title="交叉熵损失"></a>交叉熵损失</h2><p>交叉熵损失（Cross Entropy Loss）是机器学习和深度学习中常用的一种损失函数，主要用于分类问题。它衡量的是两个概率分布之间的差异，通常是模型预测的概率分布与真实标签的概率分布之间的差异。</p>
 <p>在分类任务中，假设有 $n$ 类，模型预测的概率分布为 $\mathbf{p} = (p_1, p_2, \ldots, p_n)$，真实的概率分布（即真实标签的one-hot表示）为 $\mathbf{q} = (q_1, q_2, \ldots, q_n)$。交叉熵损失的公式为：</p>
 <script type="math/tex; mode=display">L = -\sum_{i=1}^{n} q_i \log(p_i)</script><p>对于二分类问题，假设模型的输出为 $p$，真实标签为 $y$，那么交叉熵损失可以简化为：</p>
@@ -398,13 +552,13 @@ Q(x) =
 <li><p><strong>代价</strong>：正因为Attention机制的假设更为一般化，它需要更多的数据和更大的模型来弥补其在具体结构信息（如序列和空间信息）上的不足。因此，尽管它可以达到甚至超越RNN和CNN的效果，但需要在数据和计算资源上进行更多的投入。</p>
 </li>
 </ol>
-<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>总的来说，归纳偏置是指导机器学习模型如何处理和理解数据的关键假设。不同模型的归纳偏置不同，使得它们在不同类型的数据和任务上有不同的表现。Attention机制的广泛归纳偏置使其在很多任务上表现优异，但也需要更多的数据和更大的模型来弥补其对具体结构信息处理能力的不足。</p>
+<h2 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h2><p>总的来说，归纳偏置是指导机器学习模型如何处理和理解数据的关键假设。不同模型的归纳偏置不同，使得它们在不同类型的数据和任务上有不同的表现。Attention机制的广泛归纳偏置使其在很多任务上表现优异，但也需要更多的数据和更大的模型来弥补其对具体结构信息处理能力的不足。</p>
 <h1 id="softmax"><a href="#softmax" class="headerlink" title="softmax"></a>softmax</h1><script type="math/tex; mode=display">
 \text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}</script><h2 id="Softmax求梯度的公式推导"><a href="#Softmax求梯度的公式推导" class="headerlink" title="Softmax求梯度的公式推导"></a>Softmax求梯度的公式推导</h2><p>Softmax函数是机器学习中常用的激活函数，特别是在多分类任务中。它将一个向量中的每个分量映射为0到1之间的值，并且这些值的和为1。Softmax函数的公式为：</p>
 <script type="math/tex; mode=display">
 \sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^K e^{z_j}}</script><p>其中，$\mathbf{z}$是输入向量，$z_i$是向量$\mathbf{z}$的第i个分量，K是向量$\mathbf{z}$的长度。</p>
 <p>为了推导Softmax函数的梯度，我们需要计算它对输入$\mathbf{z}$的导数。具体来说，我们希望计算$\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j}$。</p>
-<h3 id="步骤-1-Softmax的偏导数"><a href="#步骤-1-Softmax的偏导数" class="headerlink" title="步骤 1: Softmax的偏导数"></a>步骤 1: Softmax的偏导数</h3><p>首先，记$\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{k=1}^K e^{z_k}}$。</p>
+<h3 id="步骤-1-Softmax的偏导数"><a href="#步骤-1-Softmax的偏导数" class="headerlink" title="步骤 1: Softmax的偏导数"></a>步骤 1: Softmax的偏导数</h3><p>首先，记$\sigma(\mathbf{z})<em>i = \frac{e^{z_i}}{\sum</em>{k=1}^K e^{z_k}}$。</p>
 <p>对第i个分量进行导数计算有两种情况：$i = j$和$i \neq j$。</p>
 <h4 id="情况-1-i-j"><a href="#情况-1-i-j" class="headerlink" title="情况 1: $i = j$"></a>情况 1: $i = j$</h4><p>当i等于j时，我们得到：</p>
 <script type="math/tex; mode=display">
@@ -424,10 +578,10 @@ Q(x) =
 <script type="math/tex; mode=display">
 \frac{\partial \sigma(\mathbf{z})_i}{\partial z_j} = -\sigma(\mathbf{z})_i \sigma(\mathbf{z})_j</script><h3 id="合并结果"><a href="#合并结果" class="headerlink" title="合并结果"></a>合并结果</h3><p>结合以上两种情况，我们可以写出Softmax函数对输入向量$\mathbf{z}$的梯度公式：</p>
 <script type="math/tex; mode=display">
-\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j} = \sigma(\mathbf{z})_i (\delta_{ij} - \sigma(\mathbf{z})_j)</script><p>其中，$\delta_{ij}$是Kronecker delta函数，当$i=j$时，$\delta_{ij}=1$，否则$\delta_{ij}=0$。</p>
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j} = \sigma(\mathbf{z})_i (\delta_{ij} - \sigma(\mathbf{z})_j)</script><p>其中，$\delta<em>{ij}$是Kronecker delta函数，当$i=j$时，$\delta</em>{ij}=1$，否则$\delta_{ij}=0$。</p>
 <p>总结一下，Softmax函数的梯度推导过程涉及对输入向量的每个分量进行求导，并且结果表示为矩阵形式，该矩阵的每个元素是上述两种情况之一。</p>
 <h2 id="Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸"><a href="#Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸" class="headerlink" title="Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸"></a>Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸</h2><h3 id="梯度消失的原因"><a href="#梯度消失的原因" class="headerlink" title="梯度消失的原因"></a>梯度消失的原因</h3><p>当Softmax函数的输入值范围较大时，Softmax的输出值会非常极端，即某些输出值接近1，而其他输出值接近0。这会导致在计算梯度时，梯度值会非常小，从而导致梯度消失。</p>
-<h3 id="具体分析"><a href="#具体分析" class="headerlink" title="具体分析"></a>具体分析</h3><p>对于Softmax函数 $\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{k} e^{z_k}}$，其梯度为：</p>
+<h3 id="具体分析"><a href="#具体分析" class="headerlink" title="具体分析"></a>具体分析</h3><p>对于Softmax函数 $\sigma(\mathbf{z})<em>i = \frac{e^{z_i}}{\sum</em>{k} e^{z_k}}$，其梯度为：</p>
 <script type="math/tex; mode=display">
 \frac{\partial \sigma(z_i)}{\partial z_j} = \sigma(z_i) (\delta_{ij} - \sigma(z_j))</script><p>在极端情况下：</p>
 <ul>
@@ -442,7 +596,7 @@ Q(x) =
 <li>缩小点积的值，使得输入值不会过大，从而使得Softmax的输出值更为均匀，不至于过于极端。</li>
 <li>使得Softmax输入值的方差变为1，确保输入值处于一个合理的范围内，避免梯度消失。</li>
 </ul>
-<h3 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h3><p>使用 $\sqrt{d_k}$ 进行缩放，主要目的是防止由于输入值范围较大导致的梯度消失问题。通过控制输入值的范围，可以确保Softmax函数的输出值更为均匀，从而避免梯度消失，确保网络的稳定训练。</p>
+<h3 id="总结-3"><a href="#总结-3" class="headerlink" title="总结"></a>总结</h3><p>使用 $\sqrt{d_k}$ 进行缩放，主要目的是防止由于输入值范围较大导致的梯度消失问题。通过控制输入值的范围，可以确保Softmax函数的输出值更为均匀，从而避免梯度消失，确保网络的稳定训练。</p>
 <p>所以，Softmax函数在输入值范围较大时，确实主要会导致梯度消失，而不是梯度爆炸。</p>
 <h1 id="OOD-accuracy"><a href="#OOD-accuracy" class="headerlink" title="OOD accuracy"></a>OOD accuracy</h1><p>out-of-distribution (OOD) accuracy</p>
 <h1 id="向量的高效搜索"><a href="#向量的高效搜索" class="headerlink" title="向量的高效搜索"></a>向量的高效搜索</h1><ul>
@@ -496,6 +650,7 @@ Q(x) =
 <li>Generation: input the retrieval information and the input query into LLM (GPT etc.) to generate answers.</li>
 </ol>
 <p>Pros: the response are greatly enhanced by the incorporation of external information</p>
+<p>经典的 RAG: 问题—-&gt; 向量数据库—-&gt;找到相关的 chunks(段落)—-&gt;把检索到的段落和问题 组成 prompt —-&gt; 大模型 —-&gt; 回复</p>
 <h1 id="Sparse-Convolution"><a href="#Sparse-Convolution" class="headerlink" title="Sparse Convolution"></a>Sparse Convolution</h1><h2 id="卷积核结构"><a href="#卷积核结构" class="headerlink" title="卷积核结构"></a>卷积核结构</h2><ol>
 <li>普通： 密集</li>
 <li>稀疏：有许多零，不参与训练。</li>
@@ -517,9 +672,9 @@ Q(x) =
 <p>![[lw13.png]]</p>
 <p>数据：  </p>
 <ol>
-<li>训练集图片$X_{tr}$、类别标签$Y_{tr}$</li>
-<li>测试集图片$X_{te}$、类别标签$Y_{te}$</li>
-<li>训练集、测试集各类别的描述：$A_{tr}$、$A_{te}$: 语意向量的 每一维 代表 一种属性。比如是否有尾巴，1代表有，0代表无。</li>
+<li>训练集图片$X<em>{tr}$、类别标签$Y</em>{tr}$</li>
+<li>测试集图片$X<em>{te}$、类别标签$Y</em>{te}$</li>
+<li>训练集、测试集各类别的描述：$A<em>{tr}$、$A</em>{te}$: 语意向量的 每一维 代表 一种属性。比如是否有尾巴，1代表有，0代表无。</li>
 <li>其中 描述A： <ol>
 <li>人工标注。</li>
 <li>自学习。（效果差很多）</li>
@@ -671,7 +826,7 @@ Q(x) =
 <p>参考文档： <a href="https://paperswithcode.com/method/gelu" target="_blank" rel="noopener">https://paperswithcode.com/method/gelu</a></p>
 <h1 id="EMA"><a href="#EMA" class="headerlink" title="EMA"></a>EMA</h1><p>![[lw238.png]]</p>
 <p>参考文档： <a href="https://www.investopedia.com/terms/e/ema.asp" target="_blank" rel="noopener">https://www.investopedia.com/terms/e/ema.asp</a></p>
-<h1 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h1><h1 id="NMS"><a href="#NMS" class="headerlink" title="NMS"></a>NMS</h1><p>Non Maximum Suppression<br>Step 1 : Select the prediction S with highest confidence score and remove it from P and add it to the final prediction list keep. (keep is empty initially).<br>Step 2 : Now compare this prediction S with all the predictions present in P. Calculate the IoU of this prediction S with every other predictions in P. If the IoU is greater than the threshold thresh_iou for any prediction T present in P, remove prediction T from P.<br>Step 3 : If there are still predictions left in P, then go to Step 1 again, else return the list keep containing the filtered predictions.</p>
+<h1 id="NMS"><a href="#NMS" class="headerlink" title="NMS"></a>NMS</h1><p>Non Maximum Suppression<br>Step 1 : Select the prediction S with highest confidence score and remove it from P and add it to the final prediction list keep. (keep is empty initially).<br>Step 2 : Now compare this prediction S with all the predictions present in P. Calculate the IoU of this prediction S with every other predictions in P. If the IoU is greater than the threshold thresh_iou for any prediction T present in P, remove prediction T from P.<br>Step 3 : If there are still predictions left in P, then go to Step 1 again, else return the list keep containing the filtered predictions.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nms_pytorch</span><span class="params">(P : torch.tensor ,thresh_iou : float)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Apply non-maximum suppression to avoid detecting too many</span></span><br><span class="line"><span class="string">    overlapping bounding boxes for a given object.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        boxes: (tensor) The location preds for the image </span></span><br><span class="line"><span class="string">            along with the class predscores, Shape: [num_boxes,5].</span></span><br><span class="line"><span class="string">        thresh_iou: (float) The overlap thresh for suppressing unnecessary boxes.</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        A list of filtered boxes, Shape: [ , 5]</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment"># we extract coordinates for every </span></span><br><span class="line">    <span class="comment"># prediction box present in P</span></span><br><span class="line">    x1 = P[:, <span class="number">0</span>]</span><br><span class="line">    y1 = P[:, <span class="number">1</span>]</span><br><span class="line">    x2 = P[:, <span class="number">2</span>]</span><br><span class="line">    y2 = P[:, <span class="number">3</span>]</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># we extract the confidence scores as well</span></span><br><span class="line">    scores = P[:, <span class="number">4</span>]</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># calculate area of every block in P</span></span><br><span class="line">    areas = (x2 - x1) * (y2 - y1)</span><br><span class="line">     </span><br><span class="line">    <span class="comment"># sort the prediction boxes in P</span></span><br><span class="line">    <span class="comment"># according to their confidence scores</span></span><br><span class="line">    order = scores.argsort()</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># initialise an empty list for </span></span><br><span class="line">    <span class="comment"># filtered prediction boxes</span></span><br><span class="line">    keep = []</span><br><span class="line">     </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> len(order) &gt; <span class="number">0</span>:</span><br><span class="line">         </span><br><span class="line">        <span class="comment"># extract the index of the </span></span><br><span class="line">        <span class="comment"># prediction with highest score</span></span><br><span class="line">        <span class="comment"># we call this prediction S</span></span><br><span class="line">        idx = order[<span class="number">-1</span>]</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># push S in filtered predictions list</span></span><br><span class="line">        keep.append(P[idx])</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># remove S from P</span></span><br><span class="line">        order = order[:<span class="number">-1</span>]</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># sanity check</span></span><br><span class="line">        <span class="keyword">if</span> len(order) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">         </span><br><span class="line">        <span class="comment"># select coordinates of BBoxes according to </span></span><br><span class="line">        <span class="comment"># the indices in order</span></span><br><span class="line">        xx1 = torch.index_select(x1,dim = <span class="number">0</span>, index = order)</span><br><span class="line">        xx2 = torch.index_select(x2,dim = <span class="number">0</span>, index = order)</span><br><span class="line">        yy1 = torch.index_select(y1,dim = <span class="number">0</span>, index = order)</span><br><span class="line">        yy2 = torch.index_select(y2,dim = <span class="number">0</span>, index = order)</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># find the coordinates of the intersection boxes</span></span><br><span class="line">        xx1 = torch.max(xx1, x1[idx])</span><br><span class="line">        yy1 = torch.max(yy1, y1[idx])</span><br><span class="line">        xx2 = torch.min(xx2, x2[idx])</span><br><span class="line">        yy2 = torch.min(yy2, y2[idx])</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># find height and width of the intersection boxes</span></span><br><span class="line">        w = xx2 - xx1</span><br><span class="line">        h = yy2 - yy1</span><br><span class="line">         </span><br><span class="line">        <span class="comment"># take max with 0.0 to avoid negative w and h</span></span><br><span class="line">        <span class="comment"># due to non-overlapping boxes</span></span><br><span class="line">        w = torch.clamp(w, min=<span class="number">0.0</span>)</span><br><span class="line">        h = torch.clamp(h, min=<span class="number">0.0</span>)</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># find the intersection area</span></span><br><span class="line">        inter = w*h</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># find the areas of BBoxes according the indices in order</span></span><br><span class="line">        rem_areas = torch.index_select(areas, dim = <span class="number">0</span>, index = order) </span><br><span class="line"> </span><br><span class="line">        <span class="comment"># find the union of every prediction T in P</span></span><br><span class="line">        <span class="comment"># with the prediction S</span></span><br><span class="line">        <span class="comment"># Note that areas[idx] represents area of S</span></span><br><span class="line">        union = (rem_areas - inter) + areas[idx]</span><br><span class="line">         </span><br><span class="line">        <span class="comment"># find the IoU of every prediction in P with S</span></span><br><span class="line">        IoU = inter / union</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># keep the boxes with IoU less than thresh_iou</span></span><br><span class="line">        mask = IoU &lt; thresh_iou</span><br><span class="line">        order = order[mask]</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">return</span> keep</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Let P be the following</span></span><br><span class="line">P = torch.tensor([</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">0.95</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">0.93</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">0.9</span>, <span class="number">3.6</span>, <span class="number">3</span>, <span class="number">0.98</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">0.9</span>, <span class="number">3.5</span>, <span class="number">3</span>, <span class="number">0.97</span>]</span><br><span class="line">])</span><br><span class="line">nms_pytorch(P,<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>[tensor([1.0000, 0.9000, 3.6000, 3.0000, 0.9800])]
 </code></pre><p>Refs: <a href="https://learnopencv.com/non-maximum-suppression-theory-and-implementation-in-pytorch/#:~:text=Non%20Maximum%20Suppression%20(NMS)%20is,arrive%20at%20the%20desired%20results" target="_blank" rel="noopener">https://learnopencv.com/non-maximum-suppression-theory-and-implementation-in-pytorch/#:~:text=Non%20Maximum%20Suppression%20(NMS)%20is,arrive%20at%20the%20desired%20results</a>.</p>
@@ -706,7 +861,7 @@ Q(x) =
 <h2 id="Panoramic-segmentation"><a href="#Panoramic-segmentation" class="headerlink" title="Panoramic segmentation"></a>Panoramic segmentation</h2><ol>
 <li>Segment all objection including the background.<br>![[Pasted image 20230903110051.png|400]]</li>
 </ol>
-<h1 id="convex-combination"><a href="#convex-combination" class="headerlink" title="convex combination"></a>convex combination</h1><p>$V’_i=\sum_{n}w_nV_n$, Where $W_n\ge0$ and $\sum_{n}w_n=1$</p>
+<h1 id="convex-combination"><a href="#convex-combination" class="headerlink" title="convex combination"></a>convex combination</h1><p>$V’<em>i=\sum</em>{n}w<em>nV_n$, Where $W_n\ge0$ and $\sum</em>{n}w_n=1$</p>
 <p>Like the below, the convex combination of those input points must be in Convex Hull.<br>![[Pasted image 20230904205822.png|575]]<br>and, the biggest angle of the convex combination is must be equal to or less than the biggest angle of the original input points(features). (assuming the input points don’t contain the origin)<br>![[Pasted image 20230904210239.png|575]]</p>
 
         
@@ -726,7 +881,7 @@ Q(x) =
           </div>
           
     
-    <div class="comments" id="gitalk-container"></div>
+    <div class="comments" id="comments"></div>
   
 
         </div>
@@ -759,7 +914,7 @@ Q(x) =
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Rank-Loss-Problem-of-Self-Attention"><span class="nav-number">1.</span> <span class="nav-text">The Rank Loss Problem of Self Attention</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#温度系数"><span class="nav-number">2.</span> <span class="nav-text">温度系数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#熵"><span class="nav-number">3.</span> <span class="nav-text">熵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自信息量"><span class="nav-number">3.1.</span> <span class="nav-text">自信息量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵（Cross-Entropy）"><span class="nav-number">3.2.</span> <span class="nav-text">交叉熵（Cross Entropy）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分解KL散度"><span class="nav-number">3.3.</span> <span class="nav-text">分解KL散度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#这里的信息损失："><span class="nav-number">3.3.1.</span> <span class="nav-text">这里的信息损失：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-预测模型中的信息损失"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">1. 预测模型中的信息损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数据压缩中的信息损失"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">2. 数据压缩中的信息损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-自然语言处理中的信息损失"><span class="nav-number">3.3.1.3.</span> <span class="nav-text">3. 自然语言处理中的信息损失</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么-Q-x-比-P-x-需要更多比特来编码"><span class="nav-number">3.4.</span> <span class="nav-text">为什么 $Q(x)$ 比 $P(x)$ 需要更多比特来编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自信息量（Self-Information）"><span class="nav-number">3.4.1.</span> <span class="nav-text">自信息量（Self-Information）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理想编码长度"><span class="nav-number">3.4.2.</span> <span class="nav-text">理想编码长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用近似分布进行编码"><span class="nav-number">3.4.3.</span> <span class="nav-text">使用近似分布进行编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平均编码长度"><span class="nav-number">3.4.4.</span> <span class="nav-text">平均编码长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#举例说明"><span class="nav-number">3.4.5.</span> <span class="nav-text">举例说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.4.6.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵损失"><span class="nav-number">3.5.</span> <span class="nav-text">交叉熵损失</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归纳偏置（Inductive-Bias）"><span class="nav-number">4.</span> <span class="nav-text">归纳偏置（Inductive Bias）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention机制的优势"><span class="nav-number">4.1.</span> <span class="nav-text">Attention机制的优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-1"><span class="nav-number">4.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#softmax"><span class="nav-number">5.</span> <span class="nav-text">softmax</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax求梯度的公式推导"><span class="nav-number">5.1.</span> <span class="nav-text">Softmax求梯度的公式推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤-1-Softmax的偏导数"><span class="nav-number">5.1.1.</span> <span class="nav-text">步骤 1: Softmax的偏导数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#情况-1-i-j"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">情况 1: $i = j$</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#情况-2-i-neq-j"><span class="nav-number">5.1.1.2.</span> <span class="nav-text">情况 2: $i \neq j$</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并结果"><span class="nav-number">5.1.2.</span> <span class="nav-text">合并结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸"><span class="nav-number">5.2.</span> <span class="nav-text">Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度消失的原因"><span class="nav-number">5.2.1.</span> <span class="nav-text">梯度消失的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体分析"><span class="nav-number">5.2.2.</span> <span class="nav-text">具体分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-sqrt-d-k-进行缩放的原因"><span class="nav-number">5.2.3.</span> <span class="nav-text">使用 $\sqrt{d_k}$ 进行缩放的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-2"><span class="nav-number">5.2.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OOD-accuracy"><span class="nav-number">6.</span> <span class="nav-text">OOD accuracy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#向量的高效搜索"><span class="nav-number">7.</span> <span class="nav-text">向量的高效搜索</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#近似最邻近"><span class="nav-number">8.</span> <span class="nav-text">近似最邻近</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现"><span class="nav-number">8.1.</span> <span class="nav-text">如何实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分区"><span class="nav-number">8.1.1.</span> <span class="nav-text">分区</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三种局部敏感哈希函数原理"><span class="nav-number">9.</span> <span class="nav-text">三种局部敏感哈希函数原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Incremental-learning"><span class="nav-number">10.</span> <span class="nav-text">Incremental learning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维链方法（CoT）"><span class="nav-number">11.</span> <span class="nav-text">思维链方法（CoT）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MoE"><span class="nav-number">12.</span> <span class="nav-text">MoE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RAG"><span class="nav-number">13.</span> <span class="nav-text">RAG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sparse-Convolution"><span class="nav-number">14.</span> <span class="nav-text">Sparse Convolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积核结构"><span class="nav-number">14.1.</span> <span class="nav-text">卷积核结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算效率"><span class="nav-number">14.2.</span> <span class="nav-text">计算效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用领域"><span class="nav-number">14.3.</span> <span class="nav-text">应用领域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#one-shot-few-shot"><span class="nav-number">15.</span> <span class="nav-text">one-shot, few shot</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zero-Shot-Learning-零次学习"><span class="nav-number">16.</span> <span class="nav-text">Zero-Shot Learning (零次学习)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#top-1-accuracy-VS-top-5-accuracy"><span class="nav-number">17.</span> <span class="nav-text">top-1 accuracy VS top-5 accuracy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Color-Jittering"><span class="nav-number">18.</span> <span class="nav-text">Color Jittering</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Beam-search"><span class="nav-number">19.</span> <span class="nav-text">Beam search</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn-算法图鉴（待学习）"><span class="nav-number">20.</span> <span class="nav-text">sklearn 算法图鉴（待学习）?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#K-Means-Clusters"><span class="nav-number">21.</span> <span class="nav-text">K-Means Clusters</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KNN（K-Nearest-Neighbors）"><span class="nav-number">22.</span> <span class="nav-text">KNN（K Nearest Neighbors）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Self-training（半监督学习方法）"><span class="nav-number">23.</span> <span class="nav-text">Self-training（半监督学习方法）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Noisy-Student"><span class="nav-number">24.</span> <span class="nav-text">Noisy Student</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stochastic-depth"><span class="nav-number">25.</span> <span class="nav-text">stochastic depth</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cosine-学习率衰减策略"><span class="nav-number">26.</span> <span class="nav-text">cosine 学习率衰减策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算-模型-计算浮点数"><span class="nav-number">27.</span> <span class="nav-text">计算 模型 计算浮点数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#L2-norm-L2-Normalize"><span class="nav-number">28.</span> <span class="nav-text">L2 norm, L2 Normalize</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迁移学习。"><span class="nav-number">29.</span> <span class="nav-text">迁移学习。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Closed-book-QA"><span class="nav-number">30.</span> <span class="nav-text">Closed book QA:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FLOPs"><span class="nav-number">31.</span> <span class="nav-text">FLOPs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GLUE"><span class="nav-number">32.</span> <span class="nav-text">GLUE:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EMA"><span class="nav-number">33.</span> <span class="nav-text">EMA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Adam"><span class="nav-number">34.</span> <span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NMS"><span class="nav-number">35.</span> <span class="nav-text">NMS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ill-posed-problems"><span class="nav-number">36.</span> <span class="nav-text">ill-posed problems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sigmoid"><span class="nav-number">37.</span> <span class="nav-text">sigmoid</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点："><span class="nav-number">37.0.1.</span> <span class="nav-text">特点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#semantic-Instance-Panoramic-segmentation"><span class="nav-number">38.</span> <span class="nav-text">(semantic, Instance, Panoramic) segmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#semantic-segmentation"><span class="nav-number">38.1.</span> <span class="nav-text">semantic segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instance-segmentation"><span class="nav-number">38.2.</span> <span class="nav-text">Instance segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Panoramic-segmentation"><span class="nav-number">38.3.</span> <span class="nav-text">Panoramic segmentation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#convex-combination"><span class="nav-number">39.</span> <span class="nav-text">convex combination</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#转置卷积"><span class="nav-number">1.</span> <span class="nav-text">转置卷积</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#交叉熵损失-VS-L1Loss"><span class="nav-number">2.</span> <span class="nav-text">交叉熵损失_VS_L1Loss</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-任务性质的不同"><span class="nav-number">2.0.1.</span> <span class="nav-text">1. 任务性质的不同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-交叉熵损失的适用性"><span class="nav-number">2.0.2.</span> <span class="nav-text">2. 交叉熵损失的适用性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-L1-损失的局限性"><span class="nav-number">2.0.3.</span> <span class="nav-text">3. L1 损失的局限性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-交叉熵损失的优越性"><span class="nav-number">2.0.4.</span> <span class="nav-text">4. 交叉熵损失的优越性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.0.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#交叉熵损失的数值不稳定性"><span class="nav-number">3.</span> <span class="nav-text">交叉熵损失的数值不稳定性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#各种卷积类型"><span class="nav-number">4.</span> <span class="nav-text">各种卷积类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#普通卷积"><span class="nav-number">4.1.</span> <span class="nav-text">普通卷积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#空洞卷积（Dilated-Convolution）"><span class="nav-number">4.2.</span> <span class="nav-text">空洞卷积（Dilated Convolution）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-传统卷积的局限性"><span class="nav-number">4.2.1.</span> <span class="nav-text">1. 传统卷积的局限性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-空洞卷积的引入"><span class="nav-number">4.2.2.</span> <span class="nav-text">2. 空洞卷积的引入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-原理细节"><span class="nav-number">4.2.3.</span> <span class="nav-text">3. 原理细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-数学表述"><span class="nav-number">4.2.4.</span> <span class="nav-text">4. 数学表述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-应用与优势"><span class="nav-number">4.2.5.</span> <span class="nav-text">5. 应用与优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-实际效果"><span class="nav-number">4.2.6.</span> <span class="nav-text">6. 实际效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deformable-Convolution"><span class="nav-number">4.3.</span> <span class="nav-text">Deformable Convolution</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优势与应用"><span class="nav-number">4.3.1.</span> <span class="nav-text">优势与应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际效果"><span class="nav-number">4.3.2.</span> <span class="nav-text">实际效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可变形卷积中的-Delta-p-是通过什么网络得到的？"><span class="nav-number">4.3.3.</span> <span class="nav-text">可变形卷积中的 $\Delta p$ 是通过什么网络得到的？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#具体过程如下："><span class="nav-number">4.3.3.1.</span> <span class="nav-text">具体过程如下：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例子说明："><span class="nav-number">4.3.3.2.</span> <span class="nav-text">例子说明：</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Adam-AdamW"><span class="nav-number">5.</span> <span class="nav-text">Adam/AdamW</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#指数加权平均"><span class="nav-number">5.1.</span> <span class="nav-text">指数加权平均</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SGD"><span class="nav-number">5.2.</span> <span class="nav-text">SGD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Momentum"><span class="nav-number">5.3.</span> <span class="nav-text">Momentum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RMSProp"><span class="nav-number">5.4.</span> <span class="nav-text">RMSProp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adam"><span class="nav-number">5.5.</span> <span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AdamW"><span class="nav-number">5.6.</span> <span class="nav-text">AdamW</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adam-AdamW参数量"><span class="nav-number">5.7.</span> <span class="nav-text">Adam/AdamW参数量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分类中的-IoU"><span class="nav-number">6.</span> <span class="nav-text">分类中的 IoU</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Rank-Loss-Problem-of-Self-Attention"><span class="nav-number">7.</span> <span class="nav-text">The Rank Loss Problem of Self Attention</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#温度系数"><span class="nav-number">8.</span> <span class="nav-text">温度系数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#熵"><span class="nav-number">9.</span> <span class="nav-text">熵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自信息量"><span class="nav-number">9.1.</span> <span class="nav-text">自信息量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵（Cross-Entropy）"><span class="nav-number">9.2.</span> <span class="nav-text">交叉熵（Cross Entropy）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#经典的二分类的交叉熵损失"><span class="nav-number">9.3.</span> <span class="nav-text">经典的二分类的交叉熵损失</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分解KL散度"><span class="nav-number">9.4.</span> <span class="nav-text">分解KL散度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#这里的信息损失："><span class="nav-number">9.4.1.</span> <span class="nav-text">这里的信息损失：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-预测模型中的信息损失"><span class="nav-number">9.4.1.1.</span> <span class="nav-text">1. 预测模型中的信息损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数据压缩中的信息损失"><span class="nav-number">9.4.1.2.</span> <span class="nav-text">2. 数据压缩中的信息损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-自然语言处理中的信息损失"><span class="nav-number">9.4.1.3.</span> <span class="nav-text">3. 自然语言处理中的信息损失</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么-Q-x-比-P-x-需要更多比特来编码"><span class="nav-number">9.5.</span> <span class="nav-text">为什么 $Q(x)$ 比 $P(x)$ 需要更多比特来编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自信息量（Self-Information）"><span class="nav-number">9.5.1.</span> <span class="nav-text">自信息量（Self-Information）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理想编码长度"><span class="nav-number">9.5.2.</span> <span class="nav-text">理想编码长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用近似分布进行编码"><span class="nav-number">9.5.3.</span> <span class="nav-text">使用近似分布进行编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平均编码长度"><span class="nav-number">9.5.4.</span> <span class="nav-text">平均编码长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#举例说明"><span class="nav-number">9.5.5.</span> <span class="nav-text">举例说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-1"><span class="nav-number">9.5.6.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵损失"><span class="nav-number">9.6.</span> <span class="nav-text">交叉熵损失</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归纳偏置（Inductive-Bias）"><span class="nav-number">10.</span> <span class="nav-text">归纳偏置（Inductive Bias）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention机制的优势"><span class="nav-number">10.1.</span> <span class="nav-text">Attention机制的优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-2"><span class="nav-number">10.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#softmax"><span class="nav-number">11.</span> <span class="nav-text">softmax</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax求梯度的公式推导"><span class="nav-number">11.1.</span> <span class="nav-text">Softmax求梯度的公式推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤-1-Softmax的偏导数"><span class="nav-number">11.1.1.</span> <span class="nav-text">步骤 1: Softmax的偏导数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#情况-1-i-j"><span class="nav-number">11.1.1.1.</span> <span class="nav-text">情况 1: $i = j$</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#情况-2-i-neq-j"><span class="nav-number">11.1.1.2.</span> <span class="nav-text">情况 2: $i \neq j$</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并结果"><span class="nav-number">11.1.2.</span> <span class="nav-text">合并结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸"><span class="nav-number">11.2.</span> <span class="nav-text">Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度消失的原因"><span class="nav-number">11.2.1.</span> <span class="nav-text">梯度消失的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体分析"><span class="nav-number">11.2.2.</span> <span class="nav-text">具体分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-sqrt-d-k-进行缩放的原因"><span class="nav-number">11.2.3.</span> <span class="nav-text">使用 $\sqrt{d_k}$ 进行缩放的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-3"><span class="nav-number">11.2.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OOD-accuracy"><span class="nav-number">12.</span> <span class="nav-text">OOD accuracy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#向量的高效搜索"><span class="nav-number">13.</span> <span class="nav-text">向量的高效搜索</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#近似最邻近"><span class="nav-number">14.</span> <span class="nav-text">近似最邻近</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现"><span class="nav-number">14.1.</span> <span class="nav-text">如何实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分区"><span class="nav-number">14.1.1.</span> <span class="nav-text">分区</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三种局部敏感哈希函数原理"><span class="nav-number">15.</span> <span class="nav-text">三种局部敏感哈希函数原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Incremental-learning"><span class="nav-number">16.</span> <span class="nav-text">Incremental learning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维链方法（CoT）"><span class="nav-number">17.</span> <span class="nav-text">思维链方法（CoT）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MoE"><span class="nav-number">18.</span> <span class="nav-text">MoE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RAG"><span class="nav-number">19.</span> <span class="nav-text">RAG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sparse-Convolution"><span class="nav-number">20.</span> <span class="nav-text">Sparse Convolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积核结构"><span class="nav-number">20.1.</span> <span class="nav-text">卷积核结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算效率"><span class="nav-number">20.2.</span> <span class="nav-text">计算效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用领域"><span class="nav-number">20.3.</span> <span class="nav-text">应用领域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#one-shot-few-shot"><span class="nav-number">21.</span> <span class="nav-text">one-shot, few shot</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zero-Shot-Learning-零次学习"><span class="nav-number">22.</span> <span class="nav-text">Zero-Shot Learning (零次学习)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#top-1-accuracy-VS-top-5-accuracy"><span class="nav-number">23.</span> <span class="nav-text">top-1 accuracy VS top-5 accuracy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Color-Jittering"><span class="nav-number">24.</span> <span class="nav-text">Color Jittering</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Beam-search"><span class="nav-number">25.</span> <span class="nav-text">Beam search</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn-算法图鉴（待学习）"><span class="nav-number">26.</span> <span class="nav-text">sklearn 算法图鉴（待学习）?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#K-Means-Clusters"><span class="nav-number">27.</span> <span class="nav-text">K-Means Clusters</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KNN（K-Nearest-Neighbors）"><span class="nav-number">28.</span> <span class="nav-text">KNN（K Nearest Neighbors）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Self-training（半监督学习方法）"><span class="nav-number">29.</span> <span class="nav-text">Self-training（半监督学习方法）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Noisy-Student"><span class="nav-number">30.</span> <span class="nav-text">Noisy Student</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stochastic-depth"><span class="nav-number">31.</span> <span class="nav-text">stochastic depth</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cosine-学习率衰减策略"><span class="nav-number">32.</span> <span class="nav-text">cosine 学习率衰减策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算-模型-计算浮点数"><span class="nav-number">33.</span> <span class="nav-text">计算 模型 计算浮点数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#L2-norm-L2-Normalize"><span class="nav-number">34.</span> <span class="nav-text">L2 norm, L2 Normalize</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迁移学习。"><span class="nav-number">35.</span> <span class="nav-text">迁移学习。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Closed-book-QA"><span class="nav-number">36.</span> <span class="nav-text">Closed book QA:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FLOPs"><span class="nav-number">37.</span> <span class="nav-text">FLOPs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GLUE"><span class="nav-number">38.</span> <span class="nav-text">GLUE:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EMA"><span class="nav-number">39.</span> <span class="nav-text">EMA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NMS"><span class="nav-number">40.</span> <span class="nav-text">NMS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ill-posed-problems"><span class="nav-number">41.</span> <span class="nav-text">ill-posed problems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sigmoid"><span class="nav-number">42.</span> <span class="nav-text">sigmoid</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点："><span class="nav-number">42.0.1.</span> <span class="nav-text">特点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#semantic-Instance-Panoramic-segmentation"><span class="nav-number">43.</span> <span class="nav-text">(semantic, Instance, Panoramic) segmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#semantic-segmentation"><span class="nav-number">43.1.</span> <span class="nav-text">semantic segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instance-segmentation"><span class="nav-number">43.2.</span> <span class="nav-text">Instance segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Panoramic-segmentation"><span class="nav-number">43.3.</span> <span class="nav-text">Panoramic segmentation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#convex-combination"><span class="nav-number">44.</span> <span class="nav-text">convex combination</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -777,7 +932,7 @@ Q(x) =
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -810,7 +965,9 @@ Q(x) =
         
           
         
-        <span class="site-state-item-count">9</span>
+          
+        
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -871,7 +1028,19 @@ Q(x) =
         
           
         
-        <span class="site-state-item-count">23</span>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
@@ -933,7 +1102,8 @@ Q(x) =
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+        <div class="copyright"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">沪ICP备2024084445号 </a>
+  <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" rel="noopener" target="_blank"> </a>&copy; <span itemprop="copyrightYear">2026</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -942,16 +1112,17 @@ Q(x) =
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">71k</span>
+    <span title="站点总字数">93k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:59</span>
+    <span title="站点阅读时长">2:35</span>
 </div>
 
+
+
         
-<div class="beian" style="text-align:center;margin-top:10px;"><a href="https://beian.miit.gov.cn" target="_blank" rel="noopener" style="color:#999;font-size:12px;">沪ICP备2024084445号-1</a></div>
 <div class="busuanzi-count">
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <span class="post-meta-item-icon">
@@ -1093,26 +1264,29 @@ Q(x) =
   
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.2/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(item => {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'xxYV7WqH5ZoRhrwNzfVqfB8w-gzGzoHsz',
+    appKey: 'GYwbjnqqCz4gmExrUFAxxKBK',
+    placeholder: '说点什么～ 上栏的 “昵称”、“邮箱” 可不填',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
 
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '140d0161c7c4631e2764',
-          clientSecret: '90d536de668c0e5a417f895d3af6a037d1528253',
-          repo: 'HuzhenYou.github.io',
-          owner: 'HuzhenYou',
-          admin: ['HuzhenYou'],
-          id:'gitalk_20230910202136',
-          labels: 'gitalk'.split(',').filter(l => l),
-          perPage: 10,
-          pagerDirection: 'last',
-          createIssueManually: false,
-          distractionFreeMode: false
-        })
-
-        gitalk.render('gitalk-container')           
-       </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
+</script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"live2d-widget-model-haru/01"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

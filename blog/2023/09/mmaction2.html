@@ -99,7 +99,7 @@
 <meta property="og:description" content="mmaction人体行为检测脚本demo/demo_spatiotemporal_det.py的分析。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020230912092443.png">
-<meta property="og:updated_time" content="2024-07-16T08:24:38.629Z">
+<meta property="og:updated_time" content="2024-07-04T07:46:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mmaction2之demo_spatiotemporal_det.py分析">
 <meta name="twitter:description" content="mmaction人体行为检测脚本demo/demo_spatiotemporal_det.py的分析。">
@@ -122,6 +122,9 @@
   <title>mmaction2之demo_spatiotemporal_det.py分析 | 九万里</title>
   <meta name="generator" content="Hexo 3.9.0">
   <meta name="google-site-verification" content="WRvG1tIE8Ae2e_jnlkkVO8Yt-CFtzc_lei8TGPXGML8" />
+  <meta name="google-site-verification" content="OstEGiE3ESciB7IL56VbUytOmP13jX5PDo65XcI4v8k" />
+  <meta name="msvalidate.01" content="8F93DB9D93C13B852661088455093440" />
+  <meta name="baidu-site-verification" content="codeva-gbOLxIULmM" />
   
 
 
@@ -310,7 +313,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-16 16:24:38" itemprop="dateModified" datetime="2024-07-16T16:24:38+08:00">2024-07-16</time>
+                <time title="修改时间：2024-07-04 15:46:02" itemprop="dateModified" datetime="2024-07-04T15:46:02+08:00">2024-07-04</time>
               </span>
             
           
@@ -337,6 +340,20 @@
               <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/blog/2023/09/mmaction2.html#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/blog/2023/09/mmaction2.html" itemprop="commentCount"></span></a>
+  </span>
+  
+  
           <br>
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
@@ -482,7 +499,7 @@
           </div>
           
     
-    <div class="comments" id="gitalk-container"></div>
+    <div class="comments" id="comments"></div>
   
 
         </div>
@@ -533,7 +550,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -566,7 +583,9 @@
         
           
         
-        <span class="site-state-item-count">9</span>
+          
+        
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -627,7 +646,19 @@
         
           
         
-        <span class="site-state-item-count">23</span>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
@@ -689,7 +720,8 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+        <div class="copyright"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">沪ICP备2024084445号 </a>
+  <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" rel="noopener" target="_blank"> </a>&copy; <span itemprop="copyrightYear">2026</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -698,16 +730,17 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">71k</span>
+    <span title="站点总字数">93k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:59</span>
+    <span title="站点阅读时长">2:35</span>
 </div>
 
+
+
         
-<div class="beian" style="text-align:center;margin-top:10px;"><a href="https://beian.miit.gov.cn" target="_blank" rel="noopener" style="color:#999;font-size:12px;">沪ICP备2024084445号-1</a></div>
 <div class="busuanzi-count">
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <span class="post-meta-item-icon">
@@ -849,26 +882,29 @@
   
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.2/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(item => {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'xxYV7WqH5ZoRhrwNzfVqfB8w-gzGzoHsz',
+    appKey: 'GYwbjnqqCz4gmExrUFAxxKBK',
+    placeholder: '说点什么～ 上栏的 “昵称”、“邮箱” 可不填',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
 
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '140d0161c7c4631e2764',
-          clientSecret: '90d536de668c0e5a417f895d3af6a037d1528253',
-          repo: 'HuzhenYou.github.io',
-          owner: 'HuzhenYou',
-          admin: ['HuzhenYou'],
-          id:'gitalk_20230917153405',
-          labels: 'gitalk'.split(',').filter(l => l),
-          perPage: 10,
-          pagerDirection: 'last',
-          createIssueManually: false,
-          distractionFreeMode: false
-        })
-
-        gitalk.render('gitalk-container')           
-       </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
+</script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"live2d-widget-model-haru/01"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

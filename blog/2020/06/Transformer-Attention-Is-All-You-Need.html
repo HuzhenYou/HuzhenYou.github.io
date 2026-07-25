@@ -106,7 +106,7 @@
 <meta property="og:image" content="https://huzhenyou.com/imgs/lw206.jpeg">
 <meta property="og:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240624181703.png">
 <meta property="og:image" content="https://huzhenyou.com/imgs/Pasted%20image%2020240626112822.png">
-<meta property="og:updated_time" content="2024-07-16T08:24:38.625Z">
+<meta property="og:updated_time" content="2024-07-04T17:57:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Transformer架构解读">
 <meta name="twitter:description" content="对Transformer架构进行详细解读。">
@@ -129,6 +129,9 @@
   <title>Transformer架构解读 | 九万里</title>
   <meta name="generator" content="Hexo 3.9.0">
   <meta name="google-site-verification" content="WRvG1tIE8Ae2e_jnlkkVO8Yt-CFtzc_lei8TGPXGML8" />
+  <meta name="google-site-verification" content="OstEGiE3ESciB7IL56VbUytOmP13jX5PDo65XcI4v8k" />
+  <meta name="msvalidate.01" content="8F93DB9D93C13B852661088455093440" />
+  <meta name="baidu-site-verification" content="codeva-gbOLxIULmM" />
   
 
 
@@ -317,7 +320,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-16 16:24:38" itemprop="dateModified" datetime="2024-07-16T16:24:38+08:00">2024-07-16</time>
+                <time title="修改时间：2024-07-05 01:57:51" itemprop="dateModified" datetime="2024-07-05T01:57:51+08:00">2024-07-05</time>
               </span>
             
           
@@ -344,6 +347,20 @@
               <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/blog/2020/06/Transformer-Attention-Is-All-You-Need.html#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/blog/2020/06/Transformer-Attention-Is-All-You-Need.html" itemprop="commentCount"></span></a>
+  </span>
+  
+  
           <br>
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
@@ -382,7 +399,7 @@
 <li>基础模型：MLP, CNN, RNN, Transformer.</li>
 <li>这篇工作之前是针对机器翻译做的。</li>
 <li>RNN<ol>
-<li>特点：隐藏状态$h_t$是由$h_{t-1}$和第t 个词决定的。</li>
+<li>特点：隐藏状态$h<em>t$是由$h</em>{t-1}$和第t 个词决定的。</li>
 <li>缺点：<ol>
 <li>并行性较差。</li>
 <li>对于长序列，容易丢掉较早的时序信息。（不想丢掉，可以把隐藏状态$h_t$做大，但缺点是内存开销也会随之增大）</li>
@@ -478,7 +495,7 @@
 <p>为了推导Softmax函数的梯度，我们需要计算它对输入$\mathbf{z}$的导数。具体来说，我们希望计算$\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j}$。</p>
 <div class="custom-quote-h3">步骤 1: Softmax的偏导数</div>
 
-<p>首先，记$\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{k=1}^K e^{z_k}}$。</p>
+<p>首先，记$\sigma(\mathbf{z})<em>i = \frac{e^{z_i}}{\sum</em>{k=1}^K e^{z_k}}$。</p>
 <p>对第i个分量进行导数计算有两种情况：$i = j$和$i \neq j$。</p>
 <div class="custom-quote-h4">情况 1: $i = j$</div>
 
@@ -504,7 +521,7 @@
 
 <p>结合以上两种情况，我们可以写出Softmax函数对输入向量$\mathbf{z}$的梯度公式：</p>
 <script type="math/tex; mode=display">
-\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j} = \sigma(\mathbf{z})_i (\delta_{ij} - \sigma(\mathbf{z})_j)</script><p>其中，$\delta_{ij}$是Kronecker delta函数，当$i=j$时，$\delta_{ij}=1$，否则$\delta_{ij}=0$。</p>
+\frac{\partial \sigma(\mathbf{z})_i}{\partial z_j} = \sigma(\mathbf{z})_i (\delta_{ij} - \sigma(\mathbf{z})_j)</script><p>其中，$\delta<em>{ij}$是Kronecker delta函数，当$i=j$时，$\delta</em>{ij}=1$，否则$\delta_{ij}=0$。</p>
 <p>总结一下，Softmax函数的梯度推导过程涉及对输入向量的每个分量进行求导，并且结果表示为矩阵形式，该矩阵的每个元素是上述两种情况之一。</p>
 </div></li>
 <li>梯度消失的原因：<div class="custom-quote"><div class="custom-quote-h2">Softmax函数在输入值范围较大时会导致梯度消失，而不是梯度爆炸</div>
@@ -514,7 +531,7 @@
 <p>当Softmax函数的输入值范围较大时，Softmax的输出值会非常极端，即某些输出值接近1，而其他输出值接近0。这会导致在计算梯度时，梯度值会非常小，从而导致梯度消失。</p>
 <div class="custom-quote-h3">具体分析</div>
 
-<p>对于Softmax函数 $\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{k} e^{z_k}}$，其梯度为：</p>
+<p>对于Softmax函数 $\sigma(\mathbf{z})<em>i = \frac{e^{z_i}}{\sum</em>{k} e^{z_k}}$，其梯度为：</p>
 <script type="math/tex; mode=display">
 \frac{\partial \sigma(z_i)}{\partial z_j} = \sigma(z_i) (\delta_{ij} - \sigma(z_j))</script><p>在极端情况下：</p>
 <ul>
@@ -732,7 +749,7 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
           </div>
           
     
-    <div class="comments" id="gitalk-container"></div>
+    <div class="comments" id="comments"></div>
   
 
         </div>
@@ -783,7 +800,7 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -816,7 +833,9 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
         
           
         
-        <span class="site-state-item-count">9</span>
+          
+        
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -877,7 +896,19 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
         
           
         
-        <span class="site-state-item-count">23</span>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
@@ -939,7 +970,8 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+        <div class="copyright"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">沪ICP备2024084445号 </a>
+  <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" rel="noopener" target="_blank"> </a>&copy; <span itemprop="copyrightYear">2026</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -948,16 +980,17 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">71k</span>
+    <span title="站点总字数">93k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:59</span>
+    <span title="站点阅读时长">2:35</span>
 </div>
 
+
+
         
-<div class="beian" style="text-align:center;margin-top:10px;"><a href="https://beian.miit.gov.cn" target="_blank" rel="noopener" style="color:#999;font-size:12px;">沪ICP备2024084445号-1</a></div>
 <div class="busuanzi-count">
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <span class="post-meta-item-icon">
@@ -1099,26 +1132,29 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
   
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.2/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(item => {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'xxYV7WqH5ZoRhrwNzfVqfB8w-gzGzoHsz',
+    appKey: 'GYwbjnqqCz4gmExrUFAxxKBK',
+    placeholder: '说点什么～ 上栏的 “昵称”、“邮箱” 可不填',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
 
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '140d0161c7c4631e2764',
-          clientSecret: '90d536de668c0e5a417f895d3af6a037d1528253',
-          repo: 'HuzhenYou.github.io',
-          owner: 'HuzhenYou',
-          admin: ['HuzhenYou'],
-          id:'gitalk_20200607211021',
-          labels: 'gitalk'.split(',').filter(l => l),
-          perPage: 10,
-          pagerDirection: 'last',
-          createIssueManually: false,
-          distractionFreeMode: false
-        })
-
-        gitalk.render('gitalk-container')           
-       </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
+</script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"live2d-widget-model-haru/01"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>
