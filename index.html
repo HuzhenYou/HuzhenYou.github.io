@@ -6,7 +6,7 @@
 
 <html lang="zh-CN">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -152,12 +152,12 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
 <link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+  <div class="container use-motion">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -298,7 +298,7 @@
                 
               
 
-              <time title="创建时间：2026-07-25 12:25:00 / 修改时间：12:28:57" itemprop="dateCreated datePublished" datetime="2026-07-25T12:25:00+08:00">2026-07-25</time>
+              <time title="创建时间：2026-07-25 12:25:00 / 修改时间：13:22:47" itemprop="dateCreated datePublished" datetime="2026-07-25T12:25:00+08:00">2026-07-25</time>
             </span>
           
             
@@ -365,12 +365,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <ul>
-<li><strong>问题</strong>：LLM 存在<strong>远超人类的 proactive interference</strong>（前文信息显著干扰对更新信息的检索），且<strong>加长 context window 不解决它</strong>。</li>
-<li><strong>为什么难</strong>：即使目标值紧邻 query（完全在任何窗口内），检索准确率仍随干扰项 <strong>log-linear 下降趋零</strong>，错误来自检索”已被覆盖的旧值”。这是 <strong>working memory bottleneck（工作记忆瓶颈），不是 context access（上下文访问）问题</strong>。人类靠主动解绑过时关联（active unbinding）在干扰下保持平台期，LLM 没有对应机制。</li>
-<li><strong>最新进展</strong>：Wang &amp; Sun 2025（”Unable to Forget”，arXiv 2506.08184，UVA + NYU，ICML 2025 LCFM Workshop），标题即结论 “Working Memory Limits in LLMs Beyond Context Length”；2026 后续确认仍开放——双过程干扰分析（2603.00270）、睡眠启发式 consolidation（2603.14517）。</li>
-<li><strong>谁在公开讨论</strong>：Wang &amp; Sun（UVA + NYU）。</li>
-</ul>
+          <p>LLM 有个远超人类的毛病——前文的旧信息会干扰它检索最新值，而且加长 context window 根本不解决。</p>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -1820,7 +1815,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:35</span>
+    <span title="站点阅读时长">2:36</span>
 </div>
 
 
@@ -2015,5 +2010,5 @@ NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.2/dist/Valine.min.
 }, window.Valine);
 
 </script>
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"live2d-widget-model-haru/01"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"live2d-widget-model-haru/01"},"display":{"position":"left","width":250,"height":400,"hOffset":-60,"vOffset":-40},"mobile":{"show":false}});</script></body>
 </html>
