@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://huzhenyou.com/"/>
-  <updated>2026-07-25T05:22:47.330Z</updated>
+  <updated>2026-07-25T05:32:01.218Z</updated>
   <id>https://huzhenyou.com/</id>
   
   <author>
@@ -21,13 +21,13 @@
     <link href="https://huzhenyou.com//blog/2026/07/proactive-interference.html"/>
     <id>https://huzhenyou.com//blog/2026/07/proactive-interference.html</id>
     <published>2026-07-25T04:25:00.000Z</published>
-    <updated>2026-07-25T05:22:47.330Z</updated>
+    <updated>2026-07-25T05:32:01.218Z</updated>
     
-    <content type="html"><![CDATA[<p>LLM 有个远超人类的毛病——前文的旧信息会干扰它检索最新值，而且加长 context window 根本不解决。</p><a id="more"></a><ul><li><strong>问题</strong>：LLM 存在<strong>远超人类的 proactive interference</strong>（前文信息显著干扰对更新信息的检索），且<strong>加长 context window 不解决它</strong>。</li><li><strong>为什么难</strong>：即使目标值紧邻 query（完全在任何窗口内），检索准确率仍随干扰项 <strong>log-linear 下降趋零</strong>，错误来自检索”已被覆盖的旧值”。这是 <strong>working memory bottleneck（工作记忆瓶颈），不是 context access（上下文访问）问题</strong>。人类靠主动解绑过时关联（active unbinding）在干扰下保持平台期，LLM 没有对应机制。</li><li><strong>最新进展</strong>：Wang &amp; Sun 2025（”Unable to Forget”，arXiv 2506.08184，UVA + NYU，ICML 2025 LCFM Workshop），标题即结论 “Working Memory Limits in LLMs Beyond Context Length”；2026 后续确认仍开放——双过程干扰分析（2603.00270）、睡眠启发式 consolidation（2603.14517）。</li><li><strong>谁在公开讨论</strong>：Wang &amp; Sun（UVA + NYU）。</li></ul><p>举个例子：</p><p>场景：我先告诉你”老王电话是 A”，过会儿”改成 B 了”，再过会儿”又改成 C”……最后问你”老王现在电话多少？”正确答案是最新的 C。这篇论文（Unable to Forget）测的就是：模型能不能顶住前面那些旧号码的干扰、答出最新的 C。proactive interference（前摄干扰）= 前面的旧信息（A、B）干扰你检索最新的（C）。</p><p><strong>① “目标值紧邻 query”</strong></p><p>query = 你的问题（”现在电话多少”）；目标值 = 正确答案（最新的 C）。”紧邻” = 把正确答案 C 就放在问题的紧前面、离得最近。</p><p>意思：哪怕把正确答案摆在它眼皮底下（不是藏在很远的地方），模型还是会被前面的旧号码带偏答错。→ 这就排除了”是不是上下文太长、它没读到”这个解释——不是够不够得着的问题，是被旧的干扰了。</p><p><strong>② “检索准确率随干扰项 log-linear 下降趋零”</strong></p><p>干扰项 = 前面那些旧号码（A、B……）；检索准确率 = 答对”最新值 C”的比例。旧号码塞得越多，答对率越低；”log-linear 下降” = 掉得很规律（横轴取对数时是条直线往下，不是断崖），”趋零” = 旧的堆够多，准确率掉到接近 0（基本全答成旧号码）。</p><p>一句话：旧信息越多，模型越记不住最新的，最后几乎全错。</p><p><strong>③ “人类靠主动解绑过时关联（active unbinding）在干扰下保持平台期”</strong></p><p>“关联” = “老王 ↔ 电话号码”这个绑定；”过时关联” = 旧绑定（老王 ↔ 旧号码 A、B）。”主动解绑（active unbinding）” = 人类会主动把旧绑定作废、松开——你心里清楚 A、B 是旧的、已经没用了，主动不去理它们，只认最新的 C。”保持平台期（plateau）” = 因为人主动清掉了旧的，所以旧号码再多，人的准确率也基本不掉，曲线是平的（平台），不像模型那样一路趋零。</p><p>总结：人有”主动扔掉过时信息”的本事，所以不受干扰；LLM 没这个机制，旧的一直挂在那儿干扰它。</p><p>所以这条难点的结论：LLM 记不住最新值，不是”读不到”（正确答案就在眼前），是它不会”主动作废旧信息”——这是 working memory（工作记忆）的病，不是 context（上下文）够不够长的问题。所以把 context window 加长根本没用，因为正确答案本来就在窗口里。</p>]]></content>
+    <content type="html"><![CDATA[<p>LLM 存在远超人类的 proactive interference（前文信息显著干扰对更新信息的检索），且加长 context window 不解决它。</p><a id="more"></a><ul><li><strong>问题</strong>：LLM 存在<strong>远超人类的 proactive interference</strong>（前文信息显著干扰对更新信息的检索），且<strong>加长 context window 不解决它</strong>。</li><li><strong>为什么难</strong>：即使目标值紧邻 query（完全在任何窗口内），检索准确率仍随干扰项 <strong>log-linear 下降趋零</strong>，错误来自检索”已被覆盖的旧值”。这是 <strong>working memory bottleneck（工作记忆瓶颈），不是 context access（上下文访问）问题</strong>。人类靠主动解绑过时关联（active unbinding）在干扰下保持平台期，LLM 没有对应机制。</li><li><strong>最新进展</strong>：Wang &amp; Sun 2025（”Unable to Forget”，arXiv 2506.08184，UVA + NYU，ICML 2025 LCFM Workshop），标题即结论 “Working Memory Limits in LLMs Beyond Context Length”；2026 后续确认仍开放——双过程干扰分析（2603.00270）、睡眠启发式 consolidation（2603.14517）。</li><li><strong>谁在公开讨论</strong>：Wang &amp; Sun（UVA + NYU）。</li></ul><p>举个例子：</p><p>场景：我先告诉你”老王电话是 A”，过会儿”改成 B 了”，再过会儿”又改成 C”……最后问你”老王现在电话多少？”正确答案是最新的 C。这篇论文（Unable to Forget）测的就是：模型能不能顶住前面那些旧号码的干扰、答出最新的 C。proactive interference（前摄干扰）= 前面的旧信息（A、B）干扰你检索最新的（C）。</p><p><strong>① “目标值紧邻 query”</strong></p><p>query = 你的问题（”现在电话多少”）；目标值 = 正确答案（最新的 C）。”紧邻” = 把正确答案 C 就放在问题的紧前面、离得最近。</p><p>意思：哪怕把正确答案摆在它眼皮底下（不是藏在很远的地方），模型还是会被前面的旧号码带偏答错。→ 这就排除了”是不是上下文太长、它没读到”这个解释——不是够不够得着的问题，是被旧的干扰了。</p><p><strong>② “检索准确率随干扰项 log-linear 下降趋零”</strong></p><p>干扰项 = 前面那些旧号码（A、B……）；检索准确率 = 答对”最新值 C”的比例。旧号码塞得越多，答对率越低；”log-linear 下降” = 掉得很规律（横轴取对数时是条直线往下，不是断崖），”趋零” = 旧的堆够多，准确率掉到接近 0（基本全答成旧号码）。</p><p>一句话：旧信息越多，模型越记不住最新的，最后几乎全错。</p><p><strong>③ “人类靠主动解绑过时关联（active unbinding）在干扰下保持平台期”</strong></p><p>“关联” = “老王 ↔ 电话号码”这个绑定；”过时关联” = 旧绑定（老王 ↔ 旧号码 A、B）。”主动解绑（active unbinding）” = 人类会主动把旧绑定作废、松开——你心里清楚 A、B 是旧的、已经没用了，主动不去理它们，只认最新的 C。”保持平台期（plateau）” = 因为人主动清掉了旧的，所以旧号码再多，人的准确率也基本不掉，曲线是平的（平台），不像模型那样一路趋零。</p><p>总结：人有”主动扔掉过时信息”的本事，所以不受干扰；LLM 没这个机制，旧的一直挂在那儿干扰它。</p><p>所以这条难点的结论：LLM 记不住最新值，不是”读不到”（正确答案就在眼前），是它不会”主动作废旧信息”——这是 working memory（工作记忆）的病，不是 context（上下文）够不够长的问题。所以把 context window 加长根本没用，因为正确答案本来就在窗口里。</p>]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;LLM 有个远超人类的毛病——前文的旧信息会干扰它检索最新值，而且加长 context window 根本不解决。&lt;/p&gt;
+      &lt;p&gt;LLM 存在远超人类的 proactive interference（前文信息显著干扰对更新信息的检索），且加长 context window 不解决它。&lt;/p&gt;
     
     </summary>
     
