@@ -292,13 +292,13 @@
       <category term="LLM+投资" scheme="https://huzhenyou.com/categories/LLM-%E6%8A%95%E8%B5%84/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.com/tags/DeepLearning/"/>
-    
       <category term="LLM+投资" scheme="https://huzhenyou.com/tags/LLM-%E6%8A%95%E8%B5%84/"/>
     
       <category term="GPT-4" scheme="https://huzhenyou.com/tags/GPT-4/"/>
     
       <category term="LLM" scheme="https://huzhenyou.com/tags/LLM/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.com/tags/DeepLearning/"/>
     
   </entry>
   
@@ -344,9 +344,9 @@
       <category term="LargeModel" scheme="https://huzhenyou.com/categories/LargeModel/"/>
     
     
-      <category term="LargeModel" scheme="https://huzhenyou.com/tags/LargeModel/"/>
-    
       <category term="DeepLearning" scheme="https://huzhenyou.com/tags/DeepLearning/"/>
+    
+      <category term="LargeModel" scheme="https://huzhenyou.com/tags/LargeModel/"/>
     
   </entry>
   
@@ -480,9 +480,9 @@
       <category term="backbone" scheme="https://huzhenyou.com/categories/backbone/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.com/tags/DeepLearning/"/>
-    
       <category term="LLM" scheme="https://huzhenyou.com/tags/LLM/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.com/tags/DeepLearning/"/>
     
       <category term="backbone" scheme="https://huzhenyou.com/tags/backbone/"/>
     
