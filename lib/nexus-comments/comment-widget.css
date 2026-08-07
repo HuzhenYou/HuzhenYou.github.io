@@ -388,10 +388,30 @@
   }
 }
 
-/* ---------- 暗色模式 ---------- */
+/* ---------- 暗色模式 ----------
+   默认永远亮色。暗色只在宿主显式选择时生效：
+   - theme:'dark'  -> [data-nxc-theme="dark"] 无条件暗
+   - theme:'auto'  -> [data-nxc-theme="auto"] 且系统为暗色时暗
+   绝不无条件跟随系统：宿主页面配色多为固定，widget 单方面变暗会在
+   浅色页面里渲染成一块黑（2026-08-07 博客实测）。 */
+
+.nxc-root[data-nxc-theme="dark"] {
+  --nxc-bg: #16181c;
+  --nxc-bg-subtle: #202329;
+  --nxc-text: #e6e8eb;
+  --nxc-text-secondary: #9aa3ad;
+  --nxc-text-muted: #6f7883;
+  --nxc-border: #2b2f36;
+  --nxc-accent: #5b8ce8;
+  --nxc-accent-hover: #7aa3ef;
+  --nxc-accent-text: #0f1115;
+  --nxc-link: #7aa3ef;
+  --nxc-danger: #e06c6c;
+  --nxc-notice: #7aa3ef;
+}
 
 @media (prefers-color-scheme: dark) {
-  .nxc-root {
+  .nxc-root[data-nxc-theme="auto"] {
     --nxc-bg: #16181c;
     --nxc-bg-subtle: #202329;
     --nxc-text: #e6e8eb;
