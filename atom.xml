@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://huzhenyou.com/"/>
-  <updated>2026-07-25T05:32:01.218Z</updated>
+  <updated>2026-08-07T04:06:49.636Z</updated>
   <id>https://huzhenyou.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>AI 与熵增</title>
+    <link href="https://huzhenyou.com//blog/2026/08/ai-and-entropy.html"/>
+    <id>https://huzhenyou.com//blog/2026/08/ai-and-entropy.html</id>
+    <published>2026-08-07T04:00:00.000Z</published>
+    <updated>2026-08-07T04:06:49.636Z</updated>
+    
+    <content type="html"><![CDATA[<p>2019 年我第一次参观 WAIC 的时候，问过展台一位讲解员一个问题：如果智能体越来越多，每一个都像一个人类的大脑，而它们和人类数量呈线性关系，那地球的温室效应会不会越来越严重？她当时笑我是杞人忧天。</p><a id="more"></a><p>七年过去了，现在世界上扩张最疯狂的东西，就是随 AI 发展而来的计算集群和能源消耗。2026 年全球数据中心用电约 565 TWh，超过法国全国一年的用电量，其中 AI 服务器占了三成，还在以每年 30% 的速度增长；IEA 预计 2030 年整体翻倍到 945 TWh。当年那个”杞人忧天”的问题，现在是各国电网规划里要正面处理的负荷。</p><p>我想把当年那个直觉补成一个完整的论证。</p><p>薛定谔在《生命是什么》里说，生命以负熵为食。智能是比生命更极端的东西：它是高强度的去熵过程，把杂乱的数据压成有序的模型，把不确定压成预测。而热力学第二定律说，局部的有序，必须以环境更大的无序为代价。你在这头造一分秩序，就要在那头倒出去不止一分的热。</p><p>计算本身也有物理账单。Landauer 极限规定了擦除一个比特信息的最小能量代价，今天的芯片每次运算的实际耗能，离这个理论下限还差好几个数量级。我们目前是在用非常奢侈的物理方式购买智能，每一个 token 都在向大气倾倒废热。</p><p>有人会说：地球不是孤立系统，太阳一直在输入能量，热也在向太空辐射，熵增定理不能直接套。确实。今天让地球变暖的主力也还不是机房的废热，而是发电排放的温室气体改变了辐射平衡，废热本身只是零头。但如果智能真的走向奇点式增长，算力曲线不是线性而是指数，零头变成主导项只是一个复利问题。到那时，芯片和数据都不是瓶颈，瓶颈是散热。文明会撞上热力学的墙。</p><p>所以我的推论没有变：如果熵增是客观定理，而智能本质是去熵的，那么 AI 的飞速发展必然带来加速的熵增。</p><p>人类必定加速繁荣，然后加速灭亡。</p><p>变量也不是没有：聚变能源、逼近物理极限的计算效率、或者把算力连同散热搬出大气层。能不能赶在撞墙之前做到，没人知道。</p><p>——记 2019 年 WAIC 上被笑作杞人忧天的一问。</p><p>参考数据：<a href="https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai" target="_blank" rel="noopener">IEA — Energy and AI</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;2019 年我第一次参观 WAIC 的时候，问过展台一位讲解员一个问题：如果智能体越来越多，每一个都像一个人类的大脑，而它们和人类数量呈线性关系，那地球的温室效应会不会越来越严重？她当时笑我是杞人忧天。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="思考" scheme="https://huzhenyou.com/categories/%E6%80%9D%E8%80%83/"/>
+    
+    
+      <category term="AI" scheme="https://huzhenyou.com/tags/AI/"/>
+    
+      <category term="熵增" scheme="https://huzhenyou.com/tags/%E7%86%B5%E5%A2%9E/"/>
+    
+  </entry>
   
   <entry>
     <title>AI 前沿难点之 proactive interference（前摄干扰）不因加长 context 解决</title>
