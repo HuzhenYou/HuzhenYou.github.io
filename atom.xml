@@ -344,9 +344,9 @@
       <category term="LargeModel" scheme="https://huzhenyou.com/categories/LargeModel/"/>
     
     
-      <category term="LargeModel" scheme="https://huzhenyou.com/tags/LargeModel/"/>
-    
       <category term="DeepLearning" scheme="https://huzhenyou.com/tags/DeepLearning/"/>
+    
+      <category term="LargeModel" scheme="https://huzhenyou.com/tags/LargeModel/"/>
     
   </entry>
   
@@ -368,9 +368,9 @@
       <category term="ActionDetection" scheme="https://huzhenyou.com/categories/ActionDetection/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.com/tags/DeepLearning/"/>
-    
       <category term="ActionDetection" scheme="https://huzhenyou.com/tags/ActionDetection/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.com/tags/DeepLearning/"/>
     
   </entry>
   
@@ -452,13 +452,13 @@
       <category term="ActionDetection" scheme="https://huzhenyou.com/categories/ActionDetection/"/>
     
     
-      <category term="DeepLearning" scheme="https://huzhenyou.com/tags/DeepLearning/"/>
-    
       <category term="ActionDetection" scheme="https://huzhenyou.com/tags/ActionDetection/"/>
     
       <category term="ProposalGeneration" scheme="https://huzhenyou.com/tags/ProposalGeneration/"/>
     
       <category term="ActivityNetChallenge2019" scheme="https://huzhenyou.com/tags/ActivityNetChallenge2019/"/>
+    
+      <category term="DeepLearning" scheme="https://huzhenyou.com/tags/DeepLearning/"/>
     
   </entry>
   
