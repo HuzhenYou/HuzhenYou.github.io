@@ -90,17 +90,17 @@
 
 
 
-  <meta name="description" content="已识乾坤大，犹怜草木青 我是虎臻，AI 算法工程师，主要兴趣在 AGI、强化学习、世界模型、LLM 训练与后训练（RLHF / GRPO）等，这里记录我的学习笔记与思考。 📧 邮箱：youhuzhen@gmail.com 🐙 GitHub：github.com/HuzhenYou 欢迎在文章下方留言，或邮件交流。">
+  <meta name="description" content="已识乾坤大，犹怜草木青 我是虎臻，AI 算法工程师，主要兴趣在 AGI、强化学习、世界模型、LLM 训练与后训练（RLHF / GRPO）等，这里记录我的学习笔记与思考。 📧 邮箱：youhuzhen@gmail.com 🐙 GitHub：github.com/HuzhenYou 欢迎在文章下方留言，或邮件交流。            AI-Native · 用量实录     这是我每天用 C">
 <meta property="og:type" content="website">
 <meta property="og:title" content="不忘本心">
 <meta property="og:url" content="https://huzhenyou.com/about/index.html">
 <meta property="og:site_name" content="九万里">
-<meta property="og:description" content="已识乾坤大，犹怜草木青 我是虎臻，AI 算法工程师，主要兴趣在 AGI、强化学习、世界模型、LLM 训练与后训练（RLHF / GRPO）等，这里记录我的学习笔记与思考。 📧 邮箱：youhuzhen@gmail.com 🐙 GitHub：github.com/HuzhenYou 欢迎在文章下方留言，或邮件交流。">
+<meta property="og:description" content="已识乾坤大，犹怜草木青 我是虎臻，AI 算法工程师，主要兴趣在 AGI、强化学习、世界模型、LLM 训练与后训练（RLHF / GRPO）等，这里记录我的学习笔记与思考。 📧 邮箱：youhuzhen@gmail.com 🐙 GitHub：github.com/HuzhenYou 欢迎在文章下方留言，或邮件交流。            AI-Native · 用量实录     这是我每天用 C">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2026-08-07T06:48:47.325Z">
+<meta property="og:updated_time" content="2026-08-10T07:39:59.371Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="不忘本心">
-<meta name="twitter:description" content="已识乾坤大，犹怜草木青 我是虎臻，AI 算法工程师，主要兴趣在 AGI、强化学习、世界模型、LLM 训练与后训练（RLHF / GRPO）等，这里记录我的学习笔记与思考。 📧 邮箱：youhuzhen@gmail.com 🐙 GitHub：github.com/HuzhenYou 欢迎在文章下方留言，或邮件交流。">
+<meta name="twitter:description" content="已识乾坤大，犹怜草木青 我是虎臻，AI 算法工程师，主要兴趣在 AGI、强化学习、世界模型、LLM 训练与后训练（RLHF / GRPO）等，这里记录我的学习笔记与思考。 📧 邮箱：youhuzhen@gmail.com 🐙 GitHub：github.com/HuzhenYou 欢迎在文章下方留言，或邮件交流。            AI-Native · 用量实录     这是我每天用 C">
   <link rel="alternate" href="/atom.xml" title="九万里" type="application/atom+xml">
   <link rel="canonical" href="https://huzhenyou.com/about/">
 
@@ -328,6 +328,261 @@
 <p>📧 邮箱：<a href="mailto:youhuzhen@gmail.com" target="_blank" rel="noopener">youhuzhen@gmail.com</a></p>
 <p>🐙 GitHub：<a href="https://github.com/HuzhenYou" target="_blank" rel="noopener">github.com/HuzhenYou</a></p>
 <p>欢迎在文章下方留言，或邮件交流。</p>
+<script src="/lib/echarts.min.js"></script>
+
+<!-- ===== AI-Native · 用量实录（可嵌入片段）=====
+     依赖：window.echarts（页面需先加载 <script src="/lib/echarts.min.js"></script>）
+     数据：GET /api/analytics/ai-usage?days=200（公开只读，同源）
+     失败 / 无数据 / 无 echarts → 静默降级，不打扰 about 页正文。
+     所有类名前缀 ainu- 避免污染博客全局样式。 -->
+<div class="ainu-root" id="ainu-root" role="region" aria-label="AI-Native 用量实录">
+  <div class="ainu-head">
+    <h3 class="ainu-title"><span class="ainu-dot" aria-hidden="true"></span>AI-Native · 用量实录</h3>
+    <p class="ainu-sub">这是我每天用 Claude Code 编程的真实 token 消耗，作为 AI-native 程度的硬数据。</p>
+  </div>
+
+  <div class="ainu-kpis">
+    <div class="ainu-kpi">
+      <div class="ainu-kpi-val"><span class="ainu-kpi-num" id="ainu-total-n">—</span><span class="ainu-kpi-unit" id="ainu-total-u"></span></div>
+      <div class="ainu-kpi-label">累计消耗</div>
+      <div class="ainu-kpi-note" id="ainu-total-note"></div>
+    </div>
+    <div class="ainu-kpi">
+      <div class="ainu-kpi-val"><span class="ainu-kpi-num" id="ainu-days-n">—</span><span class="ainu-kpi-unit" id="ainu-days-u"></span></div>
+      <div class="ainu-kpi-label">持续天数</div>
+      <div class="ainu-kpi-note" id="ainu-days-note"></div>
+    </div>
+    <div class="ainu-kpi">
+      <div class="ainu-kpi-val"><span class="ainu-kpi-num" id="ainu-avg-n">—</span><span class="ainu-kpi-unit" id="ainu-avg-u"></span></div>
+      <div class="ainu-kpi-label">日均消耗</div>
+      <div class="ainu-kpi-note" id="ainu-avg-note"></div>
+    </div>
+    <div class="ainu-kpi">
+      <div class="ainu-kpi-val"><span class="ainu-kpi-num" id="ainu-peak-n">—</span><span class="ainu-kpi-unit" id="ainu-peak-u"></span></div>
+      <div class="ainu-kpi-label">峰值单日</div>
+      <div class="ainu-kpi-note" id="ainu-peak-note"></div>
+    </div>
+  </div>
+
+  <div class="ainu-chart" id="ainu-chart"></div>
+
+  <div class="ainu-notes">
+    <p>数据来自 ccusage 对本地 Claude Code 日志的统计，每日自动更新，仅含 Claude Code（不含其他 AI 工具）。<span id="ainu-updated"></span></p>
+    <p>其中约 95% 是上下文缓存读取（cache read，单价约为常规输入的 1/10）；此处只呈现 token 规模，不代表实际消费。</p>
+  </div>
+</div>
+
+<style>
+.ainu-root{
+  --ainu-blue:#4a7dd6;
+  --ainu-surface:#ffffff;
+  --ainu-card:#f5f8fd;
+  --ainu-ink:#233240;
+  --ainu-sec:#5a6a78;
+  --ainu-muted:#8a94a0;
+  --ainu-line:rgba(74,125,214,0.16);
+  display:none;
+  box-sizing:border-box;
+  width:100%;
+  margin:1.4em 0;
+  padding:20px 20px 8px;
+  border:1px solid var(--ainu-line);
+  border-radius:12px;
+  background:var(--ainu-surface);
+  color:var(--ainu-ink);
+  font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.ainu-root.ainu-ready{display:block;}
+.ainu-root *,.ainu-root *::before,.ainu-root *::after{box-sizing:border-box;}
+.ainu-head{margin-bottom:16px;}
+.ainu-title{
+  display:flex;align-items:center;gap:8px;
+  margin:0 0 4px;padding:0;border:0;
+  font-size:18px;font-weight:700;line-height:1.3;color:var(--ainu-ink);
+}
+.ainu-dot{width:9px;height:9px;border-radius:50%;background:var(--ainu-blue);flex:0 0 auto;}
+.ainu-sub{margin:0;padding:0;font-size:12.5px;line-height:1.5;color:var(--ainu-sec);}
+.ainu-kpis{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;
+}
+.ainu-kpi{
+  padding:12px 14px;border-radius:10px;
+  background:var(--ainu-card);border:1px solid var(--ainu-line);
+  min-width:0;
+}
+.ainu-kpi-val{
+  display:flex;align-items:baseline;gap:3px;
+  color:var(--ainu-blue);line-height:1.1;white-space:nowrap;
+}
+.ainu-kpi-num{font-size:26px;font-weight:700;letter-spacing:-0.01em;}
+.ainu-kpi-unit{font-size:14px;font-weight:600;}
+.ainu-kpi-label{margin-top:5px;font-size:12.5px;font-weight:600;color:var(--ainu-ink);}
+.ainu-kpi-note{margin-top:2px;min-height:15px;font-size:11px;color:var(--ainu-muted);}
+.ainu-chart{width:100%;height:340px;}
+.ainu-notes{margin-top:10px;}
+.ainu-notes p{margin:0 0 4px;padding:0;font-size:11px;line-height:1.55;color:var(--ainu-muted);}
+.ainu-notes p:last-child{margin-bottom:0;}
+#ainu-updated{margin-left:2px;}
+@media (max-width:560px){
+  .ainu-root{padding:16px 14px 8px;}
+  .ainu-kpis{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .ainu-kpi-num{font-size:22px;}
+  .ainu-title{font-size:16px;}
+  .ainu-chart{height:320px;}
+}
+</style>
+
+<script>
+(function(){
+  "use strict";
+  var ENDPOINT = "https://huzhenyou.com/api/analytics/ai-usage?days=200";
+
+  // 中文单位格式化：>=1亿 -> "X.X 亿" / >=1万 -> "X.X 万" / 否则原数
+  function fmt(n){
+    if(n === null || n === undefined || isNaN(n)) return {value:"—", unit:""};
+    var v = Number(n), a = Math.abs(v);
+    if(a >= 1e8) return {value:(v/1e8).toFixed(1), unit:"亿"};
+    if(a >= 1e4) return {value:(v/1e4).toFixed(1), unit:"万"};
+    return {value:String(Math.round(v)), unit:""};
+  }
+  // y 轴刻度："X亿"（大刻度去小数、去尾零）
+  function fmtYi(v){
+    if(!v) return "0";
+    var y = v/1e8;
+    var s = (Math.abs(y) >= 10) ? y.toFixed(0) : y.toFixed(1);
+    return s.replace(/\.0$/, "") + "亿";
+  }
+  function setText(id, t){ var el = document.getElementById(id); if(el) el.textContent = t; }
+  function setKpi(nId, uId, n){ var f = fmt(n); setText(nId, f.value); setText(uId, f.unit); }
+
+  function init(){
+    var root = document.getElementById("ainu-root");
+    if(!root || !window.fetch) return;
+    fetch(ENDPOINT, {cache:"no-store"})
+      .then(function(r){ return (r && r.ok) ? r.json() : null; })
+      .then(function(j){
+        if(!j || !j.success || !j.data || !j.data.summary) return; // 保持隐藏
+        render(root, j.data);
+      })
+      .catch(function(){ /* 静默：保持隐藏 */ });
+  }
+
+  function render(root, data){
+    var s = data.summary, days = data.days || [];
+    setKpi("ainu-total-n", "ainu-total-u", s.total_tokens);
+    setText("ainu-days-n", String(s.days_count != null ? s.days_count : "—"));
+    setText("ainu-days-u", "天");
+    setText("ainu-days-note", s.first_date ? (s.first_date + " 起") : "");
+    setKpi("ainu-avg-n", "ainu-avg-u", s.avg_daily_tokens);
+    var pk = s.peak || {};
+    setKpi("ainu-peak-n", "ainu-peak-u", pk.total_tokens);
+    setText("ainu-peak-note", pk.date || "");
+    if(s.updated_at) setText("ainu-updated", "统计更新于 " + s.updated_at + "。");
+
+    root.classList.add("ainu-ready"); // 先展开容器，图表才拿得到宽度
+    if(window.echarts && days.length){
+      renderChart(days);
+    }else{
+      var c = document.getElementById("ainu-chart");
+      if(c) c.style.display = "none";
+    }
+  }
+
+  function tipRow(label, f){
+    return '<div style="display:flex;justify-content:space-between;gap:20px;'
+      + 'font-size:12px;line-height:1.7;color:#5a6a78">'
+      + '<span>' + label + '</span>'
+      + '<span style="color:#233240;font-variant-numeric:tabular-nums">'
+      + f.value + (f.unit ? (" " + f.unit) : "") + '</span></div>';
+  }
+
+  function renderChart(days){
+    var el = document.getElementById("ainu-chart");
+    if(!el) return;
+    var chart = window.echarts.init(el, null, {renderer:"canvas"});
+    var dates  = days.map(function(d){ return d.date; });
+    var totals = days.map(function(d){ return d.total_tokens; });
+    var n = days.length;
+    var startIdx = Math.max(0, n - 60); // 默认显示最近 60 天
+
+    chart.setOption({
+      grid: {left:6, right:14, top:16, bottom:56, containLabel:true},
+      tooltip: {
+        trigger:"axis",
+        axisPointer:{type:"shadow", shadowStyle:{color:"rgba(74,125,214,0.08)"}},
+        backgroundColor:"#ffffff",
+        borderColor:"rgba(74,125,214,0.25)",
+        borderWidth:1,
+        padding:[9,13],
+        extraCssText:"box-shadow:0 4px 16px rgba(35,50,64,0.12);border-radius:8px;",
+        textStyle:{color:"#233240", fontSize:12},
+        formatter: function(params){
+          var it = params && params[0];
+          if(!it) return "";
+          var d = days[it.dataIndex] || {};
+          return '<div style="font-weight:600;margin-bottom:5px;color:#233240">' + (d.date || "") + '</div>'
+            + tipRow("总量", fmt(d.total_tokens))
+            + tipRow("输出 output", fmt(d.output_tokens))
+            + tipRow("缓存读取 cache read", fmt(d.cache_read_tokens));
+        }
+      },
+      xAxis: {
+        type:"category", data:dates, boundaryGap:true,
+        axisTick:{show:false},
+        axisLine:{lineStyle:{color:"#c9d2dd"}},
+        axisLabel:{
+          color:"#8a94a0", fontSize:11, hideOverlap:true,
+          formatter: function(v){ return (v && v.length >= 5) ? v.slice(5) : v; }
+        }
+      },
+      yAxis: {
+        type:"value",
+        splitLine:{lineStyle:{color:"#edf0f4"}},
+        axisLabel:{color:"#8a94a0", fontSize:11, formatter: fmtYi}
+      },
+      dataZoom: [{
+        type:"slider",
+        startValue:startIdx, endValue:(n - 1),
+        height:16, bottom:12,
+        borderColor:"transparent",
+        backgroundColor:"rgba(35,50,64,0.03)",
+        fillerColor:"rgba(74,125,214,0.14)",
+        dataBackground:{
+          lineStyle:{color:"rgba(74,125,214,0.35)"},
+          areaStyle:{color:"rgba(74,125,214,0.10)"}
+        },
+        selectedDataBackground:{
+          lineStyle:{color:"rgba(74,125,214,0.6)"},
+          areaStyle:{color:"rgba(74,125,214,0.22)"}
+        },
+        handleStyle:{color:"#4a7dd6", borderColor:"#4a7dd6"},
+        moveHandleStyle:{color:"#4a7dd6"},
+        textStyle:{color:"#8a94a0", fontSize:10}
+      }],
+      series: [{
+        type:"bar", name:"日消耗", data:totals,
+        barMaxWidth:14,
+        itemStyle:{color:"#4a7dd6", borderRadius:[3,3,0,0]},
+        emphasis:{itemStyle:{color:"#3a6bc4"}}
+      }]
+    });
+
+    var t;
+    window.addEventListener("resize", function(){
+      clearTimeout(t);
+      t = setTimeout(function(){ chart.resize(); }, 120);
+    });
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  }else{
+    init();
+  }
+})();
+</script>
+
 
         
       </div>
@@ -376,7 +631,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#已识乾坤大，犹怜草木青"><span class="nav-number">1.</span> <span class="nav-text">已识乾坤大，犹怜草木青</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#已识乾坤大，犹怜草木青"><span class="nav-number">1.</span> <span class="nav-text">已识乾坤大，犹怜草木青</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ainu-root"><span class="nav-number">1.1.</span> <span class="nav-text">AI-Native · 用量实录</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
