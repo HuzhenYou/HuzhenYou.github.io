@@ -91,7 +91,7 @@
 
 
   <meta name="description" content="对Transformer架构进行详细解读。">
-<meta name="keywords" content="DeepLearning,LLM,backbone">
+<meta name="keywords" content="LLM,DeepLearning,backbone">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Transformer架构解读">
 <meta property="og:url" content="https://huzhenyou.com/blog/2020/06/Transformer-Attention-Is-All-You-Need.html">
@@ -705,9 +705,9 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
           
           <div class="post-tags">
             
-              <a href="/tags/DeepLearning/" rel="tag"># DeepLearning</a>
-            
               <a href="/tags/LLM/" rel="tag"># LLM</a>
+            
+              <a href="/tags/DeepLearning/" rel="tag"># DeepLearning</a>
             
               <a href="/tags/backbone/" rel="tag"># backbone</a>
             
@@ -746,15 +746,20 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
           </div>
           
     
+    
+    
+    
+    
     <div class="comments" id="comments"></div>
     
-    <link rel="stylesheet" href="/lib/nexus-comments/comment-widget.css?v=20260807b">
-    <script src="/lib/nexus-comments/comment-widget.js?v=20260807b"></script>
+    <link rel="stylesheet" href="/lib/nexus-comments/comment-widget.css?v=20260812a">
+    <script src="/lib/nexus-comments/comment-widget.js?v=20260812a"></script>
     <script>
       NexusComments.init({
         el: '#comments',
         apiBase: 'https://huzhenyou.com/api/comments',
-        placeholder: '说点什么～ 昵称邮箱都可不填，留邮箱有回复会邮件通知你'
+        requireEmail: true,
+        placeholder: '说点什么～ 昵称选填，邮箱必填（留邮箱有回复邮件通知你）'
       });
     </script>
   
@@ -998,6 +1003,7 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
     </span>
     <span title="站点阅读时长">2:37</span>
 </div>
+  <div class="footer-custom-text"><span class="footer-report">内容投诉举报：<a href="mailto:idyoujincheng@qq.com">idyoujincheng@qq.com</a></span></div>
 
 
 
@@ -1148,6 +1154,6 @@ torch.bmm(X, Y), torch.bmm(X, Y).shape
       window.addEventListener('DOMContentLoaded', function () {
         if (window.NexusAnalytics) NexusAnalytics.init({ apiBase: 'https://huzhenyou.com/api/analytics' });
       });
-    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-20,"vOffset":-40},"mobile":{"show":false}});</script></body>
+    </script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":0.6,"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"left","width":250,"height":400,"hOffset":-20,"vOffset":-40},"mobile":{"show":false}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>
