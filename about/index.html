@@ -352,16 +352,19 @@
     
     <div class="comments" id="comments"></div>
     
-    <link rel="stylesheet" href="/lib/nexus-comments/comment-widget.css?v=20260812a">
-    <script src="/lib/nexus-comments/comment-widget.js?v=20260812a"></script>
+    <link rel="stylesheet" href="/lib/nexus-comments/comment-widget.css?v=20260923a">
+    <script src="/lib/nexus-comments/comment-widget.js?v=20260923a"></script>
     <script>
       NexusComments.init({
         el: '#comments',
         apiBase: 'https://huzhenyou.com/api/comments',
-        requireEmail: false,
-        placeholder: '留个言～ 昵称邮箱都可不填，留邮箱有回复会邮件通知你',
+        auth: true,
+        placeholder: '留个言～ 首次留言需手机号验证（仅用于实名合规，不会公开）',
         labels: {
           title: '条留言',
+          authHint: '留言需手机号验证（仅用于实名合规，不会公开）',
+          authTitle: '手机号验证后即可留言',
+          authSubmit: '验证并发表留言',
           submit: '发表留言',
           empty: '还没有留言，来抢沙发',
           pending: '留言已提交，审核后显示',

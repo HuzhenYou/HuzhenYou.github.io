@@ -483,14 +483,14 @@
     
     <div class="comments" id="comments"></div>
     
-    <link rel="stylesheet" href="/lib/nexus-comments/comment-widget.css?v=20260812a">
-    <script src="/lib/nexus-comments/comment-widget.js?v=20260812a"></script>
+    <link rel="stylesheet" href="/lib/nexus-comments/comment-widget.css?v=20260923a">
+    <script src="/lib/nexus-comments/comment-widget.js?v=20260923a"></script>
     <script>
       NexusComments.init({
         el: '#comments',
         apiBase: 'https://huzhenyou.com/api/comments',
-        requireEmail: false,
-        placeholder: '说点什么～ 昵称邮箱都可不填，留邮箱有回复邮件通知你'
+        auth: true,
+        placeholder: '说点什么～ 首次评论需手机号验证（仅用于实名合规，不会公开）'
       });
     </script>
   

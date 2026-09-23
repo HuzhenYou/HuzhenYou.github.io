@@ -191,6 +191,119 @@
   color: var(--nxc-notice);
 }
 
+/* ---------- 实名登录（options.auth） ---------- */
+
+.nxc-root .nxc-auth-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: var(--nxc-font-size-sm);
+  color: var(--nxc-text-secondary);
+}
+
+.nxc-root .nxc-auth-user {
+  color: var(--nxc-text);
+  font-weight: 500;
+}
+
+.nxc-root .nxc-link-btn {
+  flex: 0 0 auto;
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--nxc-font-size-sm);
+  color: var(--nxc-link);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.nxc-root .nxc-link-btn:hover {
+  text-decoration: underline;
+}
+
+/* 弹层挂在 .nxc-root 之下（继承 --nxc-* 变量，跟随 widget 主题），定位 fixed 铺满视口 */
+.nxc-root .nxc-modal-mask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.nxc-root .nxc-modal {
+  width: 100%;
+  max-width: 380px;
+  padding: 20px;
+  color: var(--nxc-text);
+  background: var(--nxc-bg);
+  border: 1px solid var(--nxc-border);
+  border-radius: var(--nxc-radius);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  font-family: var(--nxc-font);
+  font-size: var(--nxc-font-size);
+  line-height: var(--nxc-line-height);
+}
+
+.nxc-root .nxc-modal-title {
+  margin: 0 0 6px;
+  font-size: var(--nxc-font-size-lg);
+  font-weight: 600;
+}
+
+.nxc-root .nxc-modal-desc {
+  margin: 0 0 14px;
+  font-size: var(--nxc-font-size-sm);
+  line-height: 1.6;
+  color: var(--nxc-text-secondary);
+}
+
+.nxc-root .nxc-modal .nxc-input {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.nxc-root .nxc-code-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.nxc-root .nxc-code-row .nxc-input {
+  margin-bottom: 0;
+}
+
+.nxc-root .nxc-code-btn {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: var(--nxc-font-size-sm);
+  color: var(--nxc-accent);
+  background: transparent;
+  border: 1px solid var(--nxc-accent);
+  border-radius: var(--nxc-radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.nxc-root .nxc-code-btn:disabled {
+  color: var(--nxc-text-muted);
+  border-color: var(--nxc-border);
+  cursor: not-allowed;
+}
+
+.nxc-root .nxc-modal .nxc-actions {
+  margin-top: 4px;
+}
+
 /* ---------- 列表 ---------- */
 
 .nxc-root .nxc-list {
